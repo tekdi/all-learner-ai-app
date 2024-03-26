@@ -86,9 +86,21 @@ const Practice = () => {
       setDisableScreen(true);
       callConfettiAndPlay();
       setTimeout(() => {
-        alert(
-          `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-        );
+        if(localStorage.getItem('contentSessionId')){
+          const alertMessage = `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `;
+          if (window && window.parent) {
+            window.parent.postMessage({
+              alert: alertMessage,
+              icon:'success',
+              message: 'storylingo-alert',
+            });
+          }
+        }
+        else{
+          alert(
+            `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
+          );
+        }
         setDisableScreen(false);
       }, 3000);
     }
