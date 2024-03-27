@@ -80,7 +80,7 @@ export default function RecordVoiceVisualizer() {
             </div>
             <div
                 class="playing"
-                style={{ position: 'absolute', left: '-0.241px', bottom: '-44px', transform: 'rotate(3.142rad)' }}
+                style={{ left: '-0.241px', bottom: '-44px', transform: 'rotate(3.142rad)' }}
             >
                 {Object.entries(renderType)
                     .reverse()
