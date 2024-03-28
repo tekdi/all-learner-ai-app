@@ -49,7 +49,7 @@ const routData = [
   {
     id: "route-000",
     path: "*",
-    component: reviews.NoPageFound,
+    component: reviews.DiscoverStart,
     requiresAuth: false,
   },
   {

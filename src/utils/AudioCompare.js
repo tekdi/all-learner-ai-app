@@ -153,7 +153,19 @@ export default class AudioRecorderCompair extends Component {
           if (this.state.soundDetected) {
             this.props.setRecordedAudio(temp_audioSrc);
           } else {
-            alert("Please Speak Louder and Clear");
+            if(window.self !== window.top){
+              const alertMessage = "Please Speak Louder and Clear";
+              if (window && window.parent) {
+                window.parent.postMessage({
+                  alert: alertMessage,
+                  icon:'warning',
+                  message: 'storylingo-alert',
+                });
+              }
+            }
+            else{
+              alert("Please Speak Louder and Clear");
+            }
           }
         }
 

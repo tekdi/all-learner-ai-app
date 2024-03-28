@@ -209,7 +209,19 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
 
 export const ProfileHeader = ({
   setOpenLangModal = () => {
-    alert("go to homescreen to change language");
+    if(window.self !== window.top){
+      const alertMessage = "Go to homescreen to change language";
+      if (window && window.parent) {
+        window.parent.postMessage({
+          alert: alertMessage,
+          icon:'warning',
+          message: 'storylingo-alert',
+        });
+      }
+    }
+    else{
+      alert("Go to homescreen to change language");
+    }
   },
   lang,
   profileName,
