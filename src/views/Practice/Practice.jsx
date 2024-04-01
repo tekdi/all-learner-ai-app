@@ -23,7 +23,8 @@ import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import { splitGraphemes } from "split-graphemes";
 import { Image } from "@mui/icons-material";
 import { Typography } from "@mui/material";
-import config from '../../utils/urlConstants.json';
+import config from "../../utils/urlConstants.json";
+import { MessageDialog } from "../../components/Assesment/Assesment";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -44,7 +45,7 @@ const Practice = () => {
   const [enableNext, setEnableNext] = useState(false);
   const [sentencePassedCounter, setSentencePassedCounter] = useState(0);
   const [progressData, setProgressData] = useState({});
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState("");
   const [isShowCase, setIsShowCase] = useState(false);
   const [startShowCase, setStartShowCase] = useState(false);
   const limit = 5;
@@ -53,12 +54,14 @@ const Practice = () => {
   const [play] = useSound(LevelCompleteAudio);
   const [livesData, setLivesData] = useState();
   const [gameOverData, setGameOverData] = useState();
+  const [loading, setLoading] = useState();
   const LIVES = 5;
   const TARGETS_PERCENTAGE = 0.3;
+  const [openMessageDialog, setOpenMessageDialog] = useState("");
   const { state } = useLocation();
 
-  const gameOver = (data, isPass) => {
-    let userWon = isPass;
+  const gameOver = (data) => {
+    let userWon = livesData?.redLivesToShow > 0;
     setGameOverData({ gameOver: true, userWon, ...data });
   };
 
@@ -85,12 +88,16 @@ const Practice = () => {
     ) {
       setDisableScreen(true);
       callConfettiAndPlay();
+
       setTimeout(() => {
-        alert(
+        // alert(
+        //   `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
+        // );
+        setOpenMessageDialog(
           `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
         );
-        setDisableScreen(false);
-      }, 3000);
+        // setDisableScreen(false);
+      }, 1200);
     }
   }, [currentQuestion]);
 
@@ -118,32 +125,33 @@ const Practice = () => {
     if (window && window.parent) {
       window.parent.postMessage({
         score: score,
-        message: 'all-test-rig-score',
+        message: "all-test-rig-score",
       });
     }
-};
+  };
 
   const handleNext = async (isGameOver) => {
     setEnableNext(false);
 
     try {
       const lang = getLocalData("lang");
-      if(localStorage.getItem("contentSessionId") !== null){
-
-       setPoints(1);
-       send(1)
-      }else {
-         const pointsRes = await axios.post(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_POINTER}/`,
-        {
-          userId: localStorage.getItem("virtualId"),
-          sessionId: localStorage.getItem("sessionId"),
-          points: 1,
-          language: lang,
-          milestoneLevel: `m${level}`,
+      if (localStorage.getItem("contentSessionId") !== null) {
+        setPoints(1);
+        if (isShowCase) {
+          send(1);
         }
-      );
-      setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
+      } else {
+        const pointsRes = await axios.post(
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.ADD_POINTER}/`,
+          {
+            userId: localStorage.getItem("virtualId"),
+            sessionId: localStorage.getItem("sessionId"),
+            points: 1,
+            language: lang,
+            milestoneLevel: `m${level}`,
+          }
+        );
+        setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
       }
 
       const virtualId = getLocalData("virtualId");
@@ -167,15 +175,18 @@ const Practice = () => {
 
       let showcasePercentage = ((currentQuestion + 1) * 100) / questions.length;
 
-      await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
-        userId: virtualId,
-        sessionId: sessionId,
-        milestone: isShowCase ? "showcase" : `practice`,
-        lesson: currentPracticeStep,
-        progress: isShowCase ? showcasePercentage : currentPracticeProgress,
-        language: lang,
-        milestoneLevel: `m${level}`,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+        {
+          userId: virtualId,
+          sessionId: sessionId,
+          milestone: isShowCase ? "showcase" : `practice`,
+          lesson: currentPracticeStep,
+          progress: isShowCase ? showcasePercentage : currentPracticeProgress,
+          language: lang,
+          milestoneLevel: `m${level}`,
+        }
+      );
 
       let newPracticeStep =
         currentQuestion == questions.length - 1 || isGameOver
@@ -216,16 +227,19 @@ const Practice = () => {
           );
           setLocalData("previous_level", getSetData.data.previous_level);
           if (getSetData.data.sessionResult == "pass") {
-            await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
-              userId: virtualId,
-              sessionId: sessionId,
-              milestone: `practice`,
-              lesson: "0",
-              progress: 0,
-              language: lang,
-              milestoneLevel: getSetData.data.currentLevel,
-            });
-            gameOver({ link: "/assesment-end" }, true);
+            await axios.post(
+              `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+              {
+                userId: virtualId,
+                sessionId: sessionId,
+                milestone: `practice`,
+                lesson: "0",
+                progress: 0,
+                language: lang,
+                milestoneLevel: getSetData.data.currentLevel,
+              }
+            );
+            gameOver({ link: "/assesment-end" });
             return;
           }
 
@@ -243,18 +257,21 @@ const Practice = () => {
           (elem) => elem.title == practiceSteps?.[newPracticeStep].name
         );
 
-        await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
-          userId: virtualId,
-          sessionId: sessionId,
-          milestone: `practice`,
-          lesson: newPracticeStep,
-          progress: currentPracticeProgress,
-          language: lang,
-          milestoneLevel: `m${level}`,
-        });
+        await axios.post(
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+          {
+            userId: virtualId,
+            sessionId: sessionId,
+            milestone: `practice`,
+            lesson: newPracticeStep,
+            progress: currentPracticeProgress,
+            language: lang,
+            milestoneLevel: `m${level}`,
+          }
+        );
 
         if (newPracticeStep == 0 || newPracticeStep == 5 || isGameOver) {
-          gameOver(undefined , false);
+          gameOver();
           return;
           // navigate("/assesment-end");
         }
@@ -345,6 +362,7 @@ const Practice = () => {
   const fetchDetails = async () => {
     let quesArr = [];
     try {
+      setLoading(true);
       const lang = getLocalData("lang");
       const virtualId = getLocalData("virtualId");
       const sessionId = getLocalData("sessionId");
@@ -415,21 +433,26 @@ const Practice = () => {
       setIsShowCase(showcaseLevel);
 
       if (showcaseLevel) {
-        await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
-          userId: virtualId,
-          sessionId: sessionId,
-          milestone: "showcase",
-          lesson: userState,
-          progress: 0,
-          language: lang,
-          milestoneLevel: `m${level}`,
-        });
+        await axios.post(
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+          {
+            userId: virtualId,
+            sessionId: sessionId,
+            milestone: "showcase",
+            lesson: userState,
+            progress: 0,
+            language: lang,
+            milestoneLevel: `m${level}`,
+          }
+        );
       }
 
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
       setProgressData(practiceProgress[virtualId]);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log("err", error);
     }
   };
@@ -456,15 +479,18 @@ const Practice = () => {
         fromBack: true,
       };
 
-      await axios.post(`${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`, {
-        userId: virtualId,
-        sessionId: sessionId,
-        milestone: "practice",
-        lesson: newCurrentPracticeStep,
-        progress: (newCurrentPracticeStep / practiceSteps.length) * 100,
-        language: lang,
-        milestoneLevel: `m${level}`,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+        {
+          userId: virtualId,
+          sessionId: sessionId,
+          milestone: "practice",
+          lesson: newCurrentPracticeStep,
+          progress: (newCurrentPracticeStep / practiceSteps.length) * 100,
+          language: lang,
+          milestoneLevel: `m${level}`,
+        }
+      );
 
       setProgressData(practiceProgress[virtualId]);
 
@@ -501,9 +527,9 @@ const Practice = () => {
 
   useEffect(() => {
     if (livesData?.scoreData) {
-      // if (parseInt(localStorage.getItem('redLivesToShow')) <= 0) {
-      //   handleNext(true);
-      // }
+      if (livesData?.redLivesToShow <= 0) {
+        handleNext(true);
+      }
     }
   }, [livesData]);
 
@@ -667,6 +693,7 @@ const Practice = () => {
             gameOverData,
             highlightWords,
             matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
+            loading,
           }}
         />
       );
@@ -711,6 +738,7 @@ const Practice = () => {
             allWords:
               questions?.map((elem) => elem?.contentSourceData?.[0]?.text) ||
               [],
+            loading,
           }}
         />
       );
@@ -752,6 +780,7 @@ const Practice = () => {
             isShowCase,
             handleBack: !isShowCase && handleBack,
             setEnableNext,
+            loading,
           }}
         />
       );
@@ -776,7 +805,20 @@ const Practice = () => {
     }
   };
 
-  return <>{renderMechanics()}</>;
+  return (
+    <>
+      {!!openMessageDialog && (
+        <MessageDialog
+          message={openMessageDialog}
+          closeDialog={() => {
+            setOpenMessageDialog("");
+            setDisableScreen(false);
+          }}
+        />
+      )}
+      {renderMechanics()}
+    </>
+  );
 };
 
 export default Practice;

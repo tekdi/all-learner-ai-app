@@ -41,6 +41,7 @@ const WordsOrImage = ({
   gameOverData,
   highlightWords,
   matchedChar,
+  loading,
 }) => {
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
@@ -84,6 +85,7 @@ const WordsOrImage = ({
         disableScreen,
         livesData,
         gameOverData,
+        loading,
       }}
     >
       <CardContent

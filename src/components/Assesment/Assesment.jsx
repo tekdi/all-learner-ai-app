@@ -4,6 +4,7 @@ import {
   Box,
   Grid,
   IconButton,
+  Typography,
 } from "../../../node_modules/@mui/material/index";
 import {
   RoundTick,
@@ -39,8 +40,9 @@ import profilePic from "../../assets/images/profile_url.png";
 import textureImage from "../../assets/images/textureImage.png";
 import scoreView from "../../assets/images/scoreView.png";
 import back from "../../assets/images/back-arrow.png";
-import { jwtDecode } from 'jwt-decode';
-import config from '../../utils/urlConstants.json';
+import { jwtDecode } from "jwt-decode";
+import config from "../../utils/urlConstants.json";
+import panda from "../../assets/images/panda.svg";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -207,6 +209,102 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   );
 };
 
+export const MessageDialog = ({ message, closeDialog }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100vw",
+        height: "100vh",
+        position: "fixed",
+        background: "rgba(0, 0, 0, 0.5)",
+        zIndex: 9999,
+      }}
+    >
+      <Box
+        sx={{
+          width: "600px",
+          minHeight: "424px",
+          borderRadius: "20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          backgroundImage: `url(${textureImage})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "round",
+          boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
+          backdropFilter: "blur(25px)",
+          position: "relative",
+        }}
+      >
+        <Box sx={{ position: "absolute", left: 10, bottom: 0 }}>
+          <img src={panda} alt="panda" />
+        </Box>
+        <Box mt="32px">
+          <Typography
+            className="successHeader"
+            sx={{
+              mt: 3,
+              textAlign: "center",
+            }}
+          >
+            Hurray!!!
+          </Typography>
+        </Box>
+        <Box mt="28px" display={"flex"} flexWrap={"wrap"}>
+          <span
+            style={{
+              color: "#000000",
+              fontWeight: 700,
+              fontSize: "40px",
+              fontFamily: "Quicksand",
+              lineHeight: "62px",
+              textAlign: "center",
+            }}
+          >
+            {message || `You have successfully completed Level 1`}
+          </span>
+        </Box>
+        <Box
+          sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+          mt="60px"
+          // mr="110px"
+        >
+          <Box
+            onClick={() => {
+              closeDialog();
+            }}
+            sx={{
+              cursor: "pointer",
+              background: "#6DAF19",
+              minWidth: "173px",
+              height: "55px",
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "0px 24px 0px 20px",
+            }}
+          >
+            <span
+              style={{
+                color: "#FFFFFF",
+                fontWeight: 600,
+                fontSize: "20px",
+                fontFamily: "Quicksand",
+              }}
+            >
+              {"Continue"}
+            </span>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
 export const ProfileHeader = ({
   setOpenLangModal = () => {
     alert("go to homescreen to change language");
@@ -278,7 +376,7 @@ export const ProfileHeader = ({
             alignItems: "center",
           }}
         >
-         {/* <Box sx={{ position: "relative" }} mr="10px">
+          {/* <Box sx={{ position: "relative" }} mr="10px">
             <img
               src={scoreView}
               alt="scoreView"
@@ -326,10 +424,10 @@ export const ProfileHeader = ({
 
 const Assesment = ({ discoverStart }) => {
   let username;
-  if (localStorage.getItem('token') !== null) {
-    let jwtToken = localStorage.getItem('token');
+  if (localStorage.getItem("token") !== null) {
+    let jwtToken = localStorage.getItem("token");
     var userDetails = jwtDecode(jwtToken);
-    username=  userDetails.student_name
+    username = userDetails.student_name;
   }
   const [searchParams, setSearchParams] = useSearchParams();
   const [profileName, setProfileName] = useState(username);
@@ -344,10 +442,10 @@ const Assesment = ({ discoverStart }) => {
     // const level = getLocalData('userLevel');
     // setLevel(level);
     setLocalData("lang", lang);
-     dispatch(setVirtualId(localStorage.getItem('virtualId')));
-    let contentSessionId = localStorage.getItem('contentSessionId')
+    dispatch(setVirtualId(localStorage.getItem("virtualId")));
+    let contentSessionId = localStorage.getItem("contentSessionId");
     localStorage.setItem("sessionId", contentSessionId);
-    if (discoverStart && username && localStorage.getItem('token')) {
+    if (discoverStart && username && localStorage.getItem("token")) {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.post(
@@ -364,7 +462,10 @@ const Assesment = ({ discoverStart }) => {
         setLevel(
           getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
         );
-        localStorage.setItem("virtualId", usernameDetails?.data?.result?.virtualID);
+        localStorage.setItem(
+          "virtualId",
+          usernameDetails?.data?.result?.virtualID
+        );
         let session_id = localStorage.getItem("sessionId");
 
         localStorage.setItem("lang", lang || "ta");

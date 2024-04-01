@@ -245,6 +245,7 @@ function VoiceAnalyser(props) {
       const { originalText, contentType, contentId, currentLine } = props;
       const responseStartTime = new Date().getTime();
       let responseText = "";
+      let newThresholdPercentage = 0;
       let data = {};
 
       if (callUpdateLearner) {
@@ -264,61 +265,9 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
+        newThresholdPercentage = data?.targetsPercentage || 0;
+        handlePercentageForLife(newThresholdPercentage)
 
-        if (livesData) {
-          let newLivesData = {
-            ...livesData,
-            scoreData: {
-              ...livesData?.scoreData,
-              [props.currentLine]: data.createScoreData.session,
-            },
-          };
-
-          let missing_token_scores = [];
-          let confidence_scores = [];
-
-          Object.values(newLivesData.scoreData)?.forEach((elem) => {
-            // elem.missing_token_scores confidence_scores
-            elem.confidence_scores.forEach((ecs) => {
-              if (!confidence_scores.find((cs) => cs == ecs.token)) {
-                confidence_scores.push(ecs.token);
-              }
-            });
-            elem.missing_token_scores.forEach((emts) => {
-              if (!missing_token_scores.find((mts) => mts == emts.token)) {
-                missing_token_scores.push(emts.token);
-              }
-            });
-          });
-
-          newLivesData = {
-            ...newLivesData,
-            missing_token_scores,
-            confidence_scores,
-          };
-
-          const blackLivesToShow =
-            Math.round(
-              newLivesData?.missing_token_scores?.length /
-                newLivesData?.targetPerLive
-            ) || 0;
-          const redLivesToShow = newLivesData?.lives - blackLivesToShow;
-
-          newLivesData = {
-            ...newLivesData,
-            blackLivesToShow,
-            redLivesToShow,
-          };
-
-          var audio = new Audio(
-            newLivesData.redLivesToShow <
-            (livesData?.redLivesToShow || livesData?.lives)
-              ? livesCut
-              : livesAdd
-          );
-          audio.play();
-          setLivesData(newLivesData);
-        }
       }
 
       const responseEndTime = new Date().getTime();
@@ -440,6 +389,87 @@ function VoiceAnalyser(props) {
       console.log("err", error);
     }
   };
+
+  const handlePercentageForLife = (percentage) => {
+    try {
+      const THRESHOLD_PERCENTAGE = 30
+      let newLivesData = {};
+
+      if (livesData) {
+
+        if (percentage > THRESHOLD_PERCENTAGE) {
+          let redLivesToShow = 0
+          let blackLivesToShow = 5;
+          newLivesData = {
+            ...livesData,
+            blackLivesToShow,
+            redLivesToShow,
+          };
+          // 5 black , 0 red
+
+        } else if (percentage >= 0 && percentage <= 5) {
+          let redLivesToShow = 5
+          let blackLivesToShow = 0;
+          newLivesData = {
+            ...livesData,
+            blackLivesToShow,
+            redLivesToShow,
+          };
+          // 5 red , 0 black
+        }
+        else if (percentage >= 6 && percentage <= 11) {
+          let redLivesToShow = 4
+          let blackLivesToShow = 1;
+          newLivesData = {
+            ...livesData,
+            blackLivesToShow,
+            redLivesToShow,
+          };
+          // 4 red , 1 black
+        } else if (percentage >= 12 && percentage <= 17) {
+          let redLivesToShow = 3
+          let blackLivesToShow = 2;
+          newLivesData = {
+            ...livesData,
+            blackLivesToShow,
+            redLivesToShow,
+          };
+          // 3 red , 2 black
+
+        } else if (percentage >= 18 && percentage <= 23) {
+          let redLivesToShow = 2;
+          let blackLivesToShow = 3;
+          newLivesData = {
+            ...livesData,
+            blackLivesToShow,
+            redLivesToShow,
+          };
+          // 2 red , 3 black
+
+        } else if (percentage >= 24 && percentage <= 29) {
+          let redLivesToShow = 1;
+          let blackLivesToShow = 4;
+          newLivesData = {
+            ...livesData,
+            blackLivesToShow,
+            redLivesToShow,
+          };
+          // 1 red , 4 black
+        }
+
+        var audio = new Audio(
+          newLivesData.redLivesToShow <
+            (livesData?.redLivesToShow || livesData?.lives)
+            ? livesCut
+            : livesAdd
+        );
+        audio.play();
+        setLivesData(newLivesData);
+      }
+    } catch {
+        // for exception
+    }
+  }
 
   // const getpermision = () => {
   //   navigator.getUserMedia =

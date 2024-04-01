@@ -56,6 +56,7 @@ const Mechanics4 = ({
   isShowCase,
   handleBack,
   setEnableNext,
+  loading,
 }) => {
   const [words, setWords] = useState(
     type == "word" ? [] : ["Friend", "She is", "My"]
@@ -148,6 +149,7 @@ const Mechanics4 = ({
         playTeacherAudio,
         handleBack,
         disableScreen,
+        loading,
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2, mt: 8 }}>

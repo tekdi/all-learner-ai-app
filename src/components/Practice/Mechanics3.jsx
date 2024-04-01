@@ -47,12 +47,13 @@ const Mechanics2 = ({
   handleBack,
   allWords,
   setEnableNext,
+  loading,
 }) => {
   const [words, setWords] = useState([]);
   const [sentences, setSentences] = useState([]);
 
   const [selectedWord, setSelectedWord] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [shake, setShake] = useState(false);
   const [wordToFill, setWordToFill] = useState("");
   const [disabledWords, setDisabledWords] = useState(false);
@@ -188,6 +189,7 @@ const Mechanics2 = ({
         playTeacherAudio,
         handleBack,
         disableScreen,
+        loading,
       }}
     >
       <Box

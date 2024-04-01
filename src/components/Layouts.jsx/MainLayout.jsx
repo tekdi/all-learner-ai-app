@@ -12,6 +12,7 @@ import practicebg3 from "../../assets/images/practice-bg3.svg";
 import gameWon from "../../assets/images/gameWon.svg";
 import gameLost from "../../assets/images/gameLost.svg";
 import clouds from "../../assets/images/clouds.svg";
+import catLoading from "../../assets/images/catLoading.gif";
 
 import textureImage from "../../assets/images/textureImage.png";
 import timer from "../../assets/images/timer.svg";
@@ -119,6 +120,7 @@ const MainLayout = (props) => {
     setStartShowCase,
     livesData,
     gameOverData,
+    loading,
   } = props;
 
   const [shake, setShake] = useState(false);
@@ -232,7 +234,7 @@ const MainLayout = (props) => {
           </Box>
         )} */}
       </Box>
-      {(!isShowCase || (isShowCase && startShowCase)) && !gameOverData && (
+      {loading ? (
         <Card
           sx={{
             width: "85vw",
@@ -240,7 +242,8 @@ const MainLayout = (props) => {
             borderRadius: "20px",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "center",
+            alignItems: "center",
             backgroundImage: `url(${
               cardBackground ? cardBackground : textureImage
             })`,
@@ -251,596 +254,321 @@ const MainLayout = (props) => {
             mt: "50px",
           }}
         >
-          <CardContent
-            sx={{
-              width: "85vw",
-              minHeight: "100%",
-              opacity: disableScreen ? 0.25 : 1,
-              pointerEvents: disableScreen ? "none" : "initial",
-            }}
-          >
-            {showTimer && (
-              <Box sx={{ position: "absolute" }}>
-                <img
-                  src={timer}
-                  alt="timer"
-                  sx={{ height: "58px", width: "58px" }}
-                />
-              </Box>
-            )}
-            {props.children}
-          </CardContent>
-          {steps > 0 && (
-            <Box
+          <Box>
+            <img
+              src={catLoading}
+              alt="catLoading"
+              // sx={{ height: "58px", width: "58px" }}
+            />
+          </Box>
+        </Card>
+      ) : (
+        <>
+          {(!isShowCase || (isShowCase && startShowCase)) && !gameOverData && (
+            <Card
               sx={{
                 width: "85vw",
-                position: "absolute",
+                minHeight: "80vh",
+                borderRadius: "20px",
                 display: "flex",
-                top: "0",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                backgroundImage: `url(${
+                  cardBackground ? cardBackground : textureImage
+                })`,
+                backgroundSize: "contain",
+                backgroundRepeat: "round",
+                boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
+                backdropFilter: "blur(25px)",
+                mt: "50px",
               }}
             >
-              {stepsArr?.map((step) => {
-                const showGreen = step + 1 <= currentStep;
-                return (
-                  <Box
-                    sx={{
-                      height: "8px",
-                      width: `${100 / steps}%`,
-                      background: showGreen ? "#18DE2C" : "#C1C6CC",
-                      marginLeft: "3px",
-                    }}
-                  ></Box>
-                );
-              })}
-            </Box>
-          )}
-          {false && (
-            <Box
-              position={"absolute"}
-              top={20}
-              left={20}
-              justifyContent={"center"}
-            >
-              <Box display={"flex"}>
-                {[...Array(Math.max(0, redLivesToShow) || 0).keys()]?.map(
-                  (elem) => (
-                    <HeartRed />
-                  )
-                )}
-
-                {[...Array(Math.max(0, blackLivesToShow) || 0).keys()]?.map(
-                  (elem) => (
-                    <HeartBlack />
-                  )
-                )}
-              </Box>
-              <span
-                style={{
-                  marginLeft: "5px",
-                  color: "#000000",
-                  fontWeight: 700,
-                  fontSize: "24px",
-                  lineHeight: "30px",
-                  fontFamily: "Quicksand",
-                }}
-              >
-                {`You have ${redLivesToShow} lives`}
-              </span>
-            </Box>
-          )}
-          <Box sx={{ height: "120px", position: "relative" }}>
-            <Box sx={{ position: "absolute", left: 0, bottom: "-2px" }}>
-              <footer>{LEVEL && levelsImages?.[LEVEL]?.milestone}</footer>
-            </Box>
-            <Box
-              sx={{
-                borderBottom: "1.5px solid rgba(51, 63, 97, 0.15)",
-                width: "100%",
-              }}
-            ></Box>
-            {showNext && (
-              <Box
+              <CardContent
                 sx={{
-                  display: "flex",
-                  justifyContent: currentPracticeStep ? "center" : "right",
-                  alignItems: "center",
-                  width: "100%",
-                  height: "100%",
+                  width: "85vw",
+                  minHeight: "100%",
+                  opacity: disableScreen ? 0.25 : 1,
+                  pointerEvents: disableScreen ? "none" : "initial",
                 }}
               >
-                {showProgress && (
+                {showTimer && (
+                  <Box sx={{ position: "absolute" }}>
+                    <img
+                      src={timer}
+                      alt="timer"
+                      sx={{ height: "58px", width: "58px" }}
+                    />
+                  </Box>
+                )}
+                {props.children}
+              </CardContent>
+              {steps > 0 && (
+                <Box
+                  sx={{
+                    width: "85vw",
+                    position: "absolute",
+                    display: "flex",
+                    top: "0",
+                  }}
+                >
+                  {stepsArr?.map((step) => {
+                    const showGreen = step + 1 <= currentStep;
+                    return (
+                      <Box
+                        sx={{
+                          height: "8px",
+                          width: `${100 / steps}%`,
+                          background: showGreen ? "#18DE2C" : "#C1C6CC",
+                          marginLeft: "3px",
+                        }}
+                      ></Box>
+                    );
+                  })}
+                </Box>
+              )}
+              {startShowCase && (
+                <Box
+                  position={"absolute"}
+                  top={20}
+                  left={20}
+                  justifyContent={"center"}
+                >
+                  <Box display={"flex"}>
+                    {[...Array(Math.max(0, redLivesToShow) || 0).keys()]?.map(
+                      (elem) => (
+                        <HeartRed />
+                      )
+                    )}
+
+                    {[...Array(Math.max(0, blackLivesToShow) || 0).keys()]?.map(
+                      (elem) => (
+                        <HeartBlack />
+                      )
+                    )}
+                  </Box>
+                  <span
+                    style={{
+                      marginLeft: "5px",
+                      color: "#000000",
+                      fontWeight: 700,
+                      fontSize: "24px",
+                      lineHeight: "30px",
+                      fontFamily: "Quicksand",
+                    }}
+                  >
+                    {`You have ${redLivesToShow} lives`}
+                  </span>
+                </Box>
+              )}
+              <Box sx={{ height: "120px", position: "relative" }}>
+                <Box sx={{ position: "absolute", left: 0, bottom: "-2px" }}>
+                  <footer>{LEVEL && levelsImages?.[LEVEL]?.milestone}</footer>
+                </Box>
+                <Box
+                  sx={{
+                    borderBottom: "1.5px solid rgba(51, 63, 97, 0.15)",
+                    width: "100%",
+                  }}
+                ></Box>
+                {showNext && (
                   <Box
                     sx={{
                       display: "flex",
-                      justifyContent: "center",
+                      justifyContent: currentPracticeStep ? "center" : "right",
+                      alignItems: "center",
                       width: "100%",
+                      height: "100%",
                     }}
                   >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                      }}
-                    >
-                      {" "}
+                    {showProgress && (
                       <Box
                         sx={{
                           display: "flex",
                           justifyContent: "center",
-                          alignItems: "center",
-                          height: "48px",
-                          border: "1.5px solid rgba(51, 63, 97, 0.15)",
-                          ml: {
-                            xs: 10,
-                            sm: 15,
-                            lg: 25,
-                            md: 18,
-                          },
-                          borderRadius: "30px",
-                          background: "white",
+                          width: "100%",
                         }}
                       >
-                        {practiceSteps.map((elem, i) => {
-                          return (
-                            <Box
-                              key={i}
-                              sx={{
-                                width: {
-                                  xs: "24px",
-                                  sm: "26px",
-                                  md: "28px",
-                                  lg: "36px",
-                                },
-                                height: {
-                                  xs: "24px",
-                                  sm: "26px",
-                                  md: "28px",
-                                  lg: "36px",
-                                },
-                                background:
-                                  currentPracticeStep > i
-                                    ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-                                    : currentPracticeStep == i
-                                    ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
-                                    : "rgba(0, 0, 0, 0.04)",
-                                ml: {
-                                  xs: 0.5,
-                                  sm: 0.5,
-                                  md: 1.5,
-                                  lg: 2,
-                                },
-                                mr: i == practiceSteps?.length - 1 ? 2 : 0,
-                                borderRadius: "30px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              {currentPracticeStep > i ? (
-                                <GreenTick />
-                              ) : (
-                                <span
-                                  style={{
-                                    color:
-                                      currentPracticeStep == i
-                                        ? "white"
-                                        : "#1E2937",
-                                    fontWeight: 600,
-                                    lineHeight: "20px",
-                                    fontSize: "16px",
-                                    fontFamily: "Quicksand",
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                          }}
+                        >
+                          {" "}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              height: "48px",
+                              border: "1.5px solid rgba(51, 63, 97, 0.15)",
+                              ml: {
+                                xs: 10,
+                                sm: 15,
+                                lg: 25,
+                                md: 18,
+                              },
+                              borderRadius: "30px",
+                              background: "white",
+                            }}
+                          >
+                            {practiceSteps.map((elem, i) => {
+                              return (
+                                <Box
+                                  key={i}
+                                  sx={{
+                                    width: {
+                                      xs: "24px",
+                                      sm: "26px",
+                                      md: "28px",
+                                      lg: "36px",
+                                    },
+                                    height: {
+                                      xs: "24px",
+                                      sm: "26px",
+                                      md: "28px",
+                                      lg: "36px",
+                                    },
+                                    background:
+                                      currentPracticeStep > i
+                                        ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
+                                        : currentPracticeStep == i
+                                        ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
+                                        : "rgba(0, 0, 0, 0.04)",
+                                    ml: {
+                                      xs: 0.5,
+                                      sm: 0.5,
+                                      md: 1.5,
+                                      lg: 2,
+                                    },
+                                    mr: i == practiceSteps?.length - 1 ? 2 : 0,
+                                    borderRadius: "30px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
                                   }}
                                 >
-                                  {elem.name}
-                                </span>
-                              )}
-                            </Box>
-                          );
-                        })}
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          ml: {
-                            xs: 10,
-                            sm: 15,
-                            lg: 25,
-                            md: 15,
-                          },
-                          mt: 2,
-                        }}
-                      >
-                        <span
-                          style={{
-                            color: "#1E2937",
-                            fontWeight: 500,
-                            lineHeight: "18px",
-                            fontSize: "14px",
-                            fontFamily: "Quicksand",
-                          }}
-                        >
-                          {"Overall Progress:"}
-                        </span>
-                        <Box
-                          sx={{
-                            height: "12px",
-                            width: {
-                              md: "250px",
-                              lg: "350px",
-                            },
-                            background: "#D1F8D5",
-                            borderRadius: "6px",
-                            ml: 2,
-                            position: "relative",
-                          }}
-                        >
+                                  {currentPracticeStep > i ? (
+                                    <GreenTick />
+                                  ) : (
+                                    <span
+                                      style={{
+                                        color:
+                                          currentPracticeStep == i
+                                            ? "white"
+                                            : "#1E2937",
+                                        fontWeight: 600,
+                                        lineHeight: "20px",
+                                        fontSize: "16px",
+                                        fontFamily: "Quicksand",
+                                      }}
+                                    >
+                                      {elem.name}
+                                    </span>
+                                  )}
+                                </Box>
+                              );
+                            })}
+                          </Box>
                           <Box
                             sx={{
-                              height: "12px",
-                              width: `${currentPracticeProgress}%`,
-                              background: "#18DE2C",
-                              borderRadius: "6px",
-                              position: "absolute",
-                            }}
-                          ></Box>
-                        </Box>
-                        <span
-                          style={{
-                            color: "#1E2937",
-                            fontWeight: 700,
-                            lineHeight: "18px",
-                            fontSize: "14px",
-                            fontFamily: "Quicksand",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          {`${currentPracticeProgress}%`}
-                        </span>
-                      </Box>
-                    </Box>
-                  </Box>
-                )}
-                <Box sx={{ display: "flex", justifyContent: "right", mr: 4 }}>
-                  {enableNext ? (
-                    <Box
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => handleNext()}
-                    >
-                      <NextButton />
-                    </Box>
-                  ) : (
-                    <Box sx={{ cursor: "pointer" }}>
-                      <NextButton disabled />
-                    </Box>
-                  )}
-                </Box>
-              </Box>
-            )}
-            {nextLessonAndHome && (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mt: 4,
-                  ml: 4,
-                  mr: 4,
-                }}
-              >
-                <Box
-                  sx={{
-                    cursor: "pointer",
-                    background:
-                      "linear-gradient(90deg, rgba(255,144,80,1) 0%, rgba(225,84,4,1) 85%)",
-                    minWidth: "100px",
-                    height: "55px",
-                    borderRadius: "10px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "0px 24px 0px 20px",
-                  }}
-                  onClick={() => handleNext()}
-                >
-                  <span
-                    style={{
-                      color: "#FFFFFF",
-                      fontWeight: 600,
-                      fontSize: "20px",
-                      fontFamily: "Quicksand",
-                    }}
-                  >
-                    {"Next Lesson"}
-                  </span>
-                  {/* <NextButton /> */}
-                </Box>
-                {enableNext ? (
-                  <Box sx={{ cursor: "pointer" }} onClick={() => handleNext()}>
-                    <NextButton />
-                  </Box>
-                ) : (
-                  <Box sx={{ cursor: "pointer" }}>
-                    <NextButton disabled />
-                  </Box>
-                )}
-              </Box>
-            )}
-          </Box>
-        </Card>
-      )}
-      {((isShowCase && !startShowCase) || gameOverData) && (
-        <Card
-          sx={{
-            width: "85vw",
-            minHeight: "80vh",
-            borderRadius: "20px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            backgroundImage: `url(${
-              cardBackground ? cardBackground : textureImage
-            })`,
-            backgroundSize: "contain",
-            backgroundRepeat: "round",
-            boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
-            backdropFilter: "blur(25px)",
-            mt: "50px",
-          }}
-        >
-          <Box>{shake && <Confetti width={width} height={"600px"} />}</Box>
-          <CardContent
-            sx={{
-              width: "85vw",
-              minHeight: "100%",
-              opacity: disableScreen ? 0.25 : 1,
-              pointerEvents: disableScreen ? "none" : "initial",
-            }}
-          >
-            {isShowCase && !startShowCase && !gameOverData && (
-              <>
-                <Typography
-                  className="successHeader"
-                  sx={{
-                    textAlign: "center",
-                  }}
-                >
-                  Hurray!!!
-                </Typography>
-                <Typography
-                  sx={{
-                    mb: 1,
-                    mt: 1,
-                    textAlign: "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      color: "#50507D",
-                      fontWeight: 600,
-                      fontSize: "20px",
-                      lineHeight: "37px",
-                      letterSpacing: "2%",
-                      fontFamily: "Quicksand",
-                    }}
-                  >
-                    {"Are you ready to go to Assessment?"}
-                  </span>
-                </Typography>
-              </>
-            )}
-            {gameOverData && (
-              <>
-                <Box
-                  sx={{ position: "absolute", top: "-120px", left: "-70px" }}
-                >
-                  {!gameOverData?.userWon && (
-                    <img src={clouds} alt="clouds" style={{ zIndex: 222 }} />
-                  )}
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    position: "relative",
-                  }}
-                >
-                  {gameOverData?.userWon ? (
-                    <img
-                      src={gameWon}
-                      alt="gameWon"
-                      style={{ zIndex: 9999, height: 340 }}
-                    />
-                  ) : (
-                    <img
-                      src={gameLost}
-                      alt="gameLost"
-                      style={{ height: 340 }}
-                    />
-                  )}
-                </Box>
-              </>
-            )}
-          </CardContent>
-          <Box sx={{ height: "120px", position: "relative" }}>
-            <Box
-              sx={{
-                borderBottom: "1.5px solid rgba(51, 63, 97, 0.15)",
-                width: "100%",
-              }}
-            ></Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: currentPracticeStep ? "center" : "right",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              {
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: currentPracticeStep ? "center" : "right",
-                    alignItems: "center",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  {showProgress && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        width: "100%",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                        }}
-                      >
-                        {" "}
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            height: "48px",
-                            border: "1.5px solid rgba(51, 63, 97, 0.15)",
-                            ml: {
-                              lg: 25,
-                              md: 18,
-                            },
-                            borderRadius: "30px",
-                            background: "white",
-                          }}
-                        >
-                          {practiceSteps.map((elem, i) => {
-                            return (
-                              <Box
-                                key={i}
-                                sx={{
-                                  width: {
-                                    md: "28px",
-                                    lg: "36px",
-                                  },
-                                  height: {
-                                    md: "28px",
-                                    lg: "36px",
-                                  },
-                                  background:
-                                    currentPracticeStep > i
-                                      ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-                                      : currentPracticeStep == i
-                                      ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
-                                      : "rgba(0, 0, 0, 0.04)",
-                                  ml: {
-                                    md: 1.5,
-                                    lg: 2,
-                                  },
-                                  mr: i == practiceSteps?.length - 1 ? 2 : 0,
-                                  borderRadius: "30px",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                }}
-                              >
-                                {currentPracticeStep > i ? (
-                                  <GreenTick />
-                                ) : (
-                                  <span
-                                    style={{
-                                      color:
-                                        currentPracticeStep == i
-                                          ? "white"
-                                          : "#1E2937",
-                                      fontWeight: 600,
-                                      lineHeight: "20px",
-                                      fontSize: "16px",
-                                      fontFamily: "Quicksand",
-                                    }}
-                                  >
-                                    {elem.name}
-                                  </span>
-                                )}
-                              </Box>
-                            );
-                          })}
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            ml: {
-                              lg: 25,
-                              md: 15,
-                            },
-                            mt: 2,
-                          }}
-                        >
-                          <span
-                            style={{
-                              color: "#1E2937",
-                              fontWeight: 500,
-                              lineHeight: "18px",
-                              fontSize: "14px",
-                              fontFamily: "Quicksand",
-                            }}
-                          >
-                            {"Overall Progress:"}
-                          </span>
-                          <Box
-                            sx={{
-                              height: "12px",
-                              width: {
-                                md: "250px",
-                                lg: "350px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              ml: {
+                                xs: 10,
+                                sm: 15,
+                                lg: 25,
+                                md: 15,
                               },
-                              background: "#D1F8D5",
-                              borderRadius: "6px",
-                              ml: 2,
-                              position: "relative",
+                              mt: 2,
                             }}
                           >
+                            <span
+                              style={{
+                                color: "#1E2937",
+                                fontWeight: 500,
+                                lineHeight: "18px",
+                                fontSize: "14px",
+                                fontFamily: "Quicksand",
+                              }}
+                            >
+                              {"Overall Progress:"}
+                            </span>
                             <Box
                               sx={{
                                 height: "12px",
-                                width: `${currentPracticeProgress}%`,
-                                background: "#18DE2C",
+                                width: {
+                                  md: "250px",
+                                  lg: "350px",
+                                },
+                                background: "#D1F8D5",
                                 borderRadius: "6px",
-                                position: "absolute",
+                                ml: 2,
+                                position: "relative",
                               }}
-                            ></Box>
+                            >
+                              <Box
+                                sx={{
+                                  height: "12px",
+                                  width: `${currentPracticeProgress}%`,
+                                  background: "#18DE2C",
+                                  borderRadius: "6px",
+                                  position: "absolute",
+                                }}
+                              ></Box>
+                            </Box>
+                            <span
+                              style={{
+                                color: "#1E2937",
+                                fontWeight: 700,
+                                lineHeight: "18px",
+                                fontSize: "14px",
+                                fontFamily: "Quicksand",
+                                marginLeft: "10px",
+                              }}
+                            >
+                              {`${currentPracticeProgress}%`}
+                            </span>
                           </Box>
-                          <span
-                            style={{
-                              color: "#1E2937",
-                              fontWeight: 700,
-                              lineHeight: "18px",
-                              fontSize: "14px",
-                              fontFamily: "Quicksand",
-                              marginLeft: "10px",
-                            }}
-                          >
-                            {`${currentPracticeProgress}%`}
-                          </span>
                         </Box>
                       </Box>
+                    )}
+                    <Box
+                      sx={{ display: "flex", justifyContent: "right", mr: 4 }}
+                    >
+                      {enableNext ? (
+                        <Box
+                          sx={{ cursor: "pointer" }}
+                          onClick={() => handleNext()}
+                        >
+                          <NextButton />
+                        </Box>
+                      ) : (
+                        <Box sx={{ cursor: "pointer" }}>
+                          <NextButton disabled />
+                        </Box>
+                      )}
                     </Box>
-                  )}
-                  <Box sx={{ display: "flex", justifyContent: "right", mr: 4 }}>
+                  </Box>
+                )}
+                {nextLessonAndHome && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mt: 4,
+                      ml: 4,
+                      mr: 4,
+                    }}
+                  >
                     <Box
                       sx={{
                         cursor: "pointer",
                         background:
                           "linear-gradient(90deg, rgba(255,144,80,1) 0%, rgba(225,84,4,1) 85%)",
-                        minWidth: "160px",
+                        minWidth: "100px",
                         height: "55px",
                         borderRadius: "10px",
                         display: "flex",
@@ -848,16 +576,7 @@ const MainLayout = (props) => {
                         alignItems: "center",
                         padding: "0px 24px 0px 20px",
                       }}
-                      onClick={() => {
-                        if (isShowCase && !startShowCase && !gameOverData) {
-                          setStartShowCase(true);
-                        }
-                        if (gameOverData) {
-                          gameOverData.link
-                            ? navigate(gameOverData.link)
-                            : navigate("/");
-                        }
-                      }}
+                      onClick={() => handleNext()}
                     >
                       <span
                         style={{
@@ -867,16 +586,349 @@ const MainLayout = (props) => {
                           fontFamily: "Quicksand",
                         }}
                       >
-                        {!gameOverData ? "Start Game ➜" : "Practice ➜"}
+                        {"Next Lesson"}
                       </span>
                       {/* <NextButton /> */}
                     </Box>
+                    {enableNext ? (
+                      <Box
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => handleNext()}
+                      >
+                        <NextButton />
+                      </Box>
+                    ) : (
+                      <Box sx={{ cursor: "pointer" }}>
+                        <NextButton disabled />
+                      </Box>
+                    )}
                   </Box>
+                )}
+              </Box>
+            </Card>
+          )}
+          {((isShowCase && !startShowCase) || gameOverData) && (
+            <Card
+              sx={{
+                width: "85vw",
+                minHeight: "80vh",
+                borderRadius: "20px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                backgroundImage: `url(${
+                  cardBackground ? cardBackground : textureImage
+                })`,
+                backgroundSize: "contain",
+                backgroundRepeat: "round",
+                boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
+                backdropFilter: "blur(25px)",
+                mt: "50px",
+              }}
+            >
+              <Box>{shake && <Confetti width={width} height={"600px"} />}</Box>
+              <CardContent
+                sx={{
+                  width: "85vw",
+                  minHeight: "100%",
+                  opacity: disableScreen ? 0.25 : 1,
+                  pointerEvents: disableScreen ? "none" : "initial",
+                }}
+              >
+                {isShowCase && !startShowCase && !gameOverData && (
+                  <>
+                    <Typography
+                      className="successHeader"
+                      sx={{
+                        textAlign: "center",
+                      }}
+                    >
+                      Hurray!!!
+                    </Typography>
+                    <Typography
+                      sx={{
+                        mb: 1,
+                        mt: 1,
+                        textAlign: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: "#50507D",
+                          fontWeight: 600,
+                          fontSize: "20px",
+                          lineHeight: "37px",
+                          letterSpacing: "2%",
+                          fontFamily: "Quicksand",
+                        }}
+                      >
+                        {"Are you ready to go to Assessment?"}
+                      </span>
+                    </Typography>
+                  </>
+                )}
+                {gameOverData && (
+                  <>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "-120px",
+                        left: "-70px",
+                      }}
+                    >
+                      {!gameOverData?.userWon && (
+                        <img
+                          src={clouds}
+                          alt="clouds"
+                          style={{ zIndex: 222 }}
+                        />
+                      )}
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        position: "relative",
+                      }}
+                    >
+                      {gameOverData?.userWon ? (
+                        <img
+                          src={gameWon}
+                          alt="gameWon"
+                          style={{ zIndex: 9999, height: 340 }}
+                        />
+                      ) : (
+                        <img
+                          src={gameLost}
+                          alt="gameLost"
+                          style={{ height: 340 }}
+                        />
+                      )}
+                    </Box>
+                  </>
+                )}
+              </CardContent>
+              <Box sx={{ height: "120px", position: "relative" }}>
+                <Box
+                  sx={{
+                    borderBottom: "1.5px solid rgba(51, 63, 97, 0.15)",
+                    width: "100%",
+                  }}
+                ></Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: currentPracticeStep ? "center" : "right",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: currentPracticeStep
+                          ? "center"
+                          : "right",
+                        alignItems: "center",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      {showProgress && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            width: "100%",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              flexDirection: "column",
+                            }}
+                          >
+                            {" "}
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "48px",
+                                border: "1.5px solid rgba(51, 63, 97, 0.15)",
+                                ml: {
+                                  lg: 25,
+                                  md: 18,
+                                },
+                                borderRadius: "30px",
+                                background: "white",
+                              }}
+                            >
+                              {practiceSteps.map((elem, i) => {
+                                return (
+                                  <Box
+                                    key={i}
+                                    sx={{
+                                      width: {
+                                        md: "28px",
+                                        lg: "36px",
+                                      },
+                                      height: {
+                                        md: "28px",
+                                        lg: "36px",
+                                      },
+                                      background:
+                                        currentPracticeStep > i
+                                          ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
+                                          : currentPracticeStep == i
+                                          ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
+                                          : "rgba(0, 0, 0, 0.04)",
+                                      ml: {
+                                        md: 1.5,
+                                        lg: 2,
+                                      },
+                                      mr:
+                                        i == practiceSteps?.length - 1 ? 2 : 0,
+                                      borderRadius: "30px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    {currentPracticeStep > i ? (
+                                      <GreenTick />
+                                    ) : (
+                                      <span
+                                        style={{
+                                          color:
+                                            currentPracticeStep == i
+                                              ? "white"
+                                              : "#1E2937",
+                                          fontWeight: 600,
+                                          lineHeight: "20px",
+                                          fontSize: "16px",
+                                          fontFamily: "Quicksand",
+                                        }}
+                                      >
+                                        {elem.name}
+                                      </span>
+                                    )}
+                                  </Box>
+                                );
+                              })}
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                ml: {
+                                  lg: 25,
+                                  md: 15,
+                                },
+                                mt: 2,
+                              }}
+                            >
+                              <span
+                                style={{
+                                  color: "#1E2937",
+                                  fontWeight: 500,
+                                  lineHeight: "18px",
+                                  fontSize: "14px",
+                                  fontFamily: "Quicksand",
+                                }}
+                              >
+                                {"Overall Progress:"}
+                              </span>
+                              <Box
+                                sx={{
+                                  height: "12px",
+                                  width: {
+                                    md: "250px",
+                                    lg: "350px",
+                                  },
+                                  background: "#D1F8D5",
+                                  borderRadius: "6px",
+                                  ml: 2,
+                                  position: "relative",
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    height: "12px",
+                                    width: `${currentPracticeProgress}%`,
+                                    background: "#18DE2C",
+                                    borderRadius: "6px",
+                                    position: "absolute",
+                                  }}
+                                ></Box>
+                              </Box>
+                              <span
+                                style={{
+                                  color: "#1E2937",
+                                  fontWeight: 700,
+                                  lineHeight: "18px",
+                                  fontSize: "14px",
+                                  fontFamily: "Quicksand",
+                                  marginLeft: "10px",
+                                }}
+                              >
+                                {`${currentPracticeProgress}%`}
+                              </span>
+                            </Box>
+                          </Box>
+                        </Box>
+                      )}
+                      <Box
+                        sx={{ display: "flex", justifyContent: "right", mr: 4 }}
+                      >
+                        <Box
+                          sx={{
+                            cursor: "pointer",
+                            background:
+                              "linear-gradient(90deg, rgba(255,144,80,1) 0%, rgba(225,84,4,1) 85%)",
+                            minWidth: "160px",
+                            height: "55px",
+                            borderRadius: "10px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: "0px 24px 0px 20px",
+                          }}
+                          onClick={() => {
+                            if (isShowCase && !startShowCase && !gameOverData) {
+                              setStartShowCase(true);
+                            }
+                            if (gameOverData) {
+                              gameOverData.link
+                                ? navigate(gameOverData.link)
+                                : navigate("/_practice");
+                            }
+                          }}
+                        >
+                          <span
+                            style={{
+                              color: "#FFFFFF",
+                              fontWeight: 600,
+                              fontSize: "20px",
+                              fontFamily: "Quicksand",
+                            }}
+                          >
+                            {!gameOverData ? "Start Game ➜" : "Practice ➜"}
+                          </span>
+                          {/* <NextButton /> */}
+                        </Box>
+                      </Box>
+                    </Box>
+                  }
                 </Box>
-              }
-            </Box>
-          </Box>
-        </Card>
+              </Box>
+            </Card>
+          )}
+        </>
       )}
     </Box>
   );
