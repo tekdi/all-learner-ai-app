@@ -27,8 +27,6 @@ const sectionStyle = {
 };
 
 const Mechanics4 = ({
-  page,
-  setPage,
   setVoiceText,
   setRecordedAudio,
   setVoiceAnimate,
@@ -36,9 +34,7 @@ const Mechanics4 = ({
   type,
   handleNext,
   background,
-  header,
   parentWords = "",
-  image,
   enableNext,
   showTimer,
   points,
@@ -238,7 +234,6 @@ const Mechanics4 = ({
                   textAlign: "center",
                   px: "25px",
                   py: "12px",
-                  background: "transparent",
                   m: 1,
                   textTransform: "none",
                   borderRadius: "12px",

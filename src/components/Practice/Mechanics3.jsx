@@ -7,7 +7,6 @@ import {
   AudioPlayerSvg,
   PlayAudioButton,
   StopAudioButton,
-  SubmitButton,
   getLocalData,
   randomizeArray,
 } from "../../utils/constants";
@@ -17,14 +16,10 @@ import wrongSound from "../../assets/audio/wrong.wav";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 
 const Mechanics2 = ({
-  page,
-  setPage,
   type,
   handleNext,
   background,
-  header,
   parentWords,
-  image,
   setVoiceText,
   setRecordedAudio,
   setVoiceAnimate,
@@ -37,7 +32,6 @@ const Mechanics2 = ({
   contentId,
   contentType,
   level,
-  isDiscover,
   progressData,
   showProgress,
   playTeacherAudio = () => {},

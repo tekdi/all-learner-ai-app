@@ -19,7 +19,7 @@ const sectionStyle = {
     boxSizing: 'border-box',
 };
 
-const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }) => {
+const Mechanics5 = ({setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }) => {
     const [sentences, setSentences] = useState([
         'What is the boy doing in picture.?',
         'Kids are eating breakfast',
@@ -55,7 +55,7 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Grid container sx={{ width: '80%', justifyContent: 'center', mb: 2, mt: 8 }}>
                     <Grid xs={5}>
-                        <img src={seePictureAndTell} style={{ borderRadius: '20px' }} />
+                        <img src={seePictureAndTell} alt='seePictureAndTell' style={{ borderRadius: '20px' }} loading="lazy" />
                     </Grid>
                     <Grid xs={7}>
                         {sentences?.map((elem, i) => (

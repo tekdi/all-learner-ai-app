@@ -1,19 +1,15 @@
 import MainLayout from "../Layouts.jsx/MainLayout";
-import assessmentBackground from "../../assets/images/assessmentBackground.png";
 import { Box } from "@mui/material";
 import {
   AssesmentCompletePlane,
   AverageMood,
   BadMood,
   GoodMood,
-  LevelRight,
-  StartAssessmentButton,
   getLocalData,
   setLocalData,
 } from "../../utils/constants";
 import homeBackground from "../../assets/images/homeBackground.png";
 import { Typography } from "../../../node_modules/@mui/material/index";
-import coinStar from "../../assets/images/coinStar.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";

@@ -107,6 +107,7 @@ const WordsOrImage = ({
                 maxHeight: "130px",
                 marginBottom: "40px",
               }}
+              loading="lazy"
             />
           </Box>
         ) : type == "phonics" ? (
@@ -180,7 +181,6 @@ const WordsOrImage = ({
                   sx={{
                     color: "#333F61",
                     fontSize: "44px",
-                    lineHeight: "normal",
                     letterSpacing: "2.2px",
                     lineHeight: "normal",
                     fontWeight: 600,

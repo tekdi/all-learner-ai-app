@@ -28,5 +28,8 @@
     "react": {
       "version": "detect"
     }
+  },
+  "globals": {
+    "self": true
   }
 }

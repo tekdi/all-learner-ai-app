@@ -18,11 +18,9 @@ import {
 import practicebg from "../../assets/images/practice-bg.svg";
 import {
   useNavigate,
-  useSearchParams,
 } from "../../../node_modules/react-router-dom/dist/index";
 import { useEffect, useState } from "react";
 import axios from "../../../node_modules/axios/index";
-import { uniqueId } from "../../services/utilService";
 // import { useDispatch } from 'react-redux';
 import { setVirtualId } from "../../store/slices/user.slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +36,6 @@ import desktopLevel8 from "../../assets/images/desktopLevel8.png";
 import desktopLevel9 from "../../assets/images/desktopLevel9.png";
 import profilePic from "../../assets/images/profile_url.png";
 import textureImage from "../../assets/images/textureImage.png";
-import scoreView from "../../assets/images/scoreView.png";
 import back from "../../assets/images/back-arrow.png";
 import { jwtDecode } from "jwt-decode";
 import config from "../../utils/urlConstants.json";
@@ -90,10 +87,10 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
         </Box>
         <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <Grid container justifyContent={"space-evenly"} sx={{ width: "80%" }}>
-            {languages.map((elem) => {
-              const isSelectedLang = elem.lang == selectedLang;
+            {languages.map((elem, index) => {
+              const isSelectedLang = elem.lang === selectedLang;
               return (
-                <Grid xs={4} item>
+                <Grid xs={4} key={index} item>
                   <Box
                     onClick={() => setSelectedLang(elem.lang)}
                     sx={{
@@ -249,9 +246,9 @@ export const MessageDialog = ({
       >
         <Box sx={{ position: "absolute", left: 10, bottom: 0 }}>
           {isError ? (
-            <img src={cryPanda} alt="cryPanda" />
+            <img src={cryPanda} alt="cryPanda" loading="lazy"/>
           ) : (
-            <img src={panda} alt="panda" />
+            <img src={panda} alt="panda" loading="lazy" />
           )}
         </Box>
 
@@ -369,7 +366,7 @@ export const ProfileHeader = ({
           {handleBack && (
             <Box ml="94px">
               <IconButton onClick={handleBack}>
-                <img src={back} alt="back" style={{ height: "30px" }} />
+                <img src={back} alt="back" style={{ height: "30px" }} loading="lazy" />
               </IconButton>
             </Box>
           )}
@@ -380,7 +377,7 @@ export const ProfileHeader = ({
                 sx={{ cursor: "pointer" }}
                 onClick={() => navigate("/")}
               >
-                <img src={profilePic}></img>
+                <img src={profilePic} alt="profilePic" loading="lazy"/>
               </Box>
               <Box ml="12px">
                 <span
@@ -466,13 +463,12 @@ export const ProfileHeader = ({
 
 const Assesment = ({ discoverStart }) => {
   let username;
+  console.log("Assesment.js");
   if (localStorage.getItem("token") !== null) {
     let jwtToken = localStorage.getItem("token");
     var userDetails = jwtDecode(jwtToken);
     username = userDetails.student_name;
   }
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [profileName, setProfileName] = useState(username);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   // let lang = searchParams.get("lang") || "ta";
   const [level, setLevel] = useState("");
@@ -484,6 +480,7 @@ const Assesment = ({ discoverStart }) => {
   useEffect(() => {
     // const level = getLocalData('userLevel');
     // setLevel(level);
+    if (!lang) return; 
     setLocalData("lang", lang);
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
@@ -493,50 +490,54 @@ const Assesment = ({ discoverStart }) => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
-        );
-        const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
-        );
+          );
+          const getMilestoneDetails = await axios.get(
+            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
+            );
 
-        localStorage.setItem(
-          "getMilestone",
-          JSON.stringify({ ...getMilestoneDetails.data })
-        );
-        setLevel(
-          getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
-        );
-        localStorage.setItem(
-          "virtualId",
+            localStorage.setItem(
+              "getMilestone",
+              JSON.stringify({ ...getMilestoneDetails.data })
+              );
+              setLevel(
+                getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
+                );
+                localStorage.setItem(
+                  "virtualId",
           usernameDetails?.data?.result?.virtualID
         );
         let session_id = localStorage.getItem("sessionId");
 
         localStorage.setItem("lang", lang || "ta");
-        const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
-        );
-        setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+        if (session_id !== "null") {
+          const getPointersDetails = await axios.get(
+            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
+            );
+            setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
-        dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
+            dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
+          }
       })();
     } else {
       (async () => {
-        const virtualId = getLocalData("virtualId");
+        const virtualId =  getLocalData("virtualId");
         const language = lang;
-        const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
-        );
-        localStorage.setItem(
-          "getMilestone",
-          JSON.stringify({ ...getMilestoneDetails.data })
-        );
-        setLevel(
-          Number(
-            getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
-          )
-        );
-        const sessionId = getLocalData("sessionId");
         if (virtualId) {
+          const getMilestoneDetails = await axios.get(
+            `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
+          );
+          localStorage.setItem(
+            "getMilestone",
+            JSON.stringify({ ...getMilestoneDetails.data })
+          );
+          setLevel(
+            Number(
+              getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
+            )
+          );
+        }
+                const sessionId = getLocalData("sessionId");
+                if (virtualId && sessionId !== "null") {
           const getPointersDetails = await axios.get(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
           );
@@ -551,7 +552,7 @@ const Assesment = ({ discoverStart }) => {
   const navigate = useNavigate();
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
-    if (!username && !profileName && !virtualId && level == 0) {
+    if (!username && !profileName && !virtualId && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({
         message: "please add username in query param",
@@ -559,7 +560,7 @@ const Assesment = ({ discoverStart }) => {
       });
       return;
     }
-    if (level == 0) {
+    if (level === 0) {
       navigate("/discover");
     } else {
       navigate("/practice");

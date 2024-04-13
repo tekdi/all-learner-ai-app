@@ -1,5 +1,4 @@
-import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
-import back from "../../assets/images/back-arrow.svg";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import Stack from '@mui/material/Stack';
 
 import practicebgstone from "../../assets/images/practice-bg-stone.svg";
@@ -208,6 +207,7 @@ const MainLayout = (props) => {
           <img
             src={levelsImages?.[LEVEL]?.backgroundAddOn}
             alt="backgroundAddOn"
+            loading="lazy"
           />
         </Box>
       )}
@@ -260,6 +260,7 @@ const MainLayout = (props) => {
               src={catLoading}
               alt="catLoading"
               // sx={{ height: "58px", width: "58px" }}
+              loading="lazy"
             />
           </Box>
         </Card>
@@ -298,6 +299,7 @@ const MainLayout = (props) => {
                       src={timer}
                       alt="timer"
                       sx={{ height: "58px", width: "58px" }}
+                      loading="lazy"
                     />
                   </Box>
                 )}
@@ -312,10 +314,11 @@ const MainLayout = (props) => {
                     top: "0",
                   }}
                 >
-                  {stepsArr?.map((step) => {
+                  {stepsArr?.map((step,index) => {
                     const showGreen = step + 1 <= currentStep;
                     return (
                       <Box
+                        key={index}
                         sx={{
                           height: "8px",
                           width: `${100 / steps}%`,
@@ -435,7 +438,7 @@ const MainLayout = (props) => {
                                       md: 1.5,
                                       lg: 2,
                                     },
-                                    mr: i == practiceSteps?.length - 1 ? 2 : 0,
+                                    mr: i === practiceSteps?.length - 1 ? 2 : 0,
                                     borderRadius: "30px",
                                     display: "flex",
                                     justifyContent: "center",
@@ -448,7 +451,7 @@ const MainLayout = (props) => {
                                     <span
                                       style={{
                                         color:
-                                          currentPracticeStep == i
+                                          currentPracticeStep === i
                                             ? "white"
                                             : "#1E2937",
                                         fontWeight: 600,
@@ -672,6 +675,7 @@ const MainLayout = (props) => {
                           src={clouds}
                           alt="clouds"
                           style={{ zIndex: 222 }}
+                          loading="lazy"
                         />
                       )}
                     </Box>
@@ -687,6 +691,7 @@ const MainLayout = (props) => {
                           src={gameWon}
                           alt="gameWon"
                           style={{ zIndex: 9999, height: 340 }}
+                          loading="lazy"
                         />
                       ) : (
                         <Stack justifyContent="center"
@@ -698,6 +703,7 @@ const MainLayout = (props) => {
                           src={gameLost}
                           alt="gameLost"
                           style={{ height: 340 }}
+                          loading="lazy"
                         />
                         </Stack>
                       )}
