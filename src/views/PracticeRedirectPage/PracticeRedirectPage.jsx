@@ -7,7 +7,7 @@ const PracticeRedirectPage = () => {
 
   useEffect(() => {
     navigate("/practice");
-  }, []);
+  }, [navigate]);
 
   return (
     <Grid

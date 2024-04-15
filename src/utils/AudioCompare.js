@@ -1,9 +1,5 @@
 import React, { Component } from "react";
 import AudioAnalyser from "react-audio-analyser";
-import mic from "../assets/mic.png";
-import listen from "../assets/listen.png";
-import pause from "../assets/pause.png";
-import mic_on from "../assets/mic.png";
 import { Box } from "@mui/material";
 import { ListenButton, RetryIcon, SpeakButton, StopButton } from "./constants";
 import RecordVoiceVisualizer from "./RecordVoiceVisualizer";
@@ -85,7 +81,7 @@ export default class AudioRecorderCompair extends Component {
         const bufferLength = analyser.frequencyBinCount;
         const domainData = new Uint8Array(bufferLength);
 
-        let soundDetected = false;
+
 
         const detectSound = () => {
           if (this.state.stopDetection) {
