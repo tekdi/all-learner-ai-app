@@ -660,7 +660,7 @@ const Practice = () => {
           {...{
             level: !isShowCase && level,
             header:
-              questions[currentQuestion]?.contentType == "image"
+              questions[currentQuestion]?.contentType === "image"
                 ? `Guess the below image`
                 : `Speak the below ${questions[currentQuestion]?.contentType}`,
             words: questions[currentQuestion]?.contentSourceData?.[0]?.text,

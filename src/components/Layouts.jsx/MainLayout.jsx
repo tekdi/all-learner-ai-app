@@ -195,11 +195,11 @@ const MainLayout = (props) => {
             position: "absolute",
             bottom: "70px",
             left:
-              LEVEL == 1
+              LEVEL === 1
                 ? "3px"
-                : LEVEL == 2
+                : LEVEL === 2
                 ? "40px"
-                : LEVEL == 3
+                : LEVEL === 3
                 ? "78px"
                 : "78px",
           }}
@@ -431,7 +431,7 @@ const MainLayout = (props) => {
                                     background:
                                       currentPracticeStep > i
                                         ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-                                        : currentPracticeStep == i
+                                        : currentPracticeStep === i
                                         ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                         : "rgba(0, 0, 0, 0.04)",
                                     ml: {
@@ -786,7 +786,7 @@ const MainLayout = (props) => {
                                       background:
                                         currentPracticeStep > i
                                           ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-                                          : currentPracticeStep == i
+                                          : currentPracticeStep === i
                                           ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                           : "rgba(0, 0, 0, 0.04)",
                                       ml: {
@@ -794,7 +794,7 @@ const MainLayout = (props) => {
                                         lg: 2,
                                       },
                                       mr:
-                                        i == practiceSteps?.length - 1 ? 2 : 0,
+                                        i === practiceSteps?.length - 1 ? 2 : 0,
                                       borderRadius: "30px",
                                       display: "flex",
                                       justifyContent: "center",
@@ -807,7 +807,7 @@ const MainLayout = (props) => {
                                       <span
                                         style={{
                                           color:
-                                            currentPracticeStep == i
+                                            currentPracticeStep === i
                                               ? "white"
                                               : "#1E2937",
                                           fontWeight: 600,

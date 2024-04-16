@@ -97,7 +97,7 @@ const WordsOrImage = ({
           pointerEvents: disableScreen ? "none" : "initial",
         }}
       >
-        {type == "image" ? (
+        {type === "image" ? (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <img
               src={image}
@@ -110,7 +110,7 @@ const WordsOrImage = ({
               loading="lazy"
             />
           </Box>
-        ) : type == "phonics" ? (
+        ) : type === "phonics" ? (
           <Box
             position="relative"
             sx={{
