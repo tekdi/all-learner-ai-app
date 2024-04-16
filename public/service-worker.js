@@ -1,18 +1,5 @@
-// service-worker.js
-
 // Define the name for the cache
 const CACHE_NAME = 'my-cache-v1';
-
-// List of URLs to be cached
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/image.jpg',
-  '/audio.mp3',
-  // Add more URLs as needed
-];
 
 // Event listener for installation of the service worker
 self.addEventListener('install', event => {
@@ -21,27 +8,48 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        // No need to pre-cache any resources during installation
       })
   );
 });
 
 // Event listener for fetching assets
 self.addEventListener('fetch', event => {
-    event.respondWith(
-      caches.match(event.request).then(response => {
-        // If the image is cached, return a cloned cached response
+  event.respondWith(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.match(event.request).then(response => {
         if (response) {
-          console.log('Image is cached:', event.request.url);
-          return response.clone(); // Clone the response to avoid modifying the original cached response
+          // Resource is in cache, return it
+          // console.log('Resource is cached:', event.request.url);
+          return response;
         }
-  
-        // If the image is not cached, fetch it from the network
-        return fetch(event.request);
-      })
-    );
-  });
-  
+
+        // Resource is not in cache, fetch it from network and cache it
+        return fetch(event.request).then(networkResponse => {
+          // Check if fetched response is valid
+          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+            return networkResponse;
+          }
+
+          // Clone the response because it's a stream that can only be consumed once
+          const responseToCache = networkResponse.clone();
+
+          // Cache the fetched response
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+
+          // console.log('Resource is fetched from network and cached:', event.request.url);
+          return networkResponse;
+        }).catch(error => {
+          // Fetch failed, return a fallback response
+          console.error('Fetch failed:', error);
+          // You can return a custom offline page or a fallback response here
+        });
+      });
+    })
+  );
+});
 
 // Event listener for activation of the service worker
 self.addEventListener('activate', event => {
