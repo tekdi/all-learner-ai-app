@@ -86,7 +86,7 @@ function VoiceAnalyser(props) {
         recordedAudio
           ? recordedAudio
           : props.contentId
-            ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
+          ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
             : AudioPath[1][10]
       );
       set_temp_audio(audio);
@@ -431,7 +431,10 @@ function VoiceAnalyser(props) {
 
             // Determine the number of red and black lives to show.
             const redLivesToShow = totalLives - livesLost;
-            const blackLivesToShow = livesLost;
+            let blackLivesToShow = 5;
+            if(livesLost <= 5){
+               blackLivesToShow = livesLost;
+            }
 
             // Prepare the new lives data.
             let newLivesData = {
