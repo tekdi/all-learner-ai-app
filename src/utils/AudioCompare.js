@@ -49,10 +49,6 @@ export default class AudioRecorderCompair extends Component {
   }
 
   handleStop() {
-    if (this.props.setEnableNext) {
-      this.props.setEnableNext(true);
-    }
-
     if (this.props.isAudioPreprocessing) {
       document.getElementById("stopaudio_compair").click();
       this.setState({ stopDetection: true });
