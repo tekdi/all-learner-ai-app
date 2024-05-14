@@ -1,7 +1,7 @@
 import wordLists from '../Badwords/badWords.json'
 
 export const checkBadWord = userInput => {
-  const lang_code = localStorage.getItem('apphomelang');
+  const lang_code = localStorage.getItem('apphomelang') || 'ta';
   const words = wordLists[lang_code];
 
   if (!words || !Array.isArray(words)) {
