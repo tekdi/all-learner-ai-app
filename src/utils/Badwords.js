@@ -13,7 +13,7 @@ export const checkBadWord = userInput => {
 };
 
 export const filterBadWords = input => {
-  let texttemp = input.replace(/[.',|!|?']/g, '');
+  let texttemp = input.replace(/[.,|!?']/g, '');
   const wordsToFilter = texttemp.toLowerCase().split(/\s+/); // Split the input into an array of words
   const filteredWords = wordsToFilter.map(word => {
     if (checkBadWord(word)) {
@@ -26,6 +26,6 @@ export const filterBadWords = input => {
 };
 
 export const isProfanityWord=()=>{
-  let isProfanity = localStorage.getItem('voiceText');
+  let isProfanity = localStorage.getItem('voiceText') || '';
   return isProfanity.includes("*****")
 }

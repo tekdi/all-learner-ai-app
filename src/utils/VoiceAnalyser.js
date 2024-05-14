@@ -265,12 +265,12 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = filterBadWords(data.responseText);
-        if (responseText.indexOf('*') !== -1) {
+        if (responseText !== data.responseText) {
           props?.setOpenMessageDialog({
-            message: "Please Behave , Don't say Badwords",
+            message: "Please behave and avoid using inappropriate language.",
             isError: true,
           });
-      } 
+        } 
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
         handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
       }
