@@ -19,7 +19,7 @@ import v7 from "../assets/audio/V7.m4a";
 import v8 from "../assets/audio/V8.m4a";
 import livesAdd from "../assets/audio/livesAdd.wav";
 import livesCut from "../assets/audio/livesCut.wav";
-
+import { filterBadWords } from "./Badwords";
 import { response } from "../services/telementryService";
 import AudioCompare from "./AudioCompare";
 import {
@@ -264,7 +264,13 @@ function VoiceAnalyser(props) {
           }
         );
         data = updateLearnerData;
-        responseText = data.responseText;
+        responseText = filterBadWords(data.responseText);
+        if (responseText.indexOf('*') !== -1) {
+          props?.setOpenMessageDialog({
+            message: "Please Behave , Don't say Badwords",
+            isError: true,
+          });
+      } 
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
         handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency);
       }
