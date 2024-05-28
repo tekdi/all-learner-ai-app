@@ -91,14 +91,23 @@ const Practice = () => {
       callConfettiAndPlay();
 
       setTimeout(() => {
-        // alert(
-        //   `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-        // );
-        setOpenMessageDialog({
-          message: `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `,
-        });
-        // setDisableScreen(false);
-      }, 1200);
+        if(window.self !== window.top){
+          const alertMessage = `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `;
+          if (window && window.parent) {
+            window.parent.postMessage({
+              alert: alertMessage,
+              icon:'success',
+              message: 'storylingo-alert',
+            });
+          }
+        }
+        else{
+          alert(
+            `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
+          );
+        }
+        setDisableScreen(false);
+      }, 3000);
     }
   }, [currentQuestion]);
 
