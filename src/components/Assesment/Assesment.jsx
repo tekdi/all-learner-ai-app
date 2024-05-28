@@ -327,21 +327,7 @@ export const MessageDialog = ({
 };
 
 export const ProfileHeader = ({
-  setOpenLangModal = () => {
-    if(window.self !== window.top){
-      const alertMessage = "Go to homescreen to change language";
-      if (window?.parent) {
-        window.parent.postMessage({
-          alert: alertMessage,
-          icon:'warning',
-          message: 'storylingo-alert',
-        });
-      }
-    }
-    else{
-      alert("Go to homescreen to change language");
-    }
-  },
+  setOpenLangModal,
   lang,
   profileName,
   points = 0,

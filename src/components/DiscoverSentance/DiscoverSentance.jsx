@@ -51,21 +51,13 @@ const SpeakSentenceComponent = () => {
       setDisableScreen(true);
       callConfettiAndPlay();
       setTimeout(() => {
-        if(window.self !== window.top){
-          const alertMessage = `You have successfully completed assessment ${assesmentCount}`;
-          if (window && window.parent) {
-            window.parent.postMessage({
-              alert: alertMessage,
-              icon:'success',
-              message: 'storylingo-alert',
-            });
-          }
-        }
-        else{
-          alert("You have successfully completed assessment " + assesmentCount);
-        }
-        setDisableScreen(false);
-      }, 3000);
+        // alert();
+        setOpenMessageDialog({
+          message:
+            "You have successfully completed assessment " + assesmentCount,
+        });
+        // setDisableScreen(false);
+      }, 1200);
     }
   }, [currentQuestion]);
 
