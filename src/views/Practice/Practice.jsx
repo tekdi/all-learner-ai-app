@@ -615,7 +615,7 @@ const Practice = () => {
                   variant="h5"
                   component="h4"
                   sx={{
-                    fontSize: `${fontSize}px`,
+                    fontSize: "clamp(1rem, 2.5vw, 40px)",
                     fontWeight: 700,
                     fontFamily: "Quicksand",
                     lineHeight: "50px",
@@ -639,7 +639,7 @@ const Practice = () => {
                 component="h4"
                 sx={{
                   color: "#333F61",
-                  fontSize: `${fontSize}px`,
+                  fontSize: "clamp(1rem, 2.5vw, 40px)",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -665,7 +665,7 @@ const Practice = () => {
                 component="h4"
                 ml={1}
                 sx={{
-                  fontSize: `${fontSize}px`,
+                  fontSize: "clamp(1rem, 2.5vw, 40px)",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -684,7 +684,7 @@ const Practice = () => {
               ml={1}
               sx={{
                 color: "#333F61",
-                fontSize: `${fontSize}px`,
+                fontSize: "clamp(1rem, 2.5vw, 40px)",
                 fontWeight: 700,
                 fontFamily: "Quicksand",
                 lineHeight: "50px",

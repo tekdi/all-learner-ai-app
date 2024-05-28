@@ -210,7 +210,7 @@ const WordsOrImage = ({
                   mb: 4,
                   color: "#333F61",
                   textAlign: "center",
-                  fontSize: "40px",
+                  fontSize: "clamp(1rem, 2.5vw, 40px)",
                   paddingX: "140px",
                   // lineHeight: "normal",
                   fontWeight: 700,
