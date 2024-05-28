@@ -52,7 +52,7 @@ const SpeakSentenceComponent = () => {
       callConfettiAndPlay();
       setTimeout(() => {
         if(window.self !== window.top){
-          const alertMessage = "You have successfully completed assessment " + assesmentCount;
+          const alertMessage = `You have successfully completed assessment ${assesmentCount}`;
           if (window && window.parent) {
             window.parent.postMessage({
               alert: alertMessage,

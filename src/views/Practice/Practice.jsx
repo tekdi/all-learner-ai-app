@@ -91,20 +91,20 @@ const Practice = () => {
       callConfettiAndPlay();
 
       setTimeout(() => {
-        if(window.self !== window.top){
-          const alertMessage = `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `;
-          if (window && window.parent) {
+        const completionMessage = `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `;
+        if (window.self !== window.top) {
+          const postMessage = {
+            alert: completionMessage,
+            icon: "success",
+            message: "storylingo-alert",
+          };
+          if (window.self !== window.top && window.parent) {
             window.parent.postMessage({
-              alert: alertMessage,
-              icon:'success',
-              message: 'storylingo-alert',
+              postMessage,
             });
           }
-        }
-        else{
-          alert(
-            `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-          );
+        } else {
+          alert(completionMessage);
         }
         setDisableScreen(false);
       }, 3000);

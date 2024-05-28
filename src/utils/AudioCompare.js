@@ -153,7 +153,7 @@ export default class AudioRecorderCompair extends Component {
           } else {
             if(window.self !== window.top){
               const alertMessage = "Please Speak Louder and Clear";
-              if (window && window.parent) {
+              if (window?.parent) {
                 window.parent.postMessage({
                   alert: alertMessage,
                   icon:'warning',
