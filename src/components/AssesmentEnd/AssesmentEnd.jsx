@@ -1,19 +1,15 @@
 import MainLayout from "../Layouts.jsx/MainLayout";
-import assessmentBackground from "../../assets/images/assessmentBackground.png";
 import { Box } from "@mui/material";
 import {
   AssesmentCompletePlane,
   AverageMood,
   BadMood,
   GoodMood,
-  LevelRight,
-  StartAssessmentButton,
   getLocalData,
   setLocalData,
 } from "../../utils/constants";
 import homeBackground from "../../assets/images/homeBackground.png";
 import { Typography } from "../../../node_modules/@mui/material/index";
-import coinStar from "../../assets/images/coinStar.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -21,6 +17,7 @@ import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import { ProfileHeader } from "../Assesment/Assesment";
 import desktopLevel5 from "../../assets/images/assesmentComplete.png";
 import config from '../../utils/urlConstants.json';
+import { uniqueId } from "../../services/utilService";
 
 const AssesmentEnd = () => {
   const [shake, setShake] = useState(true);
@@ -43,6 +40,10 @@ const AssesmentEnd = () => {
       setLevel(data.data.milestone_level);
       setLocalData("userLevel", data.data.milestone_level?.replace("m", ""));
       const sessionId = getLocalData("sessionId");
+      if (!sessionId){
+        sessionId = uniqueId();
+        localStorage.setItem("sessionId", sessionId)
+      }
       const getPointersDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
@@ -53,7 +54,6 @@ const AssesmentEnd = () => {
     }, 4000);
   }, []);
 
-  let width = window.innerWidth * 0.85;
   const navigate = useNavigate();
   let newLevel = level.replace("m", "");
 
@@ -86,7 +86,7 @@ const AssesmentEnd = () => {
                 letterSpacing: "2%",
               }}
             >
-              {newLevel == previousLevel ? "Amost There.!" : `Hurray.!`}
+              {newLevel === previousLevel ? "Amost There.!" : `Hurray.!`}
             </span>
           </Box>
           <Box
@@ -106,7 +106,7 @@ const AssesmentEnd = () => {
                 lineHeight: "30px",
               }}
             >
-              {newLevel == previousLevel
+              {newLevel === previousLevel
                 ? "more"
                 : `Level ${previousLevel || ""}`}
             </span>
@@ -128,16 +128,16 @@ const AssesmentEnd = () => {
                 lineHeight: "30px",
               }}
             >
-              {newLevel == previousLevel ? "practice" : `completed`}
+              {newLevel === previousLevel ? "practice" : `completed`}
             </span>
           </Box>
           <Box
             sx={{
               position: "absolute",
-              bottom: newLevel == previousLevel ? 115 : 125,
-              left: newLevel == previousLevel ? 190 : 200,
+              bottom: newLevel === previousLevel ? 115 : 125,
+              left: newLevel === previousLevel ? 190 : 200,
               transform:
-                newLevel == previousLevel ? "rotate(-5deg)" : "rotate(-18deg)",
+                newLevel === previousLevel ? "rotate(-5deg)" : "rotate(-18deg)",
             }}
           >
             <span
@@ -149,7 +149,7 @@ const AssesmentEnd = () => {
                 lineHeight: "30px",
               }}
             >
-              {newLevel == previousLevel ? "required" : `successfully`}
+              {newLevel === previousLevel ? "required" : `successfully`}
             </span>
           </Box>
         </Box>
@@ -308,7 +308,7 @@ const AssesmentEnd = () => {
             textAlign: "center",
           }}
         >
-          {newLevel == previousLevel ? `Almost There!!!` : `Hurray!!!`}
+          {newLevel === previousLevel ? `Almost There!!!` : `Hurray!!!`}
         </Typography>
         <Box mt={1}>
           <span
@@ -321,7 +321,7 @@ const AssesmentEnd = () => {
               letterSpacing: "2%",
             }}
           >
-            {newLevel == previousLevel
+            {newLevel === previousLevel
               ? `Some more practice required to complete ${previousLevel}`
               : `You completed Level ${previousLevel} successfully`}
           </span>

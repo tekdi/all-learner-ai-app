@@ -5,7 +5,6 @@ import speak from '../../assets/images/ic-speak.svg';
 import listen from '../../assets/images/ic-listen.svg';
 import arrow from '../../assets/images/ic-arrow.svg';
 import level from '../../assets/images/level.svg';
-import elephant from '../../assets/images/elephant.svg';
 import timer from '../../assets/images/timer.svg';
 import practicebg from '../../assets/images/practice-bg.svg';
 

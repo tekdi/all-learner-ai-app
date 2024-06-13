@@ -1,5 +1,4 @@
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
-import { v4 as uuidv4 } from 'uuid';
 const duration = new Date().getTime();
 
 export const initialize = ({ did }) => {

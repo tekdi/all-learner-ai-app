@@ -1,20 +1,16 @@
-import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
-import back from "../../assets/images/back-arrow.svg";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import Stack from '@mui/material/Stack';
 
 import practicebgstone from "../../assets/images/practice-bg-stone.svg";
 import practicebgstone2 from "../../assets/images/practice-bg-stone2.svg";
 import practicebgstone3 from "../../assets/images/practice-bg-stone3.svg";
-
 import practicebg from "../../assets/images/practice-bg.svg";
 import practicebg2 from "../../assets/images/practice-bg2.svg";
 import practicebg3 from "../../assets/images/practice-bg3.svg";
-
 import gameWon from "../../assets/images/gameWon.svg";
 import gameLost from "../../assets/images/gameLost.svg";
 import clouds from "../../assets/images/clouds.svg";
 import catLoading from "../../assets/images/catLoading.gif";
-
 import textureImage from "../../assets/images/textureImage.png";
 import timer from "../../assets/images/timer.svg";
 import {
@@ -105,7 +101,7 @@ const MainLayout = (props) => {
     enableNext,
     showNext = true,
     showTimer = true,
-    showScore = true,
+    // showScore = true,
     nextLessonAndHome = false,
     cardBackground,
     backgroundImage,
@@ -118,6 +114,9 @@ const MainLayout = (props) => {
     disableScreen,
     isShowCase,
     startShowCase,
+    contentType,
+    percentage,
+    fluency,
     setStartShowCase,
     livesData,
     gameOverData,
@@ -154,9 +153,8 @@ const MainLayout = (props) => {
 
   const sectionStyle = {
     width: "100%",
-    backgroundImage: `url(${
-      backgroundImage ? backgroundImage : levelsImages?.[LEVEL]?.background
-    })`,
+    backgroundImage: `url(${backgroundImage ? backgroundImage : levelsImages?.[LEVEL]?.background
+      })`,
     backgroundSize: "cover", // Cover the entire viewport
     backgroundPosition: "center center", // Center the image
     backgroundRepeat: "no-repeat", // Do not repeat the image
@@ -176,14 +174,13 @@ const MainLayout = (props) => {
     livesData?.blackLivesToShow > 0 ? livesData?.blackLivesToShow : 0;
 
   const redLivesToShow =
-    livesData?.redLivesToShow != undefined
+    livesData?.redLivesToShow !== undefined
       ? livesData?.redLivesToShow > 0
         ? livesData?.redLivesToShow
         : 0
       : livesData?.lives;
 
   const navigate = useNavigate();
-
   return (
     <Box sx={sectionStyle}>
       <ProfileHeader
@@ -196,13 +193,13 @@ const MainLayout = (props) => {
             position: "absolute",
             bottom: "70px",
             left:
-              LEVEL == 1
+              LEVEL === 1
                 ? "3px"
-                : LEVEL == 2
-                ? "40px"
-                : LEVEL == 3
-                ? "78px"
-                : "78px",
+                : LEVEL === 2
+                  ? "40px"
+                  : LEVEL === 3
+                    ? "78px"
+                    : "78px",
           }}
         >
           <img
@@ -245,11 +242,10 @@ const MainLayout = (props) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            backgroundImage: `url(${
-              cardBackground ? cardBackground : textureImage
-            })`,
+            backgroundImage: `url(${cardBackground ? cardBackground : textureImage
+              })`,
             backgroundSize: "contain",
-            backgroundRepeat: "round",
+            backgroundRepeat: "round", 
             boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
             backdropFilter: "blur(25px)",
             mt: "50px",
@@ -259,7 +255,7 @@ const MainLayout = (props) => {
             <img
               src={catLoading}
               alt="catLoading"
-              // sx={{ height: "58px", width: "58px" }}
+            // sx={{ height: "58px", width: "58px" }}
             />
           </Box>
         </Card>
@@ -267,18 +263,19 @@ const MainLayout = (props) => {
         <>
           {(!isShowCase || (isShowCase && startShowCase)) && !gameOverData && (
             <Card
-              sx={{
-                width: "85vw",
+              sx={{               
+                position: { xs: 'absolute', md: 'relative' },
+                left: { xs: '0px', md: 'auto' },
+                width: { xs: '100%', md: '85vw' },
                 minHeight: "80vh",
                 borderRadius: "20px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                backgroundImage: `url(${
-                  cardBackground ? cardBackground : textureImage
-                })`,
-                backgroundSize: "contain",
-                backgroundRepeat: "round",
+                backgroundImage: `url(${cardBackground ? cardBackground : textureImage
+                  })`,
+                backgroundRepeat: "no-repeat", 
+                backgroundSize: 'cover',
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
                 backdropFilter: "blur(25px)",
                 mt: "50px",
@@ -286,7 +283,6 @@ const MainLayout = (props) => {
             >
               <CardContent
                 sx={{
-                  width: "85vw",
                   minHeight: "100%",
                   opacity: disableScreen ? 0.25 : 1,
                   pointerEvents: disableScreen ? "none" : "initial",
@@ -306,16 +302,17 @@ const MainLayout = (props) => {
               {steps > 0 && (
                 <Box
                   sx={{
-                    width: "85vw",
+                    width: { xs: '100%', md: '85vw' },
                     position: "absolute",
                     display: "flex",
                     top: "0",
                   }}
                 >
-                  {stepsArr?.map((step) => {
+                  {stepsArr?.map((step, index) => {
                     const showGreen = step + 1 <= currentStep;
                     return (
                       <Box
+                        index={index}
                         sx={{
                           height: "8px",
                           width: `${100 / steps}%`,
@@ -327,7 +324,7 @@ const MainLayout = (props) => {
                   })}
                 </Box>
               )}
-              {startShowCase && (
+              {contentType && contentType.toLowerCase() !== 'word' && startShowCase && (
                 <Box
                   position={"absolute"}
                   top={20}
@@ -405,6 +402,8 @@ const MainLayout = (props) => {
                               height: "48px",
                               border: "1.5px solid rgba(51, 63, 97, 0.15)",
                               ml: {
+                                xs: 10,
+                                sm: 15,
                                 lg: 25,
                                 md: 18,
                               },
@@ -418,24 +417,30 @@ const MainLayout = (props) => {
                                   key={i}
                                   sx={{
                                     width: {
+                                      xs: "24px",
+                                      sm: "26px",
                                       md: "28px",
                                       lg: "36px",
                                     },
                                     height: {
+                                      xs: "24px",
+                                      sm: "26px",
                                       md: "28px",
                                       lg: "36px",
                                     },
                                     background:
                                       currentPracticeStep > i
                                         ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-                                        : currentPracticeStep == i
+                                        : currentPracticeStep === i
                                         ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                         : "rgba(0, 0, 0, 0.04)",
                                     ml: {
+                                      xs: 0.5,
+                                      sm: 0.5,
                                       md: 1.5,
                                       lg: 2,
                                     },
-                                    mr: i == practiceSteps?.length - 1 ? 2 : 0,
+                                    mr: i === practiceSteps?.length - 1 ? 2 : 0,
                                     borderRadius: "30px",
                                     display: "flex",
                                     justifyContent: "center",
@@ -448,7 +453,7 @@ const MainLayout = (props) => {
                                     <span
                                       style={{
                                         color:
-                                          currentPracticeStep == i
+                                          currentPracticeStep === i
                                             ? "white"
                                             : "#1E2937",
                                         fontWeight: 600,
@@ -464,12 +469,14 @@ const MainLayout = (props) => {
                               );
                             })}
                           </Box>
-                          <Box
+                          {/* <Box
                             sx={{
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
                               ml: {
+                                xs: 10,
+                                sm: 15,
                                 lg: 25,
                                 md: 15,
                               },
@@ -522,7 +529,7 @@ const MainLayout = (props) => {
                             >
                               {`${currentPracticeProgress}%`}
                             </span>
-                          </Box>
+                          </Box> */}
                         </Box>
                       </Box>
                     )}
@@ -532,7 +539,13 @@ const MainLayout = (props) => {
                       {enableNext ? (
                         <Box
                           sx={{ cursor: "pointer" }}
-                          onClick={() => handleNext()}
+                          onClick={() => {
+                            if (props.setIsNextButtonCalled) {
+                              props.setIsNextButtonCalled(true);
+                            } else {
+                              handleNext();
+                            }
+                          }}                          
                         >
                           <NextButton />
                         </Box>
@@ -607,9 +620,8 @@ const MainLayout = (props) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                backgroundImage: `url(${
-                  cardBackground ? cardBackground : textureImage
-                })`,
+                backgroundImage: `url(${cardBackground ? cardBackground : textureImage
+                  })`,
                 backgroundSize: "contain",
                 backgroundRepeat: "round",
                 boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
@@ -653,7 +665,7 @@ const MainLayout = (props) => {
                           fontFamily: "Quicksand",
                         }}
                       >
-                        {"Are you ready to go to Assessment?"}
+                        {"Ready for Challenge?"}
                       </span>
                     </Typography>
                   </>
@@ -690,16 +702,50 @@ const MainLayout = (props) => {
                         />
                       ) : (
                         <Stack justifyContent="center"
-                        alignItems="center">
-                        {!gameOverData.meetsFluencyCriteria && (<Typography textAlign="center" sx={{ mt: 2 }}>
-                          Well done! Next, try to read it more confidently.
-                        </Typography>)}
-                        <img
-                          src={gameLost}
-                          alt="gameLost"
-                          style={{ height: 340 }}
-                        />
+                          alignItems="center">
+                          <img
+                            src={gameLost}
+                            alt="gameLost"
+                            style={{ height: 340 }}
+                          />
+                       <Typography
+                            sx={{ mb: 1, mt: 1, textAlign: "center" }}
+                          >
+                            <span
+                              style={{
+                                fontWeight: 600,
+                                fontSize: "24px",
+                                lineHeight: "1.5",
+                                letterSpacing: "1px",
+                                fontFamily: "Quicksand",
+                                backgroundColor: "rgb(237, 134, 0)",
+                                padding: "6px 12px",
+                                color: "#fff",
+                                borderRadius: "20px",
+                                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              {percentage <= 0 ? 0 : percentage}/100
+                            </span>
+                            <br />
+
+                            {!fluency ? (
+                              <Typography textAlign="center" sx={{ mt: 2 }}>
+                                Good try! Need more speed.
+                              </Typography>
+                            ) : (
+                              <Typography textAlign="center" sx={{ mt: 2 }}>
+                                You need{" "}
+                                <span style={{ fontWeight: "bold" }}>
+                                  {percentage <= 0 ? 70 : 70 - percentage}
+                                </span>{" "}
+                                more.
+                              </Typography>
+                            )}
+                          </Typography>
                         </Stack>
+
                       )}
                     </Box>
                   </>
@@ -780,7 +826,7 @@ const MainLayout = (props) => {
                                       background:
                                         currentPracticeStep > i
                                           ? "linear-gradient(90deg, rgba(132, 246, 48, 0.1) 0%, rgba(64, 149, 0, 0.1) 95%)"
-                                          : currentPracticeStep == i
+                                          : currentPracticeStep === i
                                           ? "linear-gradient(90deg, #FF4BC2 0%, #C20281 95%)"
                                           : "rgba(0, 0, 0, 0.04)",
                                       ml: {
@@ -788,7 +834,7 @@ const MainLayout = (props) => {
                                         lg: 2,
                                       },
                                       mr:
-                                        i == practiceSteps?.length - 1 ? 2 : 0,
+                                        i === practiceSteps?.length - 1 ? 2 : 0,
                                       borderRadius: "30px",
                                       display: "flex",
                                       justifyContent: "center",
@@ -801,7 +847,7 @@ const MainLayout = (props) => {
                                       <span
                                         style={{
                                           color:
-                                            currentPracticeStep == i
+                                            currentPracticeStep === i
                                               ? "white"
                                               : "#1E2937",
                                           fontWeight: 600,
@@ -817,7 +863,7 @@ const MainLayout = (props) => {
                                 );
                               })}
                             </Box>
-                            <Box
+                            {/* <Box
                               sx={{
                                 display: "flex",
                                 justifyContent: "center",
@@ -875,7 +921,7 @@ const MainLayout = (props) => {
                               >
                                 {`${currentPracticeProgress}%`}
                               </span>
-                            </Box>
+                            </Box> */}
                           </Box>
                         </Box>
                       )}

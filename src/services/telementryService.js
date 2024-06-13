@@ -3,16 +3,14 @@ import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 import { uniqueId } from './utilService';
 import { jwtDecode } from '../../node_modules/jwt-decode/build/cjs/index';
 
-var contentSessionId;
+let contentSessionId;
 let playSessionId;
 let url;
-let config;
 let isBuddyLogin = checkTokenInLocalStorage();
 
 if (localStorage.getItem('token') !== null) {
     let jwtToken = localStorage.getItem('token');
-    var userDetails = jwtDecode(jwtToken);
-    var emis_username = userDetails.emis_username;
+    let userDetails = jwtDecode(jwtToken);
 }
 
 function checkTokenInLocalStorage() {
@@ -31,8 +29,6 @@ let getUrl = window.location.href;
 url = getUrl && getUrl.includes('#') && getUrl.split('#')[1].split('/')[1];
 
 export const initialize = async ({ context, config, metadata }) => {
-    context = context;
-    config = config;
     playSessionId = uniqueId();
     if (!CsTelemetryModule.instance.isInitialised) {
         await CsTelemetryModule.instance.init({});
@@ -92,6 +88,28 @@ export const response = (context, telemetryMode) => {
             getEventOptions(),
         );
     }
+};
+
+export const Log = (context, pageid, telemetryMode) => {
+  if (checkTelemetryMode(telemetryMode)) {
+    try {
+      CsTelemetryModule.instance.telemetryService.raiseLogTelemetry({
+        options: getEventOptions(),
+        edata: {
+          type: "api_call",
+          level: "TRACE",
+          message: context,
+          pageid: pageid,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to log telemetry:", error, {
+        context,
+        pageid,
+        telemetryMode,
+      });
+    }
+  }
 };
 
 export const end = (data) => {
@@ -210,6 +228,13 @@ export const getEventOptions = () => {
                 { id: localStorage.getItem('virtualStorySessionID') || contentSessionId, type: 'ContentSession' },
                 { id: playSessionId, type: 'PlaySession' },
                 { id: userId, type: userType },
+                { id: localStorage.getItem("lang") || 'ta', type: 'language' },
+                { id: userDetails?.school_name, type: 'school_name' },
+                {
+                  id: userDetails?.class_studying_id,
+                  type: 'class_studying_id',
+                },
+                { id: userDetails?.udise_code, type: 'udise_code' },
             ],
             rollup: {},
         },

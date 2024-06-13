@@ -18,11 +18,9 @@ import {
 import practicebg from "../../assets/images/practice-bg.svg";
 import {
   useNavigate,
-  useSearchParams,
 } from "../../../node_modules/react-router-dom/dist/index";
 import { useEffect, useState } from "react";
 import axios from "../../../node_modules/axios/index";
-import { uniqueId } from "../../services/utilService";
 // import { useDispatch } from 'react-redux';
 import { setVirtualId } from "../../store/slices/user.slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,12 +36,12 @@ import desktopLevel8 from "../../assets/images/desktopLevel8.png";
 import desktopLevel9 from "../../assets/images/desktopLevel9.png";
 import profilePic from "../../assets/images/profile_url.png";
 import textureImage from "../../assets/images/textureImage.png";
-import scoreView from "../../assets/images/scoreView.png";
 import back from "../../assets/images/back-arrow.png";
 import { jwtDecode } from "jwt-decode";
 import config from "../../utils/urlConstants.json";
 import panda from "../../assets/images/panda.svg";
 import cryPanda from "../../assets/images/cryPanda.svg";
+import { uniqueId } from "../../services/utilService";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -91,9 +89,9 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
         <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <Grid container justifyContent={"space-evenly"} sx={{ width: "80%" }}>
             {languages.map((elem) => {
-              const isSelectedLang = elem.lang == selectedLang;
+              const isSelectedLang = elem.lang === selectedLang;
               return (
-                <Grid xs={4} item>
+                <Grid xs={5} item key={elem.lang}>
                   <Box
                     onClick={() => setSelectedLang(elem.lang)}
                     sx={{
@@ -171,7 +169,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
         </Box>
         <Box
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}
-          mt="60px"
+          mt={5} mb={1}
           // mr="110px"
         >
           <Box
@@ -339,6 +337,20 @@ export const ProfileHeader = ({
   const username = profileName || getLocalData("profileName");
   const navigate = useNavigate();
   const [openMessageDialog, setOpenMessageDialog] = useState("");
+
+  const handleProfileBack = () => {
+    try {
+      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+        window.parent.postMessage({ type: 'restore-iframe-content' }, '*');
+        navigate("/")
+      } else {
+        navigate("/discover-start")
+      }
+    } catch (error) {
+      console.error("Error posting message:", error);
+    }
+  };
+
   return (
     <>
       {!!openMessageDialog && (
@@ -357,7 +369,7 @@ export const ProfileHeader = ({
           top: 0,
           left: 0,
           width: "100%",
-          height: "70px",
+          height: { xs: "60px", sm: "70px" },
           background: "rgba(255, 255, 255, 0.2)",
           backdropFilter: "blur(3px)",
           display: "flex",
@@ -365,9 +377,9 @@ export const ProfileHeader = ({
           zIndex: 5555,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", width: "50%" }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: { xs: "100%", sm: "50%" } }}>
           {handleBack && (
-            <Box ml="94px">
+            <Box ml={{ xs: "10px", sm: "94px" }}>
               <IconButton onClick={handleBack}>
                 <img src={back} alt="back" style={{ height: "30px" }} />
               </IconButton>
@@ -376,35 +388,35 @@ export const ProfileHeader = ({
           {username && (
             <>
               <Box
-                ml={handleBack ? "12px" : "94px"}
+                ml={handleBack ? { xs: "10px", sm: "12px" } : { xs: "10px", sm: "94px" }}
                 sx={{ cursor: "pointer" }}
-                onClick={() => navigate("/")}
+                onClick={handleProfileBack}
               >
-                <img src={profilePic}></img>
+                <img src={profilePic} alt="profile-pic" style={{ height: "30px" }} />
               </Box>
               <Box ml="12px">
                 <span
                   style={{
                     color: "#000000",
                     fontWeight: 700,
-                    fontSize: "16px",
+                    fontSize: { xs: "14px", sm: "16px" },
                     fontFamily: "Quicksand",
                     lineHeight: "25px",
                   }}
                 >
-                  {username || ""}
+                 {username || ""}
                 </span>
               </Box>
             </>
           )}
         </Box>
-
+  
         <Box
           sx={{
             justifySelf: "flex-end",
-            width: "50%",
+            width: { xs: "100%", sm: "50%" },
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: { xs: "center", sm: "flex-end" },
             alignItems: "center",
           }}
         >
@@ -428,9 +440,9 @@ export const ProfileHeader = ({
               </span>
             </Box>
           </Box> */}
-
+  
           <Box
-            mr={"90px"}
+            mr={{ xs: "10px", sm: "90px" }}
             onClick={() =>
               setOpenLangModal
                 ? setOpenLangModal(true)
@@ -447,13 +459,13 @@ export const ProfileHeader = ({
                   style={{
                     color: "#000000",
                     fontWeight: 700,
-                    fontSize: "16px",
+                    fontSize: { xs: "14px", sm: "16px" },
                     fontFamily: "Quicksand",
                     lineHeight: "25px",
                   }}
                 >
-                  {languages?.find((elem) => elem.lang == language).name ||
-                    `Select Language`}
+                  {languages?.find((elem) => elem.lang === language)?.name ||
+                    "Select Language"}
                 </span>
               </Box>
             </Box>
@@ -470,15 +482,16 @@ const Assesment = ({ discoverStart }) => {
     let jwtToken = localStorage.getItem("token");
     var userDetails = jwtDecode(jwtToken);
     username = userDetails.student_name;
+    setLocalData("profileName", username);
   }
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [profileName, setProfileName] = useState(username);
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const [profileName, setProfileName] = useState(username);
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   // let lang = searchParams.get("lang") || "ta";
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
   const [openLangModal, setOpenLangModal] = useState(false);
-  const [lang, setLang] = useState(getLocalData("lang") || "ta");
+  const [lang, setLang] = useState(getLocalData("lang") || "en"); 
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
@@ -488,11 +501,11 @@ const Assesment = ({ discoverStart }) => {
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
     localStorage.setItem("sessionId", contentSessionId);
-    if (discoverStart && username && localStorage.getItem("token")) {
+    if (discoverStart && username && !localStorage.getItem("virtualId")) {
       (async () => {
         setLocalData("profileName", username);
         const usernameDetails = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
+          `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
         );
         const getMilestoneDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
@@ -511,6 +524,11 @@ const Assesment = ({ discoverStart }) => {
         );
         let session_id = localStorage.getItem("sessionId");
 
+        if (!session_id){
+          session_id = uniqueId();
+          localStorage.setItem("sessionId", session_id)
+        }
+        
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
@@ -535,7 +553,13 @@ const Assesment = ({ discoverStart }) => {
             getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
           )
         );
-        const sessionId = getLocalData("sessionId");
+        let sessionId = getLocalData("sessionId");
+
+        if (!sessionId || sessionId === 'null'){
+          sessionId = uniqueId();
+          localStorage.setItem("sessionId", sessionId)
+        }
+
         if (virtualId) {
           const getPointersDetails = await axios.get(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
@@ -551,7 +575,7 @@ const Assesment = ({ discoverStart }) => {
   const navigate = useNavigate();
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
-    if (!username && !profileName && !virtualId && level == 0) {
+    if (!username && !profileName && !virtualId && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({
         message: "please add username in query param",
@@ -559,7 +583,7 @@ const Assesment = ({ discoverStart }) => {
       });
       return;
     }
-    if (level == 0) {
+    if (level === 0) {
       navigate("/discover");
     } else {
       navigate("/practice");
@@ -582,8 +606,8 @@ const Assesment = ({ discoverStart }) => {
     width: "100vw",
     height: "100vh",
     backgroundImage: `url(${images?.[`desktopLevel${level || 1}`]})`,
-    backgroundSize: "contain", // Cover the entire viewport
-    backgroundRepeat: "round", // Center the image
+    backgroundRepeat: "round",
+    backgroundSize: 'auto',
     position: "relative",
   };
 
@@ -651,60 +675,68 @@ const Assesment = ({ discoverStart }) => {
         </Box>
       ) : (
         <MainLayout
-          showNext={false}
-          showTimer={false}
-          cardBackground={assessmentBackground}
-          backgroundImage={practicebg}
-          {...{
-            setOpenLangModal,
-            lang,
-            points,
+        showNext={false}
+        showTimer={false}
+        cardBackground={assessmentBackground}
+        backgroundImage={practicebg}
+        {...{
+          setOpenLangModal,
+          lang,
+          points,
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            right: { xs: 20, md: 200 },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: { xs: 2, md: 5 },
           }}
         >
-          <Box
+          <Typography
             sx={{
-              position: "absolute",
-              right: 200,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
+              color: "#322020",
+              fontWeight: 700,
+              fontSize: { xs: "24px", md: "40px" },
+              fontFamily: "Quicksand",
+              lineHeight: { xs: "36px", md: "62px" }, 
+              textAlign: "center",
             }}
-            mt={5}
           >
-            <span
-              style={{
-                color: "#322020",
-                fontWeight: 700,
-                fontSize: "40px",
+            {discoverStart
+              ? "Let's test your language skills"
+              : "You have good language skills"}
+          </Typography>
+          <Box>
+            <Typography
+              sx={{
+                color: "#1CB0F6",
+                fontWeight: 600,
+                fontSize: { xs: "20px", md: "30px" },
                 fontFamily: "Quicksand",
-                lineHeight: "62px",
+                lineHeight: { xs: "30px", md: "50px" },
+                textAlign: "center",
               }}
             >
-              {discoverStart
-                ? "Lets test your language skills"
-                : "You have good language skills"}
-            </span>
-            <Box>
-              <span
-                style={{
-                  color: "#1CB0F6",
-                  fontWeight: 600,
-                  fontSize: "30px",
-                  fontFamily: "Quicksand",
-                  lineHeight: "50px",
-                }}
-              >
-                {level > 0
-                  ? `Take the assessment to complete Level ${level}.`
-                  : "Take the assessment to discover your level"}
-              </span>
-            </Box>
-            <Box sx={{ cursor: "pointer" }} mt={2} onClick={handleRedirect}>
-              <StartAssessmentButton />
-            </Box>
+              {level > 0
+                ? `Take the assessment to complete Level ${level}.`
+                : "Take the assessment to discover your level"}
+            </Typography>
           </Box>
-        </MainLayout>
+          <Box
+            sx={{
+              cursor: "pointer",
+              mt: { xs: 1, md: 2 },
+            }}
+            onClick={handleRedirect}
+          >
+            <StartAssessmentButton />
+          </Box>
+        </Box>
+      </MainLayout>
       )}
     </>
   );

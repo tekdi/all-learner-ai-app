@@ -1,30 +1,18 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import practicebg from "../../assets/images/practice-bg.svg";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import MainLayout from "../Layouts.jsx/MainLayout";
-import useSound from "use-sound";
-import t from "../../assets/audio/t.mp3";
-import i from "../../assets/audio/i.mp3";
-import g from "../../assets/audio/g.mp3";
-import e from "../../assets/audio/e.mp3";
-import r from "../../assets/audio/r.mp3";
+// import useSound from "use-sound";
+// import t from "../../assets/audio/t.mp3";
+// import i from "../../assets/audio/i.mp3";
+// import g from "../../assets/audio/g.mp3";
+// import e from "../../assets/audio/e.mp3";
+// import r from "../../assets/audio/r.mp3";
 import correctSound from "../../assets/audio/correct.wav";
 import wrongSound from "../../assets/audio/wrong.wav";
 import addSound from "../../assets/audio/add.mp3";
 import removeSound from "../../assets/audio/remove.wav";
 import { splitGraphemes } from "split-graphemes";
-
-const sectionStyle = {
-  width: "100%",
-  backgroundImage: `url(${practicebg})`,
-  backgroundSize: "cover", // Cover the entire viewport
-  backgroundPosition: "center center", // Center the image
-  backgroundRepeat: "no-repeat", // Do not repeat the image
-  height: "100vh",
-  padding: "20px 100px",
-  boxSizing: "border-box",
-};
 
 const Mechanics4 = ({
   page,
@@ -60,7 +48,7 @@ const Mechanics4 = ({
   setOpenMessageDialog,
 }) => {
   const [words, setWords] = useState(
-    type == "word" ? [] : ["Friend", "She is", "My"]
+    type === "word" ? [] : ["Friend", "She is", "My"]
   );
   const [wordsAfterSplit, setWordsAfterSplit] = useState([]);
 
@@ -84,41 +72,41 @@ const Mechanics4 = ({
 
   const [selectedWords, setSelectedWords] = useState([]);
 
-  const [tPlay] = useSound(t);
-  const [iPlay] = useSound(i);
-  const [gPlay] = useSound(g);
-  const [ePlay] = useSound(e);
-  const [rPlay] = useSound(r);
+  // const [tPlay] = useSound(t);
+  // const [iPlay] = useSound(i);
+  // const [gPlay] = useSound(g);
+  // const [ePlay] = useSound(e);
+  // const [rPlay] = useSound(r);
 
-  const audioPlay = {
-    T: tPlay,
-    I: iPlay,
-    G: gPlay,
-    E: ePlay,
-    R: rPlay,
-  };
+  // const audioPlay = {
+  //   T: tPlay,
+  //   I: iPlay,
+  //   G: gPlay,
+  //   E: ePlay,
+  //   R: rPlay,
+  // };
   const handleWords = (word, isSelected) => {
     // audioPlay[word]();
     if (selectedWords?.length + 1 !== wordsAfterSplit?.length || isSelected) {
-      var audio = new Audio(isSelected ? removeSound : addSound);
+      let audio = new Audio(isSelected ? removeSound : addSound);
       audio.play();
     }
 
     if (isSelected) {
       let selectedWordsArr = [...selectedWords];
-      let index = selectedWordsArr?.findIndex((elem) => elem == word);
+      let index = selectedWordsArr?.findIndex((elem) => elem === word);
       selectedWordsArr?.splice(index, 1);
       setSelectedWords(selectedWordsArr);
       setWords([...words, word]);
     } else {
       let wordsArr = [...words];
-      let index = wordsArr?.findIndex((elem) => elem == word);
+      let index = wordsArr?.findIndex((elem) => elem === word);
       wordsArr?.splice(index, 1);
       setWords(wordsArr);
       setSelectedWords([...selectedWords, word]);
-      if (selectedWords?.length + 1 == wordsAfterSplit?.length) {
-        var audio = new Audio(
-          [...selectedWords, word]?.join("") == parentWords
+      if (selectedWords?.length + 1 === wordsAfterSplit?.length) {
+        let audio = new Audio(
+          [...selectedWords, word]?.join("") === parentWords
             ? correctSound
             : wrongSound
         );
@@ -130,7 +118,7 @@ const Mechanics4 = ({
   const answer =
     selectedWords?.length !== wordsAfterSplit?.length
       ? ""
-      : selectedWords?.join("") == parentWords
+      : selectedWords?.join("") === parentWords
       ? "correct"
       : "wrong";
 
@@ -163,18 +151,18 @@ const Mechanics4 = ({
             alignItems: "center",
             borderRadius: "15px",
             border: `2px solid ${
-              answer == "correct"
+              answer === "correct"
                 ? "#58CC02"
-                : answer == "wrong"
+                : answer === "wrong"
                 ? "#C30303"
-                : !words?.length && !!selectedWords?.length && type == "word"
+                : !words?.length && !!selectedWords?.length && type === "word"
                 ? "#1897DE"
                 : "rgba(51, 63, 97, 0.10)"
             }`,
             cursor: "pointer",
             letterSpacing: "15px",
             background: "#FBFBFB",
-            paddingX: type == "word" ? 0 : "20px",
+            paddingX: type === "word" ? 0 : "20px",
           }}
         >
           {selectedWords?.map((elem) => (
@@ -182,18 +170,18 @@ const Mechanics4 = ({
               onClick={() => handleWords(elem, true)}
               style={{
                 color:
-                  type == "word"
-                    ? answer == "correct"
+                  type === "word"
+                    ? answer === "correct"
                       ? "#58CC02"
-                      : answer == "wrong"
+                      : answer === "wrong"
                       ? "#C30303"
                       : "#1897DE"
                     : "#333F61",
-                fontWeight: type == "word" ? 600 : 700,
+                fontWeight: type === "word" ? 600 : 700,
                 fontSize: "40px",
                 fontFamily: "Quicksand",
                 cursor: "pointer",
-                marginLeft: type == "word" ? 0 : "20px",
+                marginLeft: type === "word" ? 0 : "20px",
               }}
             >
               {elem}
@@ -204,7 +192,7 @@ const Mechanics4 = ({
       <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
         {words?.map((elem) => (
           <>
-            {type == "word" ? (
+            {type === "word" ? (
               <Box
                 onClick={() => handleWords(elem)}
                 sx={{
@@ -238,7 +226,7 @@ const Mechanics4 = ({
                   textAlign: "center",
                   px: "25px",
                   py: "12px",
-                  background: "transparent",
+                  // background: "transparent",
                   m: 1,
                   textTransform: "none",
                   borderRadius: "12px",
@@ -269,7 +257,7 @@ const Mechanics4 = ({
             setRecordedAudio={setRecordedAudio}
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
-            dontShowListen={type == "image" || isDiscover}
+            dontShowListen={type === "image" || isDiscover}
             // updateStory={updateStory}
             originalText={parentWords}
             {...{
@@ -280,7 +268,7 @@ const Mechanics4 = ({
               callUpdateLearner,
               isShowCase,
               setEnableNext,
-              showOnlyListen: answer != "correct",
+              showOnlyListen: answer !== "correct",
               setOpenMessageDialog,
             }}
           />

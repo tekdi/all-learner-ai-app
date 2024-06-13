@@ -8,3 +8,4 @@ export { NoPageFound } from "./NoPageFound";
 export { AssesmentEnd } from "./AssesmentEnd";
 export { DiscoverStart } from "./DiscoverStart";
 export { PracticeRedirectPage } from "./PracticeRedirectPage";
+export { LoginPage } from "./LoginPage";
