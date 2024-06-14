@@ -82,12 +82,16 @@ function VoiceAnalyser(props) {
   }, [props.contentId]);
 
   const playAudio = (val) => {
+    let mechanism;
+    if(props.mechanism){
+      mechanism = props.mechanism
+    }
     try {
       var audio = new Audio(
         recordedAudio
           ? recordedAudio
           : props.contentId
-            ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
+            ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${mechanism? "image/":""}${props.contentId}.wav`
             : AudioPath[1][10]
       );
       set_temp_audio(audio);

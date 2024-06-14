@@ -154,6 +154,7 @@ const Mechanics2 = ({
                   setVoiceAnimate={setVoiceAnimate}
                   storyLine={storyLine}
                   dontShowListen={type === "image" || isDiscover}
+                  mechanism={'flashcard'}
                   // updateStory={updateStory}
                   originalText={words}
                   {...{
@@ -286,6 +287,7 @@ const Mechanics2 = ({
                   dontShowListen={type === "image" || isDiscover}
                   shake={shake || false}
                   originalText={words}
+                  mechanism={'flashcard'}
                   {...{
                     contentId,
                     contentType,
