@@ -1,1 +1,4 @@
-export { default as LoginPage } from './LoginPage';
+import React from 'react';
+
+const LoginPage = React.lazy(() => import("./LoginPage"));
+export { LoginPage } 

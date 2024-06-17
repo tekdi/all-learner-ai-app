@@ -1,1 +1,4 @@
-export { default as PracticePage } from './Practice';
+import React from 'react';
+
+const PracticePage = React.lazy(() => import("./Practice"));
+export { PracticePage } 
