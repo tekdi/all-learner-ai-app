@@ -247,9 +247,9 @@ export const MessageDialog = ({
       >
         <Box sx={{ position: "absolute", left: 10, bottom: 0 }}>
           {isError ? (
-            <img src={cryPanda} alt="cryPanda" />
+            <img src={cryPanda} alt="cryPanda" loading="lazy" />
           ) : (
-            <img src={panda} alt="panda" />
+            <img src={panda} alt="panda" loading="lazy" />
           )}
         </Box>
 
@@ -381,7 +381,7 @@ export const ProfileHeader = ({
           {handleBack && (
             <Box ml={{ xs: "10px", sm: "94px" }}>
               <IconButton onClick={handleBack}>
-                <img src={back} alt="back" style={{ height: "30px" }} />
+                <img src={back} alt="back" style={{ height: "30px" }} loading="lazy" />
               </IconButton>
             </Box>
           )}
@@ -392,7 +392,7 @@ export const ProfileHeader = ({
                 sx={{ cursor: "pointer" }}
                 onClick={handleProfileBack}
               >
-                <img src={profilePic} alt="profile-pic" style={{ height: "30px" }} />
+                <img src={profilePic} alt="profile-pic" style={{ height: "30px", width:'30px' }} loading="lazy" />
               </Box>
               <Box ml="12px">
                 <span
@@ -553,6 +553,7 @@ const Assesment = ({ discoverStart }) => {
             getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
           )
         );
+      
         let sessionId = getLocalData("sessionId");
 
         if (!sessionId || sessionId === 'null'){

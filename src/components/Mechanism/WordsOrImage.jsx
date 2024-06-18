@@ -110,6 +110,8 @@ const WordsOrImage = ({
                 maxHeight: "130px",
                 marginBottom: "40px",
               }}
+              loading="lazy"
+              alt="img"
             />
           </Box>
         ) : type === "phonics" ? (

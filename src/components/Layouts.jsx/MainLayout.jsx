@@ -205,6 +205,7 @@ const MainLayout = (props) => {
           <img
             src={levelsImages?.[LEVEL]?.backgroundAddOn}
             alt="backgroundAddOn"
+            loading="lazy" 
           />
         </Box>
       )}
@@ -256,6 +257,7 @@ const MainLayout = (props) => {
               src={catLoading}
               alt="catLoading"
             // sx={{ height: "58px", width: "58px" }}
+            loading="lazy" 
             />
           </Box>
         </Card>
@@ -294,6 +296,7 @@ const MainLayout = (props) => {
                       src={timer}
                       alt="timer"
                       sx={{ height: "58px", width: "58px" }}
+                      loading="lazy" 
                     />
                   </Box>
                 )}
@@ -312,6 +315,7 @@ const MainLayout = (props) => {
                     const showGreen = step + 1 <= currentStep;
                     return (
                       <Box
+                       key={index}
                         index={index}
                         sx={{
                           height: "8px",
@@ -684,6 +688,7 @@ const MainLayout = (props) => {
                           src={clouds}
                           alt="clouds"
                           style={{ zIndex: 222 }}
+                          loading="lazy" 
                         />
                       )}
                     </Box>
@@ -699,6 +704,7 @@ const MainLayout = (props) => {
                           src={gameWon}
                           alt="gameWon"
                           style={{ zIndex: 9999, height: 340 }}
+                          loading="lazy" 
                         />
                       ) : (
                         <Stack justifyContent="center"
@@ -707,6 +713,7 @@ const MainLayout = (props) => {
                             src={gameLost}
                             alt="gameLost"
                             style={{ height: 340 }}
+                            loading="lazy" 
                           />
                        <Typography
                             sx={{ mb: 1, mt: 1, textAlign: "center" }}

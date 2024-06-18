@@ -64,9 +64,6 @@ const Practice = () => {
     setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
   };
 
-  const isFirefox = () => {
-    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
-  };
 
   useEffect(() => {
     if (startShowCase) {
@@ -92,13 +89,9 @@ const Practice = () => {
       callConfettiAndPlay();
 
       setTimeout(() => {
-        // alert(
-        //   `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-        // );
         setOpenMessageDialog({
           message: `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `,
         });
-        // setDisableScreen(false);
       }, 1200);
     }
   }, [currentQuestion]);
@@ -115,9 +108,7 @@ const Practice = () => {
       setVoiceText("");
       setEnableNext(false);
     }
-    if (voiceText == "success") {
-      // setEnableNext(true);
-      // go_to_result(voiceText);
+    if (voiceText === "success") {
       setVoiceText("");
     }
     //eslint-disable-next-line

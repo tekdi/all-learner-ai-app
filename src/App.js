@@ -11,7 +11,20 @@ import { startEvent } from './services/callTelemetryIntract';
 import '@project-sunbird/telemetry-sdk/index.js';
 
 const App = () => {
-    const ranonce = useRef(false); 
+    const ranonce = useRef(false);
+
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+                    console.log('Service Worker registered:', registration);
+                }).catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+            });
+        }
+    }, []);
+
     useEffect(() => {
         const initService = async () => {
             var did;
@@ -69,7 +82,7 @@ const App = () => {
         };
 
         setFp();
-     }, []);
+    }, []);
 
     return (
         <StyledEngineProvider injectFirst>

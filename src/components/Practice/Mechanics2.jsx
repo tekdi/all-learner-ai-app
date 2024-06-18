@@ -23,23 +23,23 @@ const Mechanics2 = ({page, setPage}) => {
   return (
     <Box sx={sectionStyle}>
       <IconButton>
-        <img src={back} alt='back' style={{ height: '30px' }} />
+        <img src={back} alt='back' style={{ height: '30px' }} loading="lazy"  />
       </IconButton>
 
       <Card sx={{ width: '85vw', height: '80vh', borderRadius: '15px', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
         <CardContent>
-          <img src={timer} alt='timer' height='40px'/>
+          <img src={timer} alt='timer' height='40px' loading="lazy" />
           <Typography variant="h5" component="h4" sx={{ mb:2, fontSize: '20px', color: '#333F61', textAlign: 'center' }}>
            Guess the below image
           </Typography>
 
           <Box sx={{display:'flex', justifyContent:'center', mb:4}}>
-            <img src={elephant} alt='elephant' height='120px' />
+            <img src={elephant} alt='elephant' height='120px' loading="lazy"  />
           </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button variant="contained" sx={{ background: 'linear-gradient(45deg, #84F630 30%, #409500 90%)', color: 'white', m: 1, textTransform: 'none', width: '100px' }}>
-              <img src={speak} alt='speak' height='15px' /><span style={{marginLeft:'4px'}}>Speak</span>
+              <img src={speak} alt='speak' height='15px' loading="lazy"  /><span style={{marginLeft:'4px'}}>Speak</span>
             </Button>
           </Box>
         </CardContent>
@@ -47,10 +47,10 @@ const Mechanics2 = ({page, setPage}) => {
         <Divider />
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box sx={{position:'relative', right:'60px'}}>
-          <img src={level} alt='level' height='100px'/>
+          <img src={level} alt='level' height='100px'loading="lazy" />
           </Box>
           <Button variant="contained" onClick={()=> setPage(page+1)} sx={{  background: 'linear-gradient(45deg, #FF9050 30%, #E15404 90%)', color: 'white', mt: 4,mr:4, textTransform: 'none', width: '90px', height:'35px' }}>
-            <span style={{marginRight:'4px'}}>Next</span><img src={arrow} alt='arrow' height='15px' />
+            <span style={{marginRight:'4px'}}>Next</span><img src={arrow} alt='arrow' height='15px' loading="lazy"  />
           </Button>
         </Box>
         </Box>

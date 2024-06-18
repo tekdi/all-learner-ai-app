@@ -108,10 +108,10 @@ const Mechanics2 = ({
       setWords(randomizeArray(wordsArr));
     } else {
       let wordsToShow = [];
-      if (type == "audio") {
+      if (type === "audio") {
         wordsToShow = allWords?.filter((elem) => elem != wordToSimilar);
       }
-      if (type == "fillInTheBlank") {
+      if (type === "fillInTheBlank") {
         wordsToShow = allWords
           ?.join(" ")
           ?.split(" ")
@@ -383,8 +383,9 @@ const Mechanics2 = ({
           marginBottom: "30px",
         }}
       >
-        {words?.map((elem) => (
+        {words?.map((elem,index) => (
           <Box
+            key={index}
             className={`${
               type === "audio" && selectedWord === elem
                 ? selectedWord === parentWords
