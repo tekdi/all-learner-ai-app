@@ -452,7 +452,7 @@ const Practice = () => {
       );
 
       const resWord = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${virtualId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}${currentGetContent.mechanism === 'flashcard' ? "&tags=image" : ""}`
       );
       setTotalSyllableCount(resWord?.data?.totalSyllableCount)
       setLivesData({
@@ -865,6 +865,49 @@ const Practice = () => {
       );
     } else if (page === 1) {
       return <Mechanics2 page={page} setPage={setPage} />;
+    }
+    else if (mechanism === "flashcard") {
+      return <Mechanics2  {...{
+        level: !isShowCase && level,
+        header:
+          questions[currentQuestion]?.contentType === "image"
+            ? `Guess the below image`
+            : `Speak the below ${questions[currentQuestion]?.contentType}`,
+        words: questions[currentQuestion]?.contentSourceData?.[0]?.text,
+        contentType: currentContentType,
+        contentId: questions[currentQuestion]?.contentId,
+        setVoiceText,
+        setRecordedAudio,
+        setVoiceAnimate,
+        storyLine,
+        handleNext,
+        type: questions[currentQuestion]?.contentType,
+        // image: elephant,
+        enableNext,
+        showTimer: false,
+        points,
+        steps: questions?.length,
+        currentStep: currentQuestion + 1,
+        progressData,
+        showProgress: true,
+        background:
+          isShowCase &&
+          "linear-gradient(281.02deg, #AE92FF 31.45%, #555ADA 100%)",
+        playTeacherAudio,
+        callUpdateLearner: isShowCase,
+        disableScreen,
+        isShowCase,
+        startShowCase,
+        setStartShowCase,
+        handleBack: !isShowCase && handleBack,
+        livesData,
+        setLivesData,
+        gameOverData,
+        highlightWords,
+        matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
+        loading,
+        setOpenMessageDialog,
+      }} page={page} setPage={setPage} />;
     }
   };
 
