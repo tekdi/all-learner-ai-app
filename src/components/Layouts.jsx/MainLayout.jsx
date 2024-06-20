@@ -37,7 +37,7 @@ import Confetti from "react-confetti";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import gameLoseAudio from "../../assets/audio/gameLose.wav";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MainLayout = (props) => {
@@ -584,7 +584,7 @@ const MainLayout = (props) => {
                         alignItems: "center",
                         padding: "0px 24px 0px 20px",
                       }}
-                      onClick={() => handleNext()}
+                      onClick={handleNext}
                     >
                       <span
                         style={{
@@ -601,7 +601,7 @@ const MainLayout = (props) => {
                     {enableNext ? (
                       <Box
                         sx={{ cursor: "pointer" }}
-                        onClick={() => handleNext()}
+                        onClick={handleNext}
                       >
                         <NextButton />
                       </Box>
@@ -984,4 +984,4 @@ const MainLayout = (props) => {
   );
 };
 
-export default MainLayout;
+export default React.memo(MainLayout);

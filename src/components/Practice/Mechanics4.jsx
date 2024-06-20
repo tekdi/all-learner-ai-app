@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import MainLayout from "../Layouts.jsx/MainLayout";
 // import useSound from "use-sound";
@@ -280,4 +280,4 @@ const Mechanics4 = ({
   );
 };
 
-export default Mechanics4;
+export default React.memo(Mechanics4);

@@ -294,9 +294,7 @@ export const MessageDialog = ({
           mb={2}
         >
           <Box
-            onClick={() => {
-              closeDialog();
-            }}
+            onClick={closeDialog}
             sx={{
               cursor: "pointer",
               background: "#6DAF19",
@@ -743,4 +741,4 @@ const Assesment = ({ discoverStart }) => {
   );
 };
 
-export default Assesment;
+export default React.memo(Assesment);

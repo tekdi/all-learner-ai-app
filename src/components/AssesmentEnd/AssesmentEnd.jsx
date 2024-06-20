@@ -12,7 +12,7 @@ import homeBackground from "../../assets/images/homeBackground.png";
 import { Typography } from "../../../node_modules/@mui/material/index";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import { ProfileHeader } from "../Assesment/Assesment";
 import desktopLevel5 from "../../assets/images/assesmentComplete.png";
@@ -396,4 +396,4 @@ const AssesmentEnd = () => {
   );
 };
 
-export default AssesmentEnd;
+export default React.memo(AssesmentEnd);

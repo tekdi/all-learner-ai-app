@@ -135,4 +135,4 @@ const AudioRecorderCompair = (props) => {
   );
 };
 
-export default AudioRecorderCompair;
+export default React.memo(AudioRecorderCompair) ;

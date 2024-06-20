@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, CircularProgress } from "../../node_modules/@mui/material/index";
 import axios from "../../node_modules/axios/index";
 import calcCER from "../../node_modules/character-error-rate/index";
@@ -599,4 +599,4 @@ function VoiceAnalyser(props) {
   );
 }
 
-export default VoiceAnalyser;
+export default React.memo(VoiceAnalyser);

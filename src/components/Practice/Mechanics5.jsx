@@ -73,9 +73,7 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
                                     mt={'1px'}
                                     mx={1}
                                     sx={{ cursor: 'pointer' }}
-                                    onClick={() => {
-                                        togglePlayPause();
-                                    }}
+                                    onClick={togglePlayPause}
                                 >
                                     {isReady && (
                                         <>
@@ -117,4 +115,4 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
     );
 };
 
-export default Mechanics5;
+export default React.memo(Mechanics5);

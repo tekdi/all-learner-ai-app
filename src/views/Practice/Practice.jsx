@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Mechanics2 from "../../components/Practice/Mechanics2";
 import Mechanics3 from "../../components/Practice/Mechanics3";
 import Mechanics4 from "../../components/Practice/Mechanics4";
@@ -70,10 +70,11 @@ const Practice = () => {
       setLivesData({ ...livesData, lives: LIVES });
     }
   }, [startShowCase]);
-  const callConfettiAndPlay = () => {
+  
+  const callConfettiAndPlay = useCallback(() => {
     play();
     callConfetti();
-  };
+  }, [play]);
 
   useEffect(() => {
     let currentPracticeStep = progressData.currentPracticeStep;
@@ -693,7 +694,7 @@ const Practice = () => {
     }
   }, [questions[currentQuestion]]);
 
-  const renderMechanics = () => {
+  const renderMechanics = useMemo(() => {
     if (!mechanism) {
       return (
         <WordsOrImage
@@ -853,7 +854,7 @@ const Practice = () => {
     } else if (page === 1) {
       return <Mechanics2 page={page} setPage={setPage} />;
     }
-  };
+  });
 
   return (
     <>
@@ -868,9 +869,9 @@ const Practice = () => {
           dontShowHeader={openMessageDialog.dontShowHeader}
         />
       )}
-      {renderMechanics()}
+      {renderMechanics}
     </>
   );
 };
 
-export default Practice;
+export default React.memo(Practice);
