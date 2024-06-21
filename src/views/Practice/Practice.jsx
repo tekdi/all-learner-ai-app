@@ -164,17 +164,21 @@ const Practice = () => {
           send(1);
         }
       } else {
-        const pointsRes = await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_POINTER}`,
-          {
+        try{
+          const pointsRes = await axios.post(
+            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_POINTER}`,
+            {
             userId: localStorage.getItem("virtualId"),
             sessionId: localStorage.getItem("sessionId"),
             points: 1,
             language: lang,
             milestone: `m${level}`,
           }
-        );
-        setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
+          );
+          setPoints(pointsRes?.data?.result?.totalLanguagePoints || 0);
+        } catch (err) {
+          console.log(" Error adding points",err);
+        }
       }
 
       const virtualId = getLocalData("virtualId");
@@ -197,19 +201,22 @@ const Practice = () => {
       }
 
       let showcasePercentage = ((currentQuestion + 1) * 100) / questions.length;
-
-      await axios.post(
-        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
-        {
-          userId: virtualId,
-          sessionId: sessionId,
-          milestone: isShowCase ? "showcase" : `practice`,
-          lesson: currentPracticeStep,
-          progress: isShowCase ? showcasePercentage : currentPracticeProgress,
-          language: lang,
-          milestoneLevel: `m${level}`,
+      try{
+        await axios.post(
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+          {
+            userId: virtualId,
+            sessionId: sessionId,
+            milestone: isShowCase ? "showcase" : `practice`,
+            lesson: currentPracticeStep,
+            progress: isShowCase ? showcasePercentage : currentPracticeProgress,
+            language: lang,
+            milestoneLevel: `m${level}`,
+          });
+        } catch (err) {
+          setLoading(false);
+          console.log("Error posting lesson progress data",err)
         }
-      );
 
       let newPracticeStep =
         currentQuestion === questions.length - 1 || isGameOver
@@ -244,17 +251,21 @@ const Practice = () => {
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
           if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
-          await axios.post(
-            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
-            {
-              userId: virtualId,
-              sessionId: sessionId,
-              subSessionId: sub_session_id,
-              milestoneLevel: getSetData?.data?.currentLevel,
-              totalSyllableCount: totalSyllableCount,
-              language: localStorage.getItem("lang"),
-            }
-          );
+            try{
+              await axios.post(
+                `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
+                {
+                  userId: virtualId,
+                  sessionId: sessionId,
+                  subSessionId: sub_session_id,
+                  milestoneLevel: getSetData?.data?.currentLevel,
+                  totalSyllableCount: totalSyllableCount,
+                  language: localStorage.getItem("lang"),
+                }
+                );
+              } catch(err){
+                console.log("Error adding points",err);
+              }
         }
           setLocalData("previous_level", getSetData.data.previous_level);
           if (getSetData.data.sessionResult === "pass") {
@@ -274,8 +285,8 @@ const Practice = () => {
               gameOver({ link: "/assesment-end" }, true);
               return;
             }
-            catch(e){
-              // catch error
+            catch (err) {
+              console.log("Error posting lesson progress data",err);
             }
           }
 
@@ -293,8 +304,9 @@ const Practice = () => {
           (elem) => elem.title === practiceSteps?.[newPracticeStep].name
         );
 
-        await axios.post(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+        try{
+          await axios.post(
+            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
           {
             userId: virtualId,
             sessionId: sessionId,
@@ -304,7 +316,15 @@ const Practice = () => {
             language: lang,
             milestoneLevel: `m${level}`,
           }
-        );
+          );
+        } catch (err) {
+          setOpenMessageDialog({
+            message:
+            " Error posting lesson progress data",
+            isError: true,
+            dontShowHeader:true
+          });
+        }
 
         if (newPracticeStep === 0 || newPracticeStep === 5 || isGameOver) {
           gameOver();
@@ -427,10 +447,14 @@ const Practice = () => {
       const resLessons = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualId}?language=${lang}`
       );
+      try {
       const getPointersDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
       );
       setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+      } catch (err) {
+        console.log("Error getting pointer details",err);
+      }
 
       let userState = Number.isInteger(
         Number(resLessons.data?.result?.result?.lesson)
@@ -475,6 +499,7 @@ const Practice = () => {
       let showcaseLevel = userState === 4 || userState === 9;
       setIsShowCase(showcaseLevel);
       if (showcaseLevel) {
+        try {
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
           {
@@ -487,6 +512,9 @@ const Practice = () => {
             milestoneLevel: `m${level}`,
           }
         );
+        }catch (err) {
+          console.log("Error posting lesson progress data", err);
+        }
       }
 
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
@@ -495,6 +523,12 @@ const Practice = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      setOpenMessageDialog({
+        message:
+        "Content Unavailable",
+        isError: true,
+        dontShowHeader:true
+      });
       console.log("err", error);
     }
   };
@@ -520,20 +554,23 @@ const Practice = () => {
         currentPracticeStep: newCurrentPracticeStep,
         fromBack: true,
       };
-
-      await axios.post(
-        `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
-        {
-          userId: virtualId,
-          sessionId: sessionId,
-          milestone: "practice",
+try{
+  await axios.post(
+    `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+    {
+      userId: virtualId,
+      sessionId: sessionId,
+      milestone: "practice",
           lesson: newCurrentPracticeStep,
           progress: (newCurrentPracticeStep / practiceSteps.length) * 100,
           language: lang,
           milestoneLevel: `m${level}`,
         }
-      );
-
+        );
+        
+      } catch (err) {
+        console.log("Error posting lesson progress data",err);      
+      }
       setProgressData(practiceProgress[virtualId]);
 
       const currentGetContent = levelGetContent?.[level]?.find(

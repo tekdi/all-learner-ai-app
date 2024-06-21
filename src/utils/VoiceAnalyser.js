@@ -82,16 +82,57 @@ function VoiceAnalyser(props) {
   }, [props.contentId]);
 
   const playAudio = (val) => {
+    const { originalText } = props;
     try {
-      var audio = new Audio(
+      const audio = new Audio(
         recordedAudio
           ? recordedAudio
           : props.contentId
             ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
             : AudioPath[1][10]
       );
-      set_temp_audio(audio);
-      setPauseAudio(val);
+  
+      audio.addEventListener('canplaythrough', () => {
+        set_temp_audio(audio);
+        setPauseAudio(val);
+        audio.play();
+      });
+  
+      audio.addEventListener('error', (err) => {
+        console.error('Audio error: ', err);
+  
+        const lang = localStorage.getItem('lang') || 'en';
+        let voiceLang = 'en-US';
+  
+        if (lang === 'hi') {
+          voiceLang = 'hi-IN';
+        } else if (lang === 'en') {
+          voiceLang = 'en-US';
+        }
+  
+        if ('speechSynthesis' in window) {
+          const synth = window.speechSynthesis;
+          const utterance = new SpeechSynthesisUtterance(originalText);
+          const voices = synth.getVoices();
+          
+          // Find a voice that matches the language preference
+          const selectedVoice = voices.find((voice) => voice.lang === voiceLang);
+          if (selectedVoice) {
+            utterance.voice = selectedVoice;
+          } else {
+            console.error(`No voice found for language: ${voiceLang}`);
+          }
+  
+          utterance.onend = () => {
+            setPauseAudio(false);
+          };
+  
+          synth.speak(utterance);
+          setPauseAudio(val);
+        } else {
+          console.error('Web Speech API is not supported in this browser.');
+        }
+      });
     } catch (err) {
       console.log(err);
     }
