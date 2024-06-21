@@ -63,15 +63,24 @@ const SpeakSentenceComponent = () => {
   }, [currentQuestion]);
 
   useEffect(() => {
-    if (!(localStorage.getItem("contentSessionId") !== null)) {
+    if (localStorage.getItem("contentSessionId") === null) {
       (async () => {
-        const sessionId = getLocalData("sessionId");
-        const virtualId = getLocalData("virtualId");
-        const lang = getLocalData("lang");
-        const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
-        );
-        setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+        try {
+          const sessionId = getLocalData("sessionId");
+          const virtualId = getLocalData("virtualId");
+          const lang = getLocalData("lang");
+  
+          try {
+            const getPointersDetails = await axios.get(
+              `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+            );
+            setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+          } catch (error) {
+            console.error("Error fetching pointer details:", error);
+          }
+        } catch (error) {
+          console.error("Error retrieving local data:", error);
+        }
       })();
     }
   }, []);
@@ -252,42 +261,54 @@ const SpeakSentenceComponent = () => {
     (async () => {
       let quesArr = [];
       try {
-        // const resSentence = await axios.get(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/scores/GetContent/sentence/${UserID}`);
-        // quesArr = [...quesArr, ...(resSentence?.data?.content?.splice(0, 5) || [])];
-        // const resWord = await axios.get(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/scores/GetContent/word/${UserID}`);
-        // quesArr = [...quesArr, ...(resWord?.data?.content?.splice(0, 5) || [])];
-        // const resPara = await axios.get(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/scores/GetContent/paragraph/${UserID}`);
-        // quesArr = [...quesArr, ...(resPara?.data?.content || [])];
         const lang = getLocalData("lang");
-        const resAssessment = await axios.post(
-          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_ASSESSMENT}`,
-          {
-            ...{ tags: ["ASER"], language: lang },
-          }
-        );
-
+        let resAssessment;
+        try {
+          resAssessment = await axios.post(
+            `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_ASSESSMENT}`,
+            {
+              ...{ tags: ["ASER"], language: lang },
+            }
+          );
+        } catch (err) {
+          console.error("Error fetching assessment:", err);
+          return; 
+        }
+  
         const sentences = resAssessment?.data?.data?.find(
           (elem) => elem.category === "Sentence"
         );
+  
+        if (!sentences) {
+          console.error("No sentences found in assessment data");
+          return;
+        }
 
-        const resPagination = await axios.get(
-          `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
-        );
+        let resPagination;
+        try {
+          resPagination = await axios.get(
+            `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
+          );
+        } catch (err) {
+          console.error("Error fetching pagination:", err);
+          return; // Exit if there's an error fetching the pagination
+        }
+  
         setCurrentContentType("Sentence");
-        setTotalSyllableCount(resPagination?.data?.totalSyllableCount)
+        setTotalSyllableCount(resPagination?.data?.totalSyllableCount);
         setCurrentCollectionId(sentences?.collectionId);
         setAssessmentResponse(resAssessment);
         localStorage.setItem("storyTitle", sentences?.name);
+  
         quesArr = [...quesArr, ...(resPagination?.data?.data || [])];
-        // quesArr[1].contentType = 'image';
-        // quesArr[0].contentType = 'phonics';
         console.log("quesArr", quesArr);
         setQuestions(quesArr);
       } catch (error) {
-        console.log("err", error);
+        console.error("An unexpected error occurred:", error);
       }
     })();
   }, []);
+  
   const handleBack = () => {
     const destination = process.env.REACT_APP_IS_APP_IFRAME === 'true' ? "/" : "/discover-start";
     navigate(destination);
