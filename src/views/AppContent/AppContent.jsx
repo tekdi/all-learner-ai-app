@@ -7,7 +7,7 @@ const PrivateRoute = (props) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!virtualId && props.requiresAuth) {
-      navigate("/");
+      navigate("/login");
     }
   }, [virtualId]);
 
