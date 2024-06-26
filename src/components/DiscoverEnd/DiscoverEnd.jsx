@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import axios from "../../../node_modules/axios/index";
 import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
@@ -77,7 +77,7 @@ const SpeakSentenceComponent = () => {
       }}
     >
       <IconButton>
-        <img src={back} alt="back" style={{ height: "30px" }} />
+        <img src={back} alt="back" style={{ height: "30px" }} loading="lazy"  />
       </IconButton>
       <Card sx={sectionStyle}>
         <Box sx={{ position: "absolute", left: "3px", bottom: "0px" }}>
@@ -85,6 +85,7 @@ const SpeakSentenceComponent = () => {
             src={discoverEndLeft}
             alt="timer"
             className={shake && "shakeImage"}
+            loading="lazy" 
           />
         </Box>
         <Box sx={{ position: "absolute", right: "3px", bottom: "0px" }}>
@@ -92,6 +93,7 @@ const SpeakSentenceComponent = () => {
             src={discoverEndRight}
             alt="timer"
             className={shake && "shakeImage"}
+            loading="lazy" 
           />
         </Box>
         <Box>
@@ -132,7 +134,7 @@ const SpeakSentenceComponent = () => {
           </Typography>
 
           <Box
-           onClick={() => handleProfileBack()}
+           onClick={handleProfileBack}
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -149,4 +151,4 @@ const SpeakSentenceComponent = () => {
   );
 };
 
-export default SpeakSentenceComponent;
+export default React.memo(SpeakSentenceComponent);

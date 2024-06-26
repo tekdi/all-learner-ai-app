@@ -49,11 +49,11 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Grid container sx={{ width: '80%', justifyContent: 'center', mb: 2, mt: 8 }}>
                     <Grid xs={5}>
-                        <img src={seePictureAndTell} style={{ borderRadius: '20px' }} alt='' />
+                        <img src={seePictureAndTell} style={{ borderRadius: '20px' }} alt='seePictureAndTell' loading="lazy"  />
                     </Grid>
                     <Grid xs={7}>
                         {sentences?.map((elem, i) => (
-                            <Box mt={i > 0 && 3} sx={{ display: 'flex' }}>
+                            <Box mt={i > 0 && 3} sx={{ display: 'flex' }} key={i}>
                                 <audio
                                     ref={audioRef}
                                     preload="metadata"
@@ -73,9 +73,7 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
                                     mt={'1px'}
                                     mx={1}
                                     sx={{ cursor: 'pointer' }}
-                                    onClick={() => {
-                                        togglePlayPause();
-                                    }}
+                                    onClick={togglePlayPause}
                                 >
                                     {isReady && (
                                         <>
@@ -117,4 +115,4 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
     );
 };
 
-export default Mechanics5;
+export default React.memo(Mechanics5);

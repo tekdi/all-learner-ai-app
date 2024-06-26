@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../node_modules/axios/index";
 import elephant from "../../assets/images/elephant.svg";
@@ -92,7 +92,7 @@ const SpeakSentenceComponent = () => {
       setVoiceText("");
       setEnableNext(false);
     }
-    if (voiceText == "success") {
+    if (voiceText === "success") {
       // go_to_result(voiceText);
       setVoiceText("");
     }
@@ -346,4 +346,4 @@ const SpeakSentenceComponent = () => {
   );
 };
 
-export default SpeakSentenceComponent;
+export default React.memo(SpeakSentenceComponent);

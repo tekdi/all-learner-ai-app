@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import MainLayout from "../Layouts.jsx/MainLayout";
 // import useSound from "use-sound";
@@ -165,7 +165,7 @@ const Mechanics4 = ({
             paddingX: type === "word" ? 0 : "20px",
           }}
         >
-          {selectedWords?.map((elem) => (
+          {selectedWords?.map((elem, index) => (
             <span
               onClick={() => handleWords(elem, true)}
               style={{
@@ -183,6 +183,7 @@ const Mechanics4 = ({
                 cursor: "pointer",
                 marginLeft: type === "word" ? 0 : "20px",
               }}
+              key={index}
             >
               {elem}
             </span>
@@ -190,7 +191,7 @@ const Mechanics4 = ({
         </Box>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-        {words?.map((elem) => (
+        {words?.map((elem,index) => (
           <>
             {type === "word" ? (
               <Box
@@ -207,6 +208,7 @@ const Mechanics4 = ({
                   borderRadius: "12px",
                   border: "5px solid #10618E",
                 }}
+                key={index}
               >
                 <span
                   style={{
@@ -278,4 +280,4 @@ const Mechanics4 = ({
   );
 };
 
-export default Mechanics4;
+export default React.memo(Mechanics4);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Mechanics2 from "../../components/Practice/Mechanics2";
 import Mechanics3 from "../../components/Practice/Mechanics3";
 import Mechanics4 from "../../components/Practice/Mechanics4";
@@ -64,19 +64,17 @@ const Practice = () => {
     setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
   };
 
-  const isFirefox = () => {
-    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
-  };
 
   useEffect(() => {
     if (startShowCase) {
       setLivesData({ ...livesData, lives: LIVES });
     }
   }, [startShowCase]);
-  const callConfettiAndPlay = () => {
+  
+  const callConfettiAndPlay = useCallback(() => {
     play();
     callConfetti();
-  };
+  }, [play]);
 
   useEffect(() => {
     let currentPracticeStep = progressData.currentPracticeStep;
@@ -92,13 +90,9 @@ const Practice = () => {
       callConfettiAndPlay();
 
       setTimeout(() => {
-        // alert(
-        //   `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-        // );
         setOpenMessageDialog({
           message: `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `,
         });
-        // setDisableScreen(false);
       }, 1200);
     }
   }, [currentQuestion]);
@@ -119,9 +113,7 @@ const Practice = () => {
       setVoiceText("");
       setEnableNext(false);
     }
-    if (voiceText == "success") {
-      // setEnableNext(true);
-      // go_to_result(voiceText);
+    if (voiceText === "success") {
       setVoiceText("");
     }
     //eslint-disable-next-line
@@ -706,7 +698,7 @@ const Practice = () => {
     }
   }, [questions[currentQuestion]]);
 
-  const renderMechanics = () => {
+  const renderMechanics = useMemo(() => {
     if (!mechanism) {
       return (
         <WordsOrImage
@@ -866,7 +858,7 @@ const Practice = () => {
     } else if (page === 1) {
       return <Mechanics2 page={page} setPage={setPage} />;
     }
-  };
+  });
 
   return (
     <>
@@ -881,9 +873,9 @@ const Practice = () => {
           dontShowHeader={openMessageDialog.dontShowHeader}
         />
       )}
-      {renderMechanics()}
+      {renderMechanics}
     </>
   );
 };
 
-export default Practice;
+export default React.memo(Practice);

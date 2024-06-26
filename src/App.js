@@ -11,7 +11,8 @@ import { startEvent } from './services/callTelemetryIntract';
 import '@project-sunbird/telemetry-sdk/index.js';
 
 const App = () => {
-    const ranonce = useRef(false); 
+    const ranonce = useRef(false);
+
     useEffect(() => {
         const initService = async () => {
             var did;
@@ -69,7 +70,7 @@ const App = () => {
         };
 
         setFp();
-     }, []);
+    }, []);
 
     return (
         <StyledEngineProvider injectFirst>
@@ -82,4 +83,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default React.memo(App);

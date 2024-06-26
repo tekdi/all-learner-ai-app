@@ -1,10 +1,9 @@
-import { Box, CardContent, Typography } from "@mui/material";
-import { createRef, useState } from "react";
+import { Box, CardContent, Typography, CircularProgress } from "@mui/material";
+import React, { createRef, useState } from "react";
 import v11 from "../../assets/audio/V10.mp3";
 import VoiceAnalyser from "../../utils/VoiceAnalyser";
 import { PlayAudioButton, StopAudioButton } from "../../utils/constants";
 import MainLayout from "../Layouts.jsx/MainLayout";
-import { CircularProgress } from "../../../node_modules/@mui/material/index";
 
 const WordsOrImage = ({
   handleNext,
@@ -51,8 +50,8 @@ const WordsOrImage = ({
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
   const [isReady, setIsReady] = useState(false);
-
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentProgress, setCurrrentProgress] = useState(0);
 
   const togglePlayPause = () => {
     if (isPlaying) {
@@ -63,7 +62,6 @@ const WordsOrImage = ({
       setIsPlaying(true);
     }
   };
-  const [currrentProgress, setCurrrentProgress] = useState(0);
 
   return (
     <MainLayout
@@ -110,6 +108,8 @@ const WordsOrImage = ({
                 maxHeight: "130px",
                 marginBottom: "40px",
               }}
+              loading="lazy"
+              alt="img"
             />
           </Box>
         ) : type === "phonics" ? (
@@ -136,18 +136,13 @@ const WordsOrImage = ({
                 ref={audioRef}
                 preload="metadata"
                 onDurationChange={(e) => setDuration(e.currentTarget.duration)}
-                onCanPlay={(e) => {
-                  setIsReady(true);
-                }}
+                onCanPlay={() => setIsReady(true)}
                 onPlaying={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
-                onTimeUpdate={(e) => {
-                  setCurrrentProgress(e.currentTarget.currentTime);
-                }}
+                onTimeUpdate={(e) => setCurrrentProgress(e.currentTarget.currentTime)}
               >
                 <source type="audio/mp3" src={v11} />
               </audio>
-              {/* <AudioPlayerSvg color="#FFA132" /> */}
 
               <Box
                 sx={{
@@ -163,18 +158,14 @@ const WordsOrImage = ({
                     marginLeft: "20px",
                     marginTop: "5px",
                   }}
-                  onClick={() => {
-                    togglePlayPause();
-                  }}
+                  onClick={togglePlayPause}
                 >
                   {isReady && (
-                    <>
-                      {isPlaying ? (
-                        <StopAudioButton color="#FFA132" />
-                      ) : (
-                        <PlayAudioButton color="#FFA132" />
-                      )}
-                    </>
+                    isPlaying ? (
+                      <StopAudioButton color="#FFA132" />
+                    ) : (
+                      <PlayAudioButton color="#FFA132" />
+                    )
                   )}
                 </Box>
                 <Typography
@@ -211,29 +202,28 @@ const WordsOrImage = ({
                   color: "#333F61",
                   textAlign: "center",
                   fontSize: "40px",
-                  // lineHeight: "normal",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
                 }}
               >
-                {words || ""}
+                 {words || ""}
               </Typography>
             )}
             {matchedChar && (
               <Box
-              display={"flex"}
-              mb={4}
-              sx={{
-                width: "100%",
-                justifyContent: "center",
-                flexWrap: "wrap",
-              }}
-            >
+                display="flex"
+                mb={4}
+                sx={{
+                  width: "100%",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
+              >
                 {highlightWords(words, matchedChar)}
               </Box>
             )}
-         </Box>
+          </Box>
         )}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
@@ -242,7 +232,6 @@ const WordsOrImage = ({
             setVoiceAnimate={setVoiceAnimate}
             storyLine={storyLine}
             dontShowListen={type === "image" || isDiscover}
-            // updateStory={updateStory}
             originalText={words}
             handleNext={handleNext}
             {...{
@@ -266,4 +255,4 @@ const WordsOrImage = ({
   );
 };
 
-export default WordsOrImage;
+export default React.memo(WordsOrImage);

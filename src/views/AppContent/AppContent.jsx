@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
 import { useSelector } from "react-redux";
@@ -21,6 +21,7 @@ const AppContent = ({ routes }) => {
   return (
     <Fragment>
       <CustomizedSnackbars />
+      <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         {routes.map((route) => (
           <Route
@@ -34,6 +35,7 @@ const AppContent = ({ routes }) => {
           />
         ))}
       </Routes>
+      </Suspense>
     </Fragment>
   );
 };

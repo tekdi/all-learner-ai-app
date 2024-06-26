@@ -25,7 +25,8 @@
     "es2021": true,
     "es6": true,
     "browser": true,
-    "node": true
+    "node": true,
+    "serviceworker": true
   },
   "settings": {
     "react": {
