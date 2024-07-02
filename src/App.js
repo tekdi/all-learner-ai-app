@@ -75,7 +75,6 @@ const App = () => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Router>
-          <a>Learn React</a>
           <AppContent routes={routes} />
         </Router>
       </ThemeProvider>
