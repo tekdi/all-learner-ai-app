@@ -5,8 +5,14 @@ import MockAdapter from "axios-mock-adapter";
 import { BrowserRouter } from "react-router-dom";
 import LoginPage from "./LoginPage";
 import config from "../../utils/urlConstants.json";
+import { useNavigate } from "react-router-dom";
 
 jest.spyOn(window, "alert").mockImplementation(() => {});
+
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: jest.fn(),
+}));
 
 describe("LoginPage", () => {
   test("shows alert when fields are empty", () => {
@@ -20,6 +26,9 @@ describe("LoginPage", () => {
   });
 
   test("navigates to /discover-start on successful login", async () => {
+    const mockNavigate = jest.fn();
+    useNavigate.mockReturnValue(mockNavigate);
+
     const mock = new MockAdapter(axios);
     mock
       .onPost(
@@ -32,6 +41,7 @@ describe("LoginPage", () => {
         <LoginPage />
       </BrowserRouter>
     );
+
     fireEvent.change(screen.getByLabelText("Username"), {
       target: { value: "testuser" },
     });
@@ -46,6 +56,8 @@ describe("LoginPage", () => {
     await waitFor(() =>
       expect(localStorage.getItem("virtualId")).toBe("12345")
     );
+
+    expect(mockNavigate).toHaveBeenCalledWith("/discover-start");
   });
 
   test("displays entered username", () => {
@@ -98,7 +110,7 @@ describe("LoginPage", () => {
     );
   });
 
-  test("clears localStorage on form submission", async () => {
+  test("Set localStorage on form submission", async () => {
     const mock = new MockAdapter(axios);
     mock
       .onPost(
