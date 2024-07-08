@@ -18,6 +18,8 @@ import java.util.Base64;
 
 public class AllTest extends BrowserManager {
 
+    // Ensure no static initialization blocks or static variables that can throw exceptions
+
     public AllTest() {
         // No-argument constructor
         System.out.println("AllTest constructor called.");
