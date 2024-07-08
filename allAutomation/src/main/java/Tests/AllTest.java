@@ -52,6 +52,8 @@ public class AllTest extends BrowserManager {
             String text = driver.findElement(By.xpath("//h4[@class='MuiTypography-root MuiTypography-h5 css-xilszg']")).getText();
             System.out.println("Extracted text: " + text);
 
+            Thread.sleep(3000);
+
             driver.findElement(By.className("game-action-button")).click();
 
             System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
