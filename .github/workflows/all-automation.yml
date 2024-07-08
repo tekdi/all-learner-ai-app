@@ -41,6 +41,17 @@ on:
   #   branches:
   #     - main
 
+name: Java CI with Maven
+
+on:
+  push:
+    branches:
+      - main
+      - all_automation_Actions
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -57,8 +68,8 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
-        working-directory: allAutomation # Adjust this path as needed
+        working-directory: all-learner-ai-app\allAutomation # Adjust this path as needed
 
       - name: Run TestNG tests
         run: mvn test -DsuiteXmlFile=testng.xml
-        working-directory: allAutomation # Adjust this path as needed
+        working-directory: all-learner-ai-app\allAutomation # Adjust this path as needed
