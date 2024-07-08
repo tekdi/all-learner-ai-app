@@ -29,7 +29,7 @@ public class LoggerUtil {
 
 	private static FileHandler logFileHandler = null;
 	private static SimpleFormatter simpleFormatter = null;
-	private static Logger logger = null;
+	private static Logger logger;
 //	private static String logFileDir = "./logs/";
 	private static Instant startInstant = null; // to measure time
 	private static FileReader fr;
@@ -38,6 +38,8 @@ public class LoggerUtil {
 	
 	// static initializer for the class
 	static {
+		logger = Logger.getLogger(LoggerUtil.class.getName());
+
 		// System.setProperty("java.util.logging.SimpleFormatter.format",
 		// "[%1$tF %1$tT] [%4$-7s] %5$s %n");
 		System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
