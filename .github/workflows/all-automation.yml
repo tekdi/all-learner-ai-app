@@ -41,8 +41,6 @@ on:
   #   branches:
   #     - main
 
-name: Java CI with Maven
-
 on:
   push:
     branches:
