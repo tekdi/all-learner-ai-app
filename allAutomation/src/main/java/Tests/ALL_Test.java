@@ -2,13 +2,11 @@ package Tests;
 
 import Pages.LoginPage;
 import com.sun.speech.freetts.audio.SingleFileAudioPlayer;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 import utils.baseutils.BrowserManager;
 import utils.javautils.BaseUtils;
-
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 
@@ -16,38 +14,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Base64;
 
-//import com.sun.speech.freetts.AudioPlayer;
-//import com.sun.speech.freetts.Voice;
-//import com.sun.speech.freetts.VoiceManager;
-//import com.sun.speech.freetts.audio.SingleFileAudioPlayer;
-
-import javax.sound.sampled.AudioFileFormat.Type;
-
-
-import com.google.cloud.texttospeech.v1.AudioConfig;
-import com.google.cloud.texttospeech.v1.AudioEncoding;
-import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
-import com.google.cloud.texttospeech.v1.SynthesisInput;
-import com.google.cloud.texttospeech.v1.TextToSpeechClient;
-import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
-import com.google.protobuf.ByteString;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-
-public class ALL_Test extends BrowserManager
-{
+public class ALL_Test extends BrowserManager {
 
     @Test
-    public static void Login() throws Exception {
+    public void Login() throws Exception {
         browserRun();
-        LoginPage lp = PageFactory.initElements(BaseUtils.driver,LoginPage.class);
+        LoginPage lp = PageFactory.initElements(BaseUtils.driver, LoginPage.class);
 
-         logStep("Enter username");
+        logStep("Enter username");
         driver.findElement(By.id(":r0:")).sendKeys("Amol");
 
         waitForUi(2);
@@ -57,21 +33,16 @@ public class ALL_Test extends BrowserManager
         driver.findElement(By.xpath("//button[@type='submit']")).click();
 
         waitForUi(2);
-
         Thread.sleep(3000);
 
         driver.findElement(By.xpath("//div[@class='MuiBox-root css-14j5rrt']")).click();
 
         Thread.sleep(3000);
 
-        String Text = driver.findElement(By.xpath("//h4[@class='MuiTypography-root MuiTypography-h5 css-xilszg']")).getText();
-
-        System.out.println(Text);
-
-//        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
+        String text = driver.findElement(By.xpath("//h4[@class='MuiTypography-root MuiTypography-h5 css-xilszg']")).getText();
+        System.out.println(text);
 
         driver.findElement(By.className("game-action-button")).click();
-
 
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 
@@ -104,7 +75,7 @@ public class ALL_Test extends BrowserManager
         SingleFileAudioPlayer audioPlayer = new SingleFileAudioPlayer(outputPath, javax.sound.sampled.AudioFileFormat.Type.WAVE);
         voice.setAudioPlayer(audioPlayer);
 
-        voice.speak(Text);
+        voice.speak(text);
 
         audioPlayer.close();
         // Deallocate the voice resources
@@ -121,19 +92,14 @@ public class ALL_Test extends BrowserManager
         saveBase64ToFile(base64FilePath, base64Audio);
         System.out.println("Base64 Audio saved successfully at: " + base64FilePath);
 
-
-//        driver.findElement(By.xpath("//*[@fill='url(#paint0_linear_400_1340)']")).sendKeys("https://all-dev-content-service.s3.ap-south-1.amazonaws.com/all-audio-files/en/44983c9c-48d4-4605-8e03-f7ae3932ad3e.wav");
-
         Thread.sleep(4000);
         driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
-
-        String audioFilePath = "output.mp3";
-
-//        convertTextToSpeech(Text,audioFilePath);
-
-
     }
 
+    public static void logStep(String message) {
+        // Implement the logging functionality
+        System.out.println(message);
+    }
 
     private static String convertWavToBase64(String filePath) {
         String base64String = "";
@@ -154,5 +120,4 @@ public class ALL_Test extends BrowserManager
             e.printStackTrace();
         }
     }
-
 }
