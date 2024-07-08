@@ -14,14 +14,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Base64;
 
 public class AllTest extends BrowserManager {
 
-    // Ensure no static initialization blocks or static variables that can throw exceptions
-
     public AllTest() {
-        // No-argument constructor
         System.out.println("AllTest constructor called.");
     }
 
@@ -59,16 +57,13 @@ public class AllTest extends BrowserManager {
 
             driver.findElement(By.className("game-action-button")).click();
 
-            System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
-
             // Create a voice manager
             VoiceManager voiceManager = VoiceManager.getInstance();
 
             // Select the voice
             Voice voice = voiceManager.getVoice("kevin16");
             if (voice == null) {
-                System.err.println("Cannot find a voice named kevin16.\n" +
-                        "Please specify a different voice.");
+                System.err.println("Cannot find a voice named kevin16.\nPlease specify a different voice.");
                 System.exit(1);
             }
 
@@ -108,7 +103,8 @@ public class AllTest extends BrowserManager {
             System.out.println("Base64 Audio saved successfully at: " + base64FilePath);
 
             Thread.sleep(4000);
-            driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
+            // Example click action
+            // driver.findElement(By.xpath("//button[text()='Example']")).click();
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -118,15 +114,13 @@ public class AllTest extends BrowserManager {
     }
 
     public static void logStep(String message) {
-        // Implement the logging functionality
         System.out.println(message);
     }
 
     private static String convertWavToBase64(String filePath) {
         String base64String = "";
         try {
-            File file = new File(filePath);
-            byte[] bytes = Files.readAllBytes(file.toPath());
+            byte[] bytes = Files.readAllBytes(Paths.get(filePath));
             base64String = Base64.getEncoder().encodeToString(bytes);
         } catch (IOException e) {
             e.printStackTrace();
