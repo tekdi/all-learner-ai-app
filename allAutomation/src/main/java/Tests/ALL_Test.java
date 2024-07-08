@@ -18,6 +18,10 @@ import java.util.Base64;
 
 public class ALL_Test extends BrowserManager {
 
+    public ALL_Test() {
+        // No-argument constructor
+    }
+
     @Test
     public void Login() throws Exception {
         browserRun();
