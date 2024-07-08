@@ -47,14 +47,14 @@ public class ALL_Test extends BrowserManager
         browserRun();
         LoginPage lp = PageFactory.initElements(BaseUtils.driver,LoginPage.class);
 
-        // logstep("Enter username");
+         logStep("Enter username");
         driver.findElement(By.id(":r0:")).sendKeys("Amol");
 
         waitForUi(2);
-                // logstep("Enter password");
+        logStep("Enter password");
         driver.findElement(By.id(":r1:")).sendKeys("Amol@123");
 
-        // logstep("Login button click");
+        logStep("Login button click");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
 
         waitForUi(2);

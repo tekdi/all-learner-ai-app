@@ -5,24 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/BaseTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Pages/LoginPage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Tests/LoginTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/ENV.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/test/resources/locators/login.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshots/20240506_112228/ test case_20240506_112228.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pom/Intranet/Intranet_Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pom/Intranet/Intranet_Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/javautils/BaseUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/javautils/BaseUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/javautils/Reporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/javautils/Reporter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test/Intranet/IntranetLogin_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/Intranet/IntranetLogin_Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/test/resources/Test_data/browserConfig.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/resources/Test_data/browserConfig.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Tests/ALL_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tests/ALL_Test.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +16,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -44,12 +30,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "ToolWindowRun.ShowToolbar": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="Tests" />
