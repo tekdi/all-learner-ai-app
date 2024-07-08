@@ -134,21 +134,17 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('all-learner-ai-app/allAutomation/pom.xml') }}
+        key: ${{ runner.os }}-maven-${{ hashFiles('/home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-
     - name: Install dependencies
       run: |
-        cd all-learner-ai-app/allAutomation
+        cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
         mvn install -DskipTests
-
     - name: Run tests
       run: |
-        cd all-learner-ai-app/allAutomation
+        cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
         mvn test
-
-
 
 
 
