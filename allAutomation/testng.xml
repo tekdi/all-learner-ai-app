@@ -4,7 +4,9 @@
 	<test thread-count="5" name="Test">
 		<classes>
 			 <!-- <class name="test.Intranet.IntranetLogin_Test"/> -->
-			<class name="Tests.ALL_Test"></class>
+			<class name="Tests.ALL_Test"/>
+<!--				<methods></methods>-->
+<!--			</class>-->
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

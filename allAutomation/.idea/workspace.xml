@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Tests/ALL_Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tests/ALL_Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testng.xml" beforeDir="false" afterPath="$PROJECT_DIR$/testng.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +39,7 @@
       <recent name="Tests" />
     </key>
   </component>
-  <component name="RunManager" selected="TestNG.ALL_Test.Login">
+  <component name="RunManager" selected="TestNG.E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/testng.xml">
     <configuration name="ALL_Test.Login" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="Hybrid-Automation-Framework" />
       <extension name="coverage">
@@ -54,6 +52,16 @@
       <option name="MAIN_CLASS_NAME" value="Tests.ALL_Test" />
       <option name="METHOD_NAME" value="Login" />
       <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/testng.xml" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="Hybrid-Automation-Framework" />
+      <option name="SUITE_NAME" value="$PROJECT_DIR$/testng.xml" />
+      <option name="TEST_OBJECT" value="SUITE" />
       <properties />
       <listeners />
       <method v="2">
@@ -80,6 +88,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="TestNG.E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/testng.xml" />
         <item itemvalue="TestNG.ALL_Test.Login" />
         <item itemvalue="TestNG.LoginTest.Login" />
       </list>
