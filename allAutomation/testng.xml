@@ -5,10 +5,8 @@
 
 		<classes>
 			 <!-- <class name="test.Intranet.IntranetLogin_Test"/> -->
-			<class name="Tests.AllTest">
-				<methods>
-					<include name="Login"/>
-				</methods>
+			<class name="Tests.RunSuite">
+
 			</class>
 		</classes>
 	</test> <!-- Test -->
