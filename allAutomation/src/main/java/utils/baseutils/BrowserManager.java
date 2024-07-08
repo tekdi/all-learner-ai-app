@@ -50,9 +50,6 @@ public class BrowserManager extends BaseUtils {
             opt.addArguments("--remote-allow-origins=*");
             opt.addArguments("--incognito");
             opt.addArguments("--use-fake-ui-for-media-stream");
-            opt.addArguments("--headless");
-            opt.addArguments("--use-fake-ui-for-media-stream");
-            ChromeDriver driver = new ChromeDriver(opt);
 
 //            opt.setBrowserVersion("116");
 

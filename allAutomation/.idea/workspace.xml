@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../.github/workflows/all-automation.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.github/workflows/all-automation.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/javautils/LoggerUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/javautils/LoggerUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
