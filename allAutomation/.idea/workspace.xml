@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/AllTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Tests/ALL_Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testng.xml" beforeDir="false" afterPath="$PROJECT_DIR$/testng.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,18 +32,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ToolWindowRun.ShowToolbar": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="Tests" />
     </key>
   </component>
-  <component name="RunManager" selected="TestNG.ALL_Test.Login">
+  <component name="RunManager" selected="TestNG.E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/testng.xml">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="All_Automation" />
       <method v="2">
@@ -49,24 +54,6 @@
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <module name="All_Automation" />
       <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ALL_Test.Login" type="TestNG" temporary="true" nameIsGenerated="true">
-      <module name="All_Automation" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Tests" />
-      <option name="MAIN_CLASS_NAME" value="Tests.ALL_Test" />
-      <option name="METHOD_NAME" value="Login" />
-      <option name="TEST_OBJECT" value="METHOD" />
-      <properties />
-      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -99,10 +86,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="alltest.Login" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="All_Automation" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Tests" />
+      <option name="MAIN_CLASS_NAME" value="Tests.alltest" />
+      <option name="METHOD_NAME" value="Login" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="TestNG.ALL_Test.Login" />
         <item itemvalue="TestNG.E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/testng.xml" />
+        <item itemvalue="TestNG.alltest.Login" />
         <item itemvalue="TestNG.LoginTest.Login" />
       </list>
     </recent_temporary>
@@ -117,5 +122,16 @@
       <updated>1719896402303</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

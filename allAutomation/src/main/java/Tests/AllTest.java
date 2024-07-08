@@ -1,14 +1,14 @@
 package Tests;
 
 import Pages.LoginPage;
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.audio.SingleFileAudioPlayer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 import utils.baseutils.BrowserManager;
 import utils.javautils.BaseUtils;
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.VoiceManager;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Base64;
 
-public class ALL_Test extends BrowserManager {
+public class AllTest extends BrowserManager {
 
-    public ALL_Test() {
+    public AllTest() {
         // No-argument constructor
     }
 
