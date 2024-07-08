@@ -1,3 +1,36 @@
+# name: Java CI with Maven and TestNG
+
+# on:
+#   push:
+#     branches:
+#       - all_Automation_Actions
+#   # pull_request:
+#   #   branches:
+#   #     - main
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3.3.0
+
+#       - name: Set up JDK 17
+#         uses: actions/setup-java@v2
+#         with:
+#           java-version: '17'
+
+#       # - name: Build with Maven
+#       #   run: mvn clean install
+
+#       - name: Run TestNG tests
+#         run: mvn test -DsuiteXmlFile=testng.xml
+
+#       # -name: Run tests
+#       #   run: mvn test
+
+
 name: Java CI with Maven and TestNG
 
 on:
@@ -14,11 +47,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
+          distribution: 'temurin' # Can be 'adopt', 'zulu', etc.
           java-version: '17'
 
       # - name: Build with Maven
@@ -27,5 +61,5 @@ jobs:
       - name: Run TestNG tests
         run: mvn test -DsuiteXmlFile=testng.xml
 
-      # -name: Run tests
+      # - name: Run tests
       #   run: mvn test
