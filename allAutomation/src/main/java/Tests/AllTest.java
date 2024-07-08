@@ -40,15 +40,18 @@ public class AllTest extends BrowserManager {
             logStep("Enter password");
             driver.findElement(By.id(":r1:")).sendKeys("Amol@123");
 
+            logStep("Click on Submit Button");
             driver.findElement(By.xpath("//button[@type='submit']")).click();
 
             waitForUi(2);
             Thread.sleep(3000);
 
+            logStep("Click on Mike button");
             driver.findElement(By.xpath("//div[@class='MuiBox-root css-14j5rrt']")).click();
 
             Thread.sleep(3000);
 
+            logStep("Get Text from UI");
             String text = driver.findElement(By.xpath("//h4[@class='MuiTypography-root MuiTypography-h5 css-xilszg']")).getText();
             System.out.println("Extracted text: " + text);
 
