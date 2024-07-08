@@ -54,7 +54,6 @@ public class ALL_Test extends BrowserManager
         logStep("Enter password");
         driver.findElement(By.id(":r1:")).sendKeys("Amol@123");
 
-        logStep("Login button click");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
 
         waitForUi(2);
