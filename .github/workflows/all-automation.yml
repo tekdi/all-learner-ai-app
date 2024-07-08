@@ -24,8 +24,8 @@ jobs:
       # - name: Build with Maven
       #   run: mvn clean install
 
-      # - name: Run TestNG tests
-      #   run: mvn test -DsuiteXmlFile=testng.xml
+      - name: Run TestNG tests
+        run: mvn test -DsuiteXmlFile=testng.xml
 
-      -name: Run tests
-        run: mvn test
+      # -name: Run tests
+      #   run: mvn test
