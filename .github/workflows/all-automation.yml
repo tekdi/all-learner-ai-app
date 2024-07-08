@@ -92,6 +92,10 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+        working-directory: all-learner-ai-app/all-learner-ai-app/allAutomation
+
 
       - name: Run TestNG tests
         run: mvn test -DsuiteXmlFile=testng.xml
+        working-directory: all-learner-ai-app/all-learner-ai-app/allAutomation
+
