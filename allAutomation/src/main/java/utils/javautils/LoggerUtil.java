@@ -19,27 +19,25 @@ import java.util.logging.SimpleFormatter;
  * consolidates all logs in one single file and creates new file for every run.
  * The log file is generated in 'logs' directory. It provides convenient methods
  * for: - measuring time of execution. - Dumping stack trace in log files
- * 
+ *
  * It also sets pattern of logs with TimeStamp and Log level
  *
  * @author Mandar Wadhavekar
- * 
+ *
  */
 public class LoggerUtil {
 
 	private static FileHandler logFileHandler = null;
 	private static SimpleFormatter simpleFormatter = null;
-	private static Logger logger;
-//	private static String logFileDir = "./logs/";
+	private static Logger logger = null;
+	//	private static String logFileDir = "./logs/";
 	private static Instant startInstant = null; // to measure time
 	private static FileReader fr;
 	private static Properties prop;
 	static String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-	
+
 	// static initializer for the class
 	static {
-		logger = Logger.getLogger(LoggerUtil.class.getName());
-
 		// System.setProperty("java.util.logging.SimpleFormatter.format",
 		// "[%1$tF %1$tT] [%4$-7s] %5$s %n");
 		System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
@@ -71,7 +69,7 @@ public class LoggerUtil {
 			if (file.exists() == false) {
 				System.out.println("Creating directory: " + logFileDir);
 				System.out.println("Creating directory: " + logFileDir);
-			
+
 				File directory = new File(logFileDir);
 				directory.mkdir(); // create logs directory
 			} else {
@@ -90,30 +88,30 @@ public class LoggerUtil {
 			String logLevel = prop.getProperty("logLevel");
 			Level level;
 			switch (logLevel.toUpperCase()) {
-			case "SEVERE":
-				level = Level.SEVERE;
-				break;
-			case "WARNING":
-				level = Level.WARNING;
-				break;
-			case "INFO":
-				level = Level.INFO;
-				break;
-			case "CONFIG":
-				level = Level.CONFIG;
-				break;
-			case "FINE":
-				level = Level.FINE;
-				break;
-			case "FINER":
-				level = Level.FINER;
-				break;
-			case "FINEST":
-				level = Level.FINEST;
-				break;
-			default:
-				level = Level.INFO; // Default level if the value is not recognized
-				break;
+				case "SEVERE":
+					level = Level.SEVERE;
+					break;
+				case "WARNING":
+					level = Level.WARNING;
+					break;
+				case "INFO":
+					level = Level.INFO;
+					break;
+				case "CONFIG":
+					level = Level.CONFIG;
+					break;
+				case "FINE":
+					level = Level.FINE;
+					break;
+				case "FINER":
+					level = Level.FINER;
+					break;
+				case "FINEST":
+					level = Level.FINEST;
+					break;
+				default:
+					level = Level.INFO; // Default level if the value is not recognized
+					break;
 			}
 
 			logger.setLevel(level); // TODO: read this from properties file Mandar Wadhavekar
@@ -133,7 +131,7 @@ public class LoggerUtil {
 	/**
 	 * This method returns the logFileHandler This method may be needed only if some
 	 * class want to do specific coding
-	 * 
+	 *
 	 * @return FileHandler
 	 */
 	public static FileHandler getLogFileHandler() {
@@ -142,7 +140,7 @@ public class LoggerUtil {
 
 	/**
 	 * This methods returns Logger so that classes can put in log statements
-	 * 
+	 *
 	 * @return Logger
 	 */
 	public static Logger getLogger() {
@@ -152,7 +150,7 @@ public class LoggerUtil {
 
 	/**
 	 * Log details of exception - exception's message and stack trace
-	 * 
+	 *
 	 * @param exception
 	 */
 	public static void logException(Exception exception) {
@@ -163,7 +161,7 @@ public class LoggerUtil {
 	/**
 	 * Log details of exception - exception's error message, custom message and
 	 * stack trace
-	 * 
+	 *
 	 * @param exception
 	 */
 	public static void logException(Exception exception, String customMessage) {
@@ -186,13 +184,13 @@ public class LoggerUtil {
 	 * Starts measurement of time using Instant. Returns java.time.Instant class but
 	 * caller method can ignore it if they just want to measure time and not
 	 * interested in other details of the Instant
-	 * 
+	 *
 	 * @return Instant
 	 */
 	public static Instant startTimeMeasurement() {
 		startInstant = Instant.now();
 		logger.log(Level.INFO, "Started measuring time " + startInstant); // TODO: Change level to FINER - Mandar
-																			// Wadhavekar
+		// Wadhavekar
 		return startInstant;
 	}
 
@@ -206,7 +204,7 @@ public class LoggerUtil {
 	/**
 	 * Stop Time Measurement and print time taken since last startTimeMeasurement
 	 * and also print the custom message. This can be utilized in following
-	 * 
+	 *
 	 * @param message
 	 */
 	public static void stopTimeMeasurement(String message) {
@@ -222,7 +220,7 @@ public class LoggerUtil {
 
 	/**
 	 * Converts stack trace to String Mainly to dump it in log file.
-	 * 
+	 *
 	 * @param throwable the exception for which stack trace is to be converted into
 	 *                  string
 	 * @return
@@ -235,58 +233,58 @@ public class LoggerUtil {
 			throw new IllegalStateException(ioe);
 		}
 	}
-	
-	
-	
+
+
+
 	// To delete old log files
-	
-	
+
+
 	private static LoggerUtil instance;
-    private String directoryPath;
+	private String directoryPath;
 
-    private LoggerUtil() {
-        // Set the directory path where the report files are stored
-        directoryPath = System.getProperty("user.dir") +java.io.File.separator+ "logs"+java.io.File.separator;
-    }
+	private LoggerUtil() {
+		// Set the directory path where the report files are stored
+		directoryPath = System.getProperty("user.dir") +java.io.File.separator+ "logs"+java.io.File.separator;
+	}
 
-    public static LoggerUtil getInstance() {
-        if (instance == null) {
-            synchronized (LoggerUtil.class) {
-                if (instance == null) {
-                    instance = new LoggerUtil();
-                }
-            }
-        }
-        return instance;
-    }
+	public static LoggerUtil getInstance() {
+		if (instance == null) {
+			synchronized (LoggerUtil.class) {
+				if (instance == null) {
+					instance = new LoggerUtil();
+				}
+			}
+		}
+		return instance;
+	}
 
-    public void deleteOldLogFiles(int days) {
-        // Calculate the deletion threshold date 
-    	
-    	/*here locldate object from java.time used to calculate date usign minus () in that 
-    	 * mention days then it will get substracted from current day 
-    	 * suppose day 5running then it will delete 3day 
-    	 * 
-    	 * */
-        LocalDate deletionThreshold = LocalDate.now().minus(days, ChronoUnit.DAYS);
+	public void deleteOldLogFiles(int days) {
+		// Calculate the deletion threshold date
 
-        // Get the list of files in the directory
-        File directory = new File(directoryPath);
-        File[] files = directory.listFiles();
+		/*here locldate object from java.time used to calculate date usign minus () in that
+		 * mention days then it will get substracted from current day
+		 * suppose day 5running then it will delete 3day
+		 *
+		 * */
+		LocalDate deletionThreshold = LocalDate.now().minus(days, ChronoUnit.DAYS);
 
-        // Iterate through the files and delete if older than the threshold
-        for (File file : files) {
-            LocalDate fileDate = LocalDate.ofEpochDay(file.lastModified() / (24 * 60 * 60 * 1000));
+		// Get the list of files in the directory
+		File directory = new File(directoryPath);
+		File[] files = directory.listFiles();
 
-            if (fileDate.isBefore(deletionThreshold)) {
-                // Delete the file
-                if (file.delete()) {
-                    System.out.println("Deleted file: " + file.getName());
-                } else {
-                    System.out.println("Failed to delete file: " + file.getName());
-                }
-            }
-        }
-    }
-    	
+		// Iterate through the files and delete if older than the threshold
+		for (File file : files) {
+			LocalDate fileDate = LocalDate.ofEpochDay(file.lastModified() / (24 * 60 * 60 * 1000));
+
+			if (fileDate.isBefore(deletionThreshold)) {
+				// Delete the file
+				if (file.delete()) {
+					System.out.println("Deleted file: " + file.getName());
+				} else {
+					System.out.println("Failed to delete file: " + file.getName());
+				}
+			}
+		}
+	}
+
 }
