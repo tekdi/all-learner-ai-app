@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/javautils/LoggerUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/javautils/LoggerUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +46,7 @@
       <recent name="Tests" />
     </key>
   </component>
-  <component name="RunManager" selected="TestNG.AllTest.Login">
+  <component name="RunManager" selected="TestNG.RunSuite.firstTest">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="All_Automation" />
       <method v="2">
@@ -108,6 +106,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RunSuite.firstTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="All_Automation" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Tests" />
+      <option name="MAIN_CLASS_NAME" value="Tests.RunSuite" />
+      <option name="METHOD_NAME" value="firstTest" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="alltest.Login" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="All_Automation" />
       <extension name="coverage">
@@ -128,6 +144,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="TestNG.RunSuite.firstTest" />
         <item itemvalue="TestNG.AllTest.Login" />
         <item itemvalue="TestNG.E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/testng.xml" />
         <item itemvalue="TestNG.alltest.Login" />

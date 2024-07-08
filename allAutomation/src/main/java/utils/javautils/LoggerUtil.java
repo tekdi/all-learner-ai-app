@@ -37,97 +37,150 @@ public class LoggerUtil {
 	static String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
 	// static initializer for the class
+//	static {
+//		// System.setProperty("java.util.logging.SimpleFormatter.format",
+//		// "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+//		System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+//
+//		try {
+//			fr = new FileReader("."+java.io.File.separator+"logger.properties");
+//			prop = new Properties();
+//
+//			prop.load(fr);
+//		} catch (Exception e1) {
+//
+//			e1.printStackTrace();
+//		}
+//		// Naming to directory of log file-sanket
+//		String parentDirectory="."+java.io.File.separator+"logs";
+//		String logFileDir = parentDirectory + java.io.File.separator +timestamp+ java.io.File.separator;
+//
+//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("-YY-MM-dd_HHmmss");
+//		System.out.println("======>>>> LOG_FILE_NAME from Constants " + prop.getProperty("logfilename"));
+//		String logFileName = prop.getProperty("logfilename") + simpleDateFormat.format(Calendar.getInstance().getTime())
+//				+ ".log";
+//		// String logFileName = System.getProperty(Constant.LOG_FILE_NAME.getValue()) +
+//		// simpleDateFormat.format(Calendar.getInstance().getTime()) + ".log";
+//		System.out.println("======:::: LOG_FILE_NAME " + logFileName);
+//		System.out.println("======:::: LOG_FILE_DIR " + logFileDir);
+//		try {
+//			File file = new File(logFileDir);
+//
+//			if (file.exists() == false) {
+//				System.out.println("Creating directory: " + logFileDir);
+//				System.out.println("Creating directory: " + logFileDir);
+//
+//				File directory = new File(logFileDir);
+//				directory.mkdir(); // create logs directory
+//			} else {
+//				System.out.println("The directory already exists: " + logFileDir);
+//			}
+//
+//			logFileHandler = new FileHandler(logFileDir + logFileName, true);
+//			simpleFormatter = new SimpleFormatter();
+//
+//			logFileHandler.setFormatter(simpleFormatter);
+//			logger = Logger.getLogger("SunbirdSaas-logger"); // just naming the logger
+//			// logger.setUseParentHandlers(false);
+//			logger.addHandler(logFileHandler);
+//
+//			// to set specific log level-Sanket
+//			String logLevel = prop.getProperty("logLevel");
+//			Level level;
+//			switch (logLevel.toUpperCase()) {
+//				case "SEVERE":
+//					level = Level.SEVERE;
+//					break;
+//				case "WARNING":
+//					level = Level.WARNING;
+//					break;
+//				case "INFO":
+//					level = Level.INFO;
+//					break;
+//				case "CONFIG":
+//					level = Level.CONFIG;
+//					break;
+//				case "FINE":
+//					level = Level.FINE;
+//					break;
+//				case "FINER":
+//					level = Level.FINER;
+//					break;
+//				case "FINEST":
+//					level = Level.FINEST;
+//					break;
+//				default:
+//					level = Level.INFO; // Default level if the value is not recognized
+//					break;
+//			}
+//
+/*
+//			logger.setLevel(level); // TODO: read this from properties file Mandar Wadhavekar
+*/
+//
+//		} catch (IOException ioe) {
+//			logger.warning("================= FATAL ERROR ===========================" + logFileName);
+//			System.out.println("================= FATAL ERROR ===========================");
+//			System.out.println("IOException while creating log file: " + logFileName + " in directory: " + logFileDir);
+//			ioe.printStackTrace();
+//		} catch (Exception e) {
+//			System.out.println("================= FATAL ERROR ===========================");
+//			System.out.println("Exception while creating log file : " + logFileName + " in directory: " + logFileDir);
+//			e.printStackTrace();
+//		}
+//	} // end of static block
+
 	static {
-		// System.setProperty("java.util.logging.SimpleFormatter.format",
-		// "[%1$tF %1$tT] [%4$-7s] %5$s %n");
-		System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
-
 		try {
-			fr = new FileReader("."+java.io.File.separator+"logger.properties");
+			// Load properties
+			fr = new FileReader("." + java.io.File.separator + "logger.properties");
 			prop = new Properties();
-
 			prop.load(fr);
-		} catch (Exception e1) {
 
-			e1.printStackTrace();
-		}
-		// Naming to directory of log file-sanket
-		String parentDirectory="."+java.io.File.separator+"logs";
-		String logFileDir = parentDirectory + java.io.File.separator +timestamp+ java.io.File.separator;
+			// Directory and file name setup
+			String parentDirectory = "." + java.io.File.separator + "logs";
+			String logFileDir = parentDirectory + java.io.File.separator + timestamp + java.io.File.separator;
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("-YY-MM-dd_HHmmss");
+			String logFileName = prop.getProperty("filename") + simpleDateFormat.format(Calendar.getInstance().getTime()) + ".log";
 
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("-YY-MM-dd_HHmmss");
-		System.out.println("======>>>> LOG_FILE_NAME from Constants " + prop.getProperty("logfilename"));
-		String logFileName = prop.getProperty("logfilename") + simpleDateFormat.format(Calendar.getInstance().getTime())
-				+ ".log";
-		// String logFileName = System.getProperty(Constant.LOG_FILE_NAME.getValue()) +
-		// simpleDateFormat.format(Calendar.getInstance().getTime()) + ".log";
-		System.out.println("======:::: LOG_FILE_NAME " + logFileName);
-		System.out.println("======:::: LOG_FILE_DIR " + logFileDir);
-		try {
-			File file = new File(logFileDir);
-
-			if (file.exists() == false) {
+			// Ensure directory exists
+			File directory = new File(logFileDir);
+			if (!directory.exists()) {
 				System.out.println("Creating directory: " + logFileDir);
-				System.out.println("Creating directory: " + logFileDir);
-
-				File directory = new File(logFileDir);
-				directory.mkdir(); // create logs directory
+				if (!directory.mkdirs()) {
+					System.err.println("Failed to create directory: " + logFileDir);
+				}
 			} else {
 				System.out.println("The directory already exists: " + logFileDir);
 			}
 
+			// Initialize logger
 			logFileHandler = new FileHandler(logFileDir + logFileName, true);
 			simpleFormatter = new SimpleFormatter();
-
 			logFileHandler.setFormatter(simpleFormatter);
-			logger = Logger.getLogger("SunbirdSaas-logger"); // just naming the logger
-			// logger.setUseParentHandlers(false);
+			logger = Logger.getLogger("SunbirdSaas-logger");
 			logger.addHandler(logFileHandler);
 
-			// to set specific log level-Sanket
+			// Set log level from properties
 			String logLevel = prop.getProperty("logLevel");
-			Level level;
-			switch (logLevel.toUpperCase()) {
-				case "SEVERE":
-					level = Level.SEVERE;
-					break;
-				case "WARNING":
-					level = Level.WARNING;
-					break;
-				case "INFO":
-					level = Level.INFO;
-					break;
-				case "CONFIG":
-					level = Level.CONFIG;
-					break;
-				case "FINE":
-					level = Level.FINE;
-					break;
-				case "FINER":
-					level = Level.FINER;
-					break;
-				case "FINEST":
-					level = Level.FINEST;
-					break;
-				default:
-					level = Level.INFO; // Default level if the value is not recognized
-					break;
-			}
-
-			logger.setLevel(level); // TODO: read this from properties file Mandar Wadhavekar
+			Level level = Level.parse(logLevel.toUpperCase());
+			logger.setLevel(level);
 
 		} catch (IOException ioe) {
-			logger.warning("================= FATAL ERROR ===========================" + logFileName);
-			System.out.println("================= FATAL ERROR ===========================");
-			System.out.println("IOException while creating log file: " + logFileName + " in directory: " + logFileDir);
+			System.err.println("IOException while initializing LoggerUtil:");
 			ioe.printStackTrace();
 		} catch (Exception e) {
-			System.out.println("================= FATAL ERROR ===========================");
-			System.out.println("Exception while creating log file : " + logFileName + " in directory: " + logFileDir);
+			System.err.println("Exception while initializing LoggerUtil:");
 			e.printStackTrace();
+		} finally {
+			// Close FileReader
+			try {
+				if (fr != null) fr.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-	} // end of static block
-
+	}
 	/**
 	 * This method returns the logFileHandler This method may be needed only if some
 	 * class want to do specific coding
