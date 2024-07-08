@@ -1,0 +1,26 @@
+name: ALL rig dev Deployment
+
+on:
+  push:
+    branches:
+      - test-rig-1.1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: all-dev-rig 
+
+    steps:
+    - name: uses: actions/setup-java@v2
+
+        with:
+
+          java-version: '17'
+
+          distribution: 'adopt'
+
+          cache: maven
+
+     - name: Build with Maven
+
+        run: mvn -B package --file pom.xml

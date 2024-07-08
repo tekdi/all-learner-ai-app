@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/BaseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Pages/LoginPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tests/ALL_Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Tests/LoginTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/ENV.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/test/resources/locators/login.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screenshots/20240506_112228/ test case_20240506_112228.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pom/Intranet/Intranet_Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pom/Intranet/Intranet_Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/javautils/BaseUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/javautils/BaseUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/javautils/Reporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/javautils/Reporter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test/Intranet/IntranetLogin_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/Intranet/IntranetLogin_Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/test/resources/Test_data/browserConfig.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/test/resources/Test_data/browserConfig.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2ifzPxuJehC4RsdkFcKQag7ooeI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "ToolWindowRun.ShowToolbar": "false"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="Tests" />
+    </key>
+  </component>
+  <component name="RunManager" selected="TestNG.ALL_Test.Login">
+    <configuration name="ALL_Test.Login" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="Hybrid-Automation-Framework" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Tests" />
+      <option name="MAIN_CLASS_NAME" value="Tests.ALL_Test" />
+      <option name="METHOD_NAME" value="Login" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LoginTest.Login" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="Hybrid-Automation-Framework" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Tests" />
+      <option name="MAIN_CLASS_NAME" value="Tests.LoginTest" />
+      <option name="METHOD_NAME" value="Login" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="TestNG.ALL_Test.Login" />
+        <item itemvalue="TestNG.LoginTest.Login" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="" />
+      <created>1719896402303</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1719896402303</updated>
+    </task>
+    <servers />
+  </component>
+</project>
