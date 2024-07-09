@@ -21,6 +21,9 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Base64;
 
+
+import javax.sound.sampled.*;
+
 public class AllTest extends BrowserManager {
 
     public AllTest() {
@@ -295,6 +298,46 @@ public class AllTest extends BrowserManager {
 
 
         logStep("Speak text in Mike ");
+
+
+        AudioFormat format = new AudioFormat(16000.0f, 16, 1, true, true);
+
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+
+        if (!AudioSystem.isLineSupported(info)) {
+            System.out.println("Line matching " + info + " is not supported.");
+            // List all supported formats for debugging
+            System.out.println("Supported formats:");
+            for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
+                System.out.println("Mixer: " + mixerInfo.getName());
+                try {
+                    Mixer mixer = AudioSystem.getMixer(mixerInfo);
+                    Line.Info[] lineInfos = mixer.getSourceLineInfo();
+                    for (Line.Info lineInfo : lineInfos) {
+                        if (lineInfo instanceof DataLine.Info) {
+                            DataLine.Info dataLineInfo = (DataLine.Info) lineInfo;
+                            AudioFormat[] formats = dataLineInfo.getFormats();
+                            for (AudioFormat supportedFormat : formats) {
+                                System.out.println("  " + supportedFormat);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("  Error retrieving formats: " + e.getMessage());
+                }
+            }
+        } else {
+            System.out.println("Line matching " + info + " is supported.");
+            // Proceed with audio processing using the supported format
+            try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
+                line.open(format);
+                line.start();
+                // Your audio processing code here
+                line.drain();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
 
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
