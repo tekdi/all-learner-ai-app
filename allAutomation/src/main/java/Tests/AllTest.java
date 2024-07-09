@@ -175,6 +175,7 @@ public class AllTest extends BrowserManager {
 
     private static void injectAudioFile(String relativeFilePath) throws IOException {
         // Resolve the relative path to an absolute path
+        logStep("Speaking text in mike");
         Path absolutePath = Paths.get(relativeFilePath).toAbsolutePath();
 
         // Read the audio file and convert it to a Base64 string
@@ -190,6 +191,8 @@ public class AllTest extends BrowserManager {
         // Execute the JavaScript in the context of the browser
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(script);
+        logStep("Speaking text in mike");
+
     }
 
     private static void clickElementUsingJavaScript(WebElement element) {
