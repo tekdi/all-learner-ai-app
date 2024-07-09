@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Base64;
@@ -60,6 +61,7 @@ public class AllTest extends BrowserManager {
         assertTrue("Mike button is enabled", textElement.isDisplayed(),"Mike button is not enabled");
 
         String text = textElement.getText();
+        logStep(text);
 
         logStep("Click on the Mike button");
         WebElement mikeButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']"));
@@ -69,12 +71,11 @@ public class AllTest extends BrowserManager {
         logStep("Speak text in Mike");
 //        TexttoSpeach(text);\
         injectAudioFile("src/main/java/Pages/output_audio.wav.wav");
-        
+
         Thread.sleep(4000);
 
         logStep("Click on Stop button");
-        clickElementUsingJavaScript(driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")));
-
+        driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
 
         // Assuming audio is recorded and stored, proceed with enabling Next button
         Thread.sleep(2000);
@@ -172,9 +173,12 @@ public class AllTest extends BrowserManager {
     }
 
 
-    private static void injectAudioFile(String filePath) throws IOException {
+    private static void injectAudioFile(String relativeFilePath) throws IOException {
+        // Resolve the relative path to an absolute path
+        Path absolutePath = Paths.get(relativeFilePath).toAbsolutePath();
+
         // Read the audio file and convert it to a Base64 string
-        File file = new File(filePath);
+        File file = absolutePath.toFile();
         byte[] fileContent = Files.readAllBytes(file.toPath());
         String encodedString = Base64.getEncoder().encodeToString(fileContent);
 

@@ -7,6 +7,7 @@
     <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tests/AllTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/AllTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Tests/AllTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tests/AllTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +93,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AllTest.Login (2)" type="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="AllTest.Login (3)" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="All_Automation" />
       <extension name="coverage">
         <pattern>
@@ -110,7 +111,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AllTest.Login (3)" type="TestNG" temporary="true" nameIsGenerated="true">
+    <configuration name="AllTest.Login (4)" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="All_Automation" />
       <extension name="coverage">
         <pattern>
@@ -149,10 +150,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="TestNG.AllTest.Login" />
-        <item itemvalue="TestNG.AllTest.Login (3)" />
-        <item itemvalue="Application.AllTest" />
-        <item itemvalue="TestNG.AllTest.Login (2)" />
         <item itemvalue="TestNG.AllTest.Login (1)" />
+        <item itemvalue="Application.AllTest" />
+        <item itemvalue="TestNG.AllTest.Login (4)" />
+        <item itemvalue="TestNG.AllTest.Login (3)" />
       </list>
     </recent_temporary>
   </component>
