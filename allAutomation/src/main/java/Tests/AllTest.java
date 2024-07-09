@@ -66,16 +66,30 @@ public class AllTest extends BrowserManager {
         Thread.sleep(3000);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']")));
-        assertTrue("Mike button is enables",driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']")).isDisplayed(),"Mike button is not enabled");
+        assertTrue("Mike button is enabled",driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']")).isDisplayed(),"Mike button is not enabled");
 
         element.click();
 
         logStep(Text);
 
-        TexttoSpeach(Text);
+//        TexttoSpeach(Text);
+
 
         Thread.sleep(4000);
+        logStep("Click on Stop button");
         driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
+
+        Thread.sleep(2000);
+
+        driver.findElement(By.xpath("//*[@class='MuiBox-root css-1iyidz3']")).click();
+
+        Thread.sleep(2000);
+        driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).sendKeys("allAutomation/src/main/java/Pages/output_audio.wav.wav");
+
+
+        Thread.sleep(4000);
+        logStep("Click on Next Button");
+        driver.findElement(By.xpath("//*[@class='MuiBox-root css-140ohgs']")).click();
 
     }
 
@@ -121,9 +135,7 @@ public class AllTest extends BrowserManager {
         voice.allocate();
         voice.speak(Text);
 
-        Thread.sleep(4000);
-        logStep("Click on Next Button");
-        driver.findElement(By.xpath("//*[@class='MuiBox-root css-140ohgs']")).click();
+
 
         // Ensure the directory exists
         String directoryPath = "src/main/java/Pages"; // Adjust this path as needed
