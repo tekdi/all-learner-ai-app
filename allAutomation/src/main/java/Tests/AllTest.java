@@ -295,44 +295,26 @@ public class AllTest extends BrowserManager {
 
 
 
-        AudioFormat format = new AudioFormat(44100.0f, 16, 2, true, false); // Adjust parameters as needed
+        AudioFormat[] formatsToTry = {
+                new AudioFormat(44100.0f, 16, 2, true, false), // PCM_SIGNED 44100 Hz, 16 bit, stereo, little-endian
+                new AudioFormat(16000.0f, 16, 1, true, true)   // PCM_SIGNED 16000 Hz, 16 bit, mono, big-endian
+        };
 
-// Create DataLine.Info for the alternative format
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-
-// Check if the alternative format is supported
-        if (!AudioSystem.isLineSupported(info)) {
-            System.out.println("Alternative format " + format + " is not supported.");
-            // Log other supported formats for debugging
-            System.out.println("Supported formats:");
-            for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
-                System.out.println("Mixer: " + mixerInfo.getName());
-                try {
-                    Mixer mixer = AudioSystem.getMixer(mixerInfo);
-                    Line.Info[] lineInfos = mixer.getSourceLineInfo();
-                    for (Line.Info lineInfo : lineInfos) {
-                        if (lineInfo instanceof DataLine.Info) {
-                            DataLine.Info dataLineInfo = (DataLine.Info) lineInfo;
-                            AudioFormat[] formats = dataLineInfo.getFormats();
-                            for (AudioFormat supportedFormat : formats) {
-                                System.out.println("  " + supportedFormat);
-                            }
-                        }
-                    }
+        for (AudioFormat format : formatsToTry) {
+            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+            if (AudioSystem.isLineSupported(info)) {
+                try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
+                    line.open(format);
+                    line.start();
+                    // Your audio processing code here
+                    line.drain();
+                    System.out.println("Using format: " + format);
+                    break; // Exit loop if a supported format is found
                 } catch (Exception e) {
-                    System.out.println("  Error retrieving formats: " + e.getMessage());
+                    e.printStackTrace();
                 }
-            }
-        } else {
-            // Proceed with using the alternative format
-            System.out.println("Alternative format " + format + " is supported.");
-            try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
-                line.open(format);
-                line.start();
-                // Your audio processing code here
-                line.drain();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                System.out.println("Format " + format + " is not supported.");
             }
         }
 
