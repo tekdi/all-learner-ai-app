@@ -75,7 +75,7 @@ public class AllTest extends BrowserManager {
         logStep("Speak text in Mike");
 //        TexttoSpeach(text);
 
-        Thread.sleep(4000);
+        Thread.sleep(10000);
 
         logStep("Click on Stop button");
         WebElement stopButton = driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]"));
