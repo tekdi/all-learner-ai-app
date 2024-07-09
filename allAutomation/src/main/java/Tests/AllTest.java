@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import utils.baseutils.BrowserManager;
 import utils.javautils.BaseUtils;
 
+import javax.sound.sampled.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -294,14 +295,55 @@ public class AllTest extends BrowserManager {
 
 
 
-        logStep("Speak text in Mike ");
+        AudioFormat format = new AudioFormat(44100.0f, 16, 2, true, false); // Adjust parameters as needed
+
+// Create DataLine.Info for the alternative format
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+
+// Check if the alternative format is supported
+        if (!AudioSystem.isLineSupported(info)) {
+            System.out.println("Alternative format " + format + " is not supported.");
+            // Log other supported formats for debugging
+            System.out.println("Supported formats:");
+            for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
+                System.out.println("Mixer: " + mixerInfo.getName());
+                try {
+                    Mixer mixer = AudioSystem.getMixer(mixerInfo);
+                    Line.Info[] lineInfos = mixer.getSourceLineInfo();
+                    for (Line.Info lineInfo : lineInfos) {
+                        if (lineInfo instanceof DataLine.Info) {
+                            DataLine.Info dataLineInfo = (DataLine.Info) lineInfo;
+                            AudioFormat[] formats = dataLineInfo.getFormats();
+                            for (AudioFormat supportedFormat : formats) {
+                                System.out.println("  " + supportedFormat);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("  Error retrieving formats: " + e.getMessage());
+                }
+            }
+        } else {
+            // Proceed with using the alternative format
+            System.out.println("Alternative format " + format + " is supported.");
+            try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
+                line.open(format);
+                line.start();
+                // Your audio processing code here
+                line.drain();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
 
 
 
 
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 
-        logStep("Speak text in Mike again");
+        logStep("Speak text in Mike");
         // Create a voice manager
         VoiceManager voiceManager = VoiceManager.getInstance();
 
