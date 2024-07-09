@@ -65,29 +65,16 @@ public class AllTest extends BrowserManager {
         WebElement mikeButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']"));
         mikeButton.click();
 
-//        // Use JavaScript Executor to initiate audio recording
-//        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-//        jsExecutor.executeScript("startRecording();");
-
-
 
         logStep("Speak text in Mike");
 //        TexttoSpeach(text);\
         injectAudioFile("src/main/java/Pages/output_audio.wav.wav");
-
-
+        
         Thread.sleep(4000);
 
         logStep("Click on Stop button");
-        logStep("Click on Stop button");
         clickElementUsingJavaScript(driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")));
 
-
-        Thread.sleep(2000);
-
-        logStep("Click on Continue button");
-        WebElement continueButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1fhz53j']"));
-        continueButton.click();
 
         // Assuming audio is recorded and stored, proceed with enabling Next button
         Thread.sleep(2000);
