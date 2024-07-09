@@ -21,9 +21,6 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Base64;
 
-
-import javax.sound.sampled.*;
-
 public class AllTest extends BrowserManager {
 
     public AllTest() {
@@ -300,48 +297,6 @@ public class AllTest extends BrowserManager {
         logStep("Speak text in Mike ");
 
 
-        AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
-                44100.0f, 16, 2, 4, 44100.0f, false);
-
-// Use a different format info
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-
-// Check if the alternative format is supported
-        if (!AudioSystem.isLineSupported(info)) {
-            System.out.println("Alternative format " + format + " is not supported.");
-            // Log other supported formats for debugging
-            System.out.println("Supported formats:");
-            // Log supported formats for debugging
-            for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
-                System.out.println("Mixer: " + mixerInfo.getName());
-                try {
-                    Mixer mixer = AudioSystem.getMixer(mixerInfo);
-                    Line.Info[] lineInfos = mixer.getSourceLineInfo();
-                    for (Line.Info lineInfo : lineInfos) {
-                        if (lineInfo instanceof DataLine.Info) {
-                            DataLine.Info dataLineInfo = (DataLine.Info) lineInfo;
-                            AudioFormat[] formats = dataLineInfo.getFormats();
-                            for (AudioFormat supportedFormat : formats) {
-                                System.out.println("  " + supportedFormat);
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println("  Error retrieving formats: " + e.getMessage());
-                }
-            }
-        } else {
-            // Proceed with using the alternative format
-            System.out.println("Alternative format " + format + " is supported.");
-            try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
-                line.open(format);
-                line.start();
-                // Your audio processing code here
-                line.drain();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
 
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
@@ -362,6 +317,9 @@ public class AllTest extends BrowserManager {
         voice.allocate();
         voice.speak(Text);
 
+        Thread.sleep(4000);
+        logStep("Click on Next Button");
+        driver.findElement(By.xpath("//*[@class='MuiBox-root css-140ohgs']")).click();
 
         // Ensure the directory exists
         String directoryPath = "src/main/java/Pages"; // Adjust this path as needed
