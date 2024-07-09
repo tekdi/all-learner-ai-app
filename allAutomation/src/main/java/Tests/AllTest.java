@@ -291,6 +291,8 @@ public class AllTest extends BrowserManager {
 
         // Allocate the chosen voice
         voice.allocate();
+        voice.speak(Text);
+
 
         // Ensure the directory exists
         String directoryPath = "src/main/java/Pages"; // Adjust this path as needed
@@ -324,16 +326,12 @@ public class AllTest extends BrowserManager {
         saveBase64ToFile(base64FilePath, base64Audio);
         System.out.println("Base64 Audio saved successfully at: " + base64FilePath);
 
-
-//        driver.findElement(By.xpath("//*[@fill='url(#paint0_linear_400_1340)']")).sendKeys("https://all-dev-content-service.s3.ap-south-1.amazonaws.com/all-audio-files/en/44983c9c-48d4-4605-8e03-f7ae3932ad3e.wav");
-
+//      driver.findElement(By.xpath("//*[@fill='url(#paint0_linear_400_1340)']")).sendKeys("https://all-dev-content-service.s3.ap-south-1.amazonaws.com/all-audio-files/en/44983c9c-48d4-4605-8e03-f7ae3932ad3e.wav");
         Thread.sleep(4000);
         driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
 
         String audioFilePath = "output.mp3";
-
 //        convertTextToSpeech(Text,audioFilePath);
-
 
     }
 
