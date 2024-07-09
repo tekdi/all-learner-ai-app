@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Pages/Base64Audio.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Pages/output_audio.wav.wav" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tests/AllTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/AllTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tests/LoginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/LoginTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/baseutils/BrowserManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Tests/AllTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tests/AllTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/baseutils/BrowserManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/baseutils/BrowserManager.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,6 +116,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AllTest.Login (3)" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="All_Automation" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="Tests" />
+      <option name="MAIN_CLASS_NAME" value="Tests.AllTest" />
+      <option name="METHOD_NAME" value="Login" />
+      <option name="TEST_OBJECT" value="METHOD" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="AllTest.Login" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="All_Automation" />
       <extension name="coverage">
@@ -127,31 +152,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RunSuite.firstTest" type="TestNG" temporary="true" nameIsGenerated="true">
-      <module name="All_Automation" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Tests" />
-      <option name="MAIN_CLASS_NAME" value="Tests.RunSuite" />
-      <option name="METHOD_NAME" value="firstTest" />
-      <option name="TEST_OBJECT" value="METHOD" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="TestNG.AllTest.Login" />
+        <item itemvalue="TestNG.AllTest.Login (3)" />
         <item itemvalue="Application.AllTest" />
         <item itemvalue="TestNG.AllTest.Login (2)" />
         <item itemvalue="TestNG.AllTest.Login (1)" />
-        <item itemvalue="TestNG.RunSuite.firstTest" />
       </list>
     </recent_temporary>
   </component>
