@@ -69,7 +69,7 @@ public class AllTest extends BrowserManager {
 
 
         logStep("Speak text in Mike");
-        TexttoSpeach(text);
+//        TexttoSpeach(text);
         Thread.sleep(4000);
 
         injectAudioFile("src/main/java/Pages/output_audio.wav.wav");
