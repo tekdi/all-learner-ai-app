@@ -280,6 +280,7 @@ public class AllTest extends BrowserManager {
 //        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 
         logStep("Click on the Mike button");
+        assertTrue("Mike button is enables",driver.findElement(By.className("game-action-button")).isDisplayed(),"Mike button is not enabled");
         driver.findElement(By.className("game-action-button")).click();
 
         logStep("Speak text in Mike ");
