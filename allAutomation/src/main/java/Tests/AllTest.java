@@ -280,18 +280,20 @@ public class AllTest extends BrowserManager {
 
         String Text = driver.findElement(By.xpath("//h4[@class='MuiTypography-root MuiTypography-h5 css-xilszg']")).getText();
 
-        System.out.println(Text);
-
-//        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
-
         logStep("Click on the Mike button");
         Thread.sleep(3000);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='game-action-button']")));
-        assertTrue("Mike button is enables",driver.findElement(By.xpath("//div[@class='game-action-button']")).isDisplayed(),"Mike button is not enabled");
-
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']")));
+        assertTrue("Mike button is enables",driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']")).isDisplayed(),"Mike button is not enabled");
 
         element.click();
+
+        logStep(Text);
+
+//        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
+
+
+
         logStep("Speak text in Mike ");
 
 
