@@ -121,36 +121,36 @@ public class AllTest extends BrowserManager {
 
 
           // Ensure the directory exists
-          String directoryPath = "src/main/java/Pages"; // Adjust this path as needed
-          String fileName = "output_audio"; // Adjust the file name as needed
-          String outputPath = directoryPath + "/" + fileName + ".wav";
-
-          // Create directory if it doesn't exist
-          File directory = new File(directoryPath);
-          if (!directory.exists()) {
-               directory.mkdirs();
-          }
-
-          // Create a SingleFileAudioPlayer
-          SingleFileAudioPlayer audioPlayer = new SingleFileAudioPlayer(outputPath, javax.sound.sampled.AudioFileFormat.Type.WAVE);
-          voice.setAudioPlayer(audioPlayer);
-
-          voice.speak(Text);
-
-          audioPlayer.close();
-          // Deallocate the voice resources
-          voice.deallocate();
-
-          System.out.println("Audio file created successfully at: " + outputPath);
-
-          // Convert audio file to Base64
-          String base64Audio = convertWavToBase64(outputPath);
-          System.out.println("Base64 Audio: " + base64Audio);
-
-          // Save Base64 string to a file
-          String base64FilePath = directoryPath + "/Base64Audio.txt";
-          saveBase64ToFile(base64FilePath, base64Audio);
-          System.out.println("Base64 Audio saved successfully at: " + base64FilePath);
+//          String directoryPath = "src/main/java/Pages"; // Adjust this path as needed
+//          String fileName = "output_audio"; // Adjust the file name as needed
+//          String outputPath = directoryPath + "/" + fileName + ".wav";
+//
+//          // Create directory if it doesn't exist
+//          File directory = new File(directoryPath);
+//          if (!directory.exists()) {
+//               directory.mkdirs();
+//          }
+//
+//          // Create a SingleFileAudioPlayer
+//          SingleFileAudioPlayer audioPlayer = new SingleFileAudioPlayer(outputPath, javax.sound.sampled.AudioFileFormat.Type.WAVE);
+//          voice.setAudioPlayer(audioPlayer);
+//
+//          voice.speak(Text);
+//
+//          audioPlayer.close();
+//          // Deallocate the voice resources
+//          voice.deallocate();
+//
+//          System.out.println("Audio file created successfully at: " + outputPath);
+//
+//          // Convert audio file to Base64
+//          String base64Audio = convertWavToBase64(outputPath);
+//          System.out.println("Base64 Audio: " + base64Audio);
+//
+//          // Save Base64 string to a file
+//          String base64FilePath = directoryPath + "/Base64Audio.txt";
+//          saveBase64ToFile(base64FilePath, base64Audio);
+//          System.out.println("Base64 Audio saved successfully at: " + base64FilePath);
      }
 
 
