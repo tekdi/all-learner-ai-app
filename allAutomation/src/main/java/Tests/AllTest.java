@@ -5,7 +5,10 @@ import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.audio.SingleFileAudioPlayer;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import utils.baseutils.BrowserManager;
 import utils.javautils.BaseUtils;
@@ -15,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.Base64;
 
 public class AllTest extends BrowserManager {
@@ -281,9 +285,12 @@ public class AllTest extends BrowserManager {
 
         logStep("Click on the Mike button");
         Thread.sleep(3000);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='game-action-button']")));
         assertTrue("Mike button is enables",driver.findElement(By.xpath("//div[@class='game-action-button']")).isDisplayed(),"Mike button is not enabled");
-        driver.findElement(By.xpath("//div[@class='game-action-button']")).click();
 
+
+        element.click();
         logStep("Speak text in Mike ");
 
 
