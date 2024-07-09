@@ -69,13 +69,14 @@ public class AllTest extends BrowserManager {
 //        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 //        jsExecutor.executeScript("startRecording();");
 
-        injectAudioFile("src/main/java/Pages/output_audio.wav.wav");
 
 
         logStep("Speak text in Mike");
-//        TexttoSpeach(text);
+//        TexttoSpeach(text);\
+        injectAudioFile("src/main/java/Pages/output_audio.wav.wav");
 
-        Thread.sleep(10000);
+
+        Thread.sleep(4000);
 
         logStep("Click on Stop button");
         WebElement stopButton = driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]"));
@@ -94,8 +95,8 @@ public class AllTest extends BrowserManager {
         String recordedAudioPath = "allAutomation/src/main/java/Pages/output_audio.wav.wav";
 
         // Set the file path dynamically for the Next button action
-        WebElement fileInputElement = driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]"));
-        fileInputElement.sendKeys(recordedAudioPath);
+//        WebElement fileInputElement = driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]"));
+//        fileInputElement.sendKeys(recordedAudioPath);
 
         Thread.sleep(4000);
 
