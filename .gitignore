@@ -107,3 +107,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+
+# Ignore BrowserManager.java
+allAutomation/src/main/java/utils/baseutils/BrowserManager

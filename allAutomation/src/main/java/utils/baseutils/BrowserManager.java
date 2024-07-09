@@ -33,6 +33,8 @@ public class BrowserManager extends BaseUtils {
             environment = new String(encoded).trim();
         } catch (IOException e) {
             System.out.println("Error reading the file: " + e.getMessage());
+                        System.out.println("Error reading the file: " + e.getMessage());
+
         }
     }
 
@@ -47,12 +49,6 @@ public class BrowserManager extends BaseUtils {
 
             ChromeOptions opt = new ChromeOptions();
             //opt.setHeadless(true);
-            opt.addArguments("--headless"); // Run Chrome in headless mode
-            opt.addArguments("--no-sandbox"); // Bypass OS security model
-            opt.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
-            opt.addArguments("--remote-debugging-port=9222");
-            opt.addArguments("--disable-gpu"); // applicable to windows os only
-
             opt.addArguments("--remote-allow-origins=*");
             opt.addArguments("--incognito");
             opt.addArguments("--use-fake-ui-for-media-stream");
