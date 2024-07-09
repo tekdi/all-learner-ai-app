@@ -79,14 +79,15 @@ public class AllTest extends BrowserManager {
         Thread.sleep(4000);
 
         logStep("Click on Stop button");
-        WebElement stopButton = driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]"));
-        stopButton.click();
+        logStep("Click on Stop button");
+        clickElementUsingJavaScript(driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")));
+
 
         Thread.sleep(2000);
 
-//        logStep("Click on Continue button");
-//        WebElement continueButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1fhz53j']"));
-//        continueButton.click();
+        logStep("Click on Continue button");
+        WebElement continueButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1fhz53j']"));
+        continueButton.click();
 
         // Assuming audio is recorded and stored, proceed with enabling Next button
         Thread.sleep(2000);
@@ -200,7 +201,10 @@ public class AllTest extends BrowserManager {
         jsExecutor.executeScript(script);
     }
 
-
+    private static void clickElementUsingJavaScript(WebElement element) {
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        jsExecutor.executeScript("arguments[0].click();", element);
+    }
 
 }
 
