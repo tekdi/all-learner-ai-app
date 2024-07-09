@@ -282,8 +282,12 @@ public class AllTest extends BrowserManager {
         logStep("Click on the Mike button");
         driver.findElement(By.className("game-action-button")).click();
 
+        logStep("Speak text in Mike ");
+
+
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 
+        logStep("Speak text in Mike again");
         // Create a voice manager
         VoiceManager voiceManager = VoiceManager.getInstance();
 
