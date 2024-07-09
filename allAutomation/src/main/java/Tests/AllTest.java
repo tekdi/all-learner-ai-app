@@ -276,6 +276,7 @@ public class AllTest extends BrowserManager {
         Thread.sleep(3000);
 
         logStep("Get Text from UI");
+        assertTrue("Mike button is enables",driver.findElement(By.xpath("//h4[@class='MuiTypography-root MuiTypography-h5 css-xilszg']")).isDisplayed(),"Mike button is not enabled");
 
         String Text = driver.findElement(By.xpath("//h4[@class='MuiTypography-root MuiTypography-h5 css-xilszg']")).getText();
 
