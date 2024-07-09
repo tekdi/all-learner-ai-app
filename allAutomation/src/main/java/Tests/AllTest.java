@@ -300,14 +300,18 @@ public class AllTest extends BrowserManager {
         logStep("Speak text in Mike ");
 
 
-        AudioFormat format = new AudioFormat(16000.0f, 16, 1, true, true);
+        AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+                44100.0f, 16, 2, 4, 44100.0f, false);
 
+// Use a different format info
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
+// Check if the alternative format is supported
         if (!AudioSystem.isLineSupported(info)) {
-            System.out.println("Line matching " + info + " is not supported.");
-            // List all supported formats for debugging
+            System.out.println("Alternative format " + format + " is not supported.");
+            // Log other supported formats for debugging
             System.out.println("Supported formats:");
+            // Log supported formats for debugging
             for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
                 System.out.println("Mixer: " + mixerInfo.getName());
                 try {
@@ -327,8 +331,8 @@ public class AllTest extends BrowserManager {
                 }
             }
         } else {
-            System.out.println("Line matching " + info + " is supported.");
-            // Proceed with audio processing using the supported format
+            // Proceed with using the alternative format
+            System.out.println("Alternative format " + format + " is supported.");
             try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
                 line.open(format);
                 line.start();
