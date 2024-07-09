@@ -279,6 +279,7 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
+        console.log("Learner AI recoder",data);
          profanityWord = await filterBadWords(data.responseText);
         if (profanityWord !== data.responseText) {
           props?.setOpenMessageDialog({
