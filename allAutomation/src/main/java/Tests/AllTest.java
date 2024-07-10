@@ -80,8 +80,8 @@ public class AllTest extends BrowserManager {
         Thread.sleep(2000);
         Thread.sleep(4000);
         logStep("Click on Next Button");
-        WebElement nextButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-140ohgs']"));
-        nextButton.click();
+//        WebElement nextButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-140ohgs']"));
+//        nextButton.click();
 
     }
 

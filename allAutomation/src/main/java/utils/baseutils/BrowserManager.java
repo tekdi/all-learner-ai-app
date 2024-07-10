@@ -110,7 +110,8 @@ public class BrowserManager extends BaseUtils {
             opt.addArguments("--remote-allow-origins=*");
             opt.addArguments("--incognito");
             opt.addArguments("--use-fake-ui-for-media-stream");
-            opt.addArguments("load-extension=:allAutomation\\src\\Extensions");
+            opt.addArguments("--use-file-for-fake-audio-capture");
+//            opt.addArguments("load-extension=:allAutomation\\src\\Extensions");
 
             driver = new ChromeDriver(opt);
         } else if (prop.getProperty("Browser").equalsIgnoreCase("firefox")) {
