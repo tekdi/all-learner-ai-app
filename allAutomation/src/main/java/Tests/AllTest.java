@@ -24,16 +24,6 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Base64;
 
-import javax.sound.sampled.*;
-
-
-
-import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
-
-import static Tests.AudioRecorder.getAudioFormat;
-
 public class AllTest extends BrowserManager {
 
     public AllTest() {
@@ -76,7 +66,7 @@ public class AllTest extends BrowserManager {
         String text = textElement.getText();
         logStep(text);
 
-//        String audioFilePath = "src/main/java/Pages/converted_audio.wav";
+        String audioFilePath = "src/main/java/Pages/output_audio.wav";
 
 
         logStep("Click on the Mike button");
@@ -85,101 +75,15 @@ public class AllTest extends BrowserManager {
 
 
         logStep("Speak text in Mike");
-//        TexttoSpeach(text);
+        TexttoSpeach(text);
         Thread.sleep(4000);
 
-        int recordTime = 10000; // 10 seconds
-
-        // Define the target data line (microphone)
-        AudioFormat format = getAudioFormat();
-        logStep(String.valueOf(format));
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-
-        if (!AudioSystem.isLineSupported(info)) {
-            System.out.println("The line is not supported.");
-            System.exit(0);
-        }
-
-        try {
-            // Open the target data line
-            TargetDataLine microphone = (TargetDataLine) AudioSystem.getLine(info);
-            microphone.open(format);
-            microphone.start();
-
-            System.out.println("Recording...");
-
-            // Create a thread to record the audio
-            Thread stopper = new Thread(new Runnable() {
-                public void run() {
-                    AudioInputStream audioStream = new AudioInputStream(microphone);
-                    File audioFile = new File("src/main/java/Pages/converted_audio.wav");
-
-                    try {
-                        // Write the recorded audio to a WAV file
-                        AudioSystem.write(audioStream, AudioFileFormat.Type.WAVE, audioFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            stopper.start();
-            Thread.sleep(recordTime);
-            microphone.stop();
-            microphone.close();
-
-            System.out.println("Recording completed.");
-
-        } catch (LineUnavailableException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-
-
-      /*  try {
-
-            File audioFile = new File(audioFilePath);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-            AudioFormat format = audioStream.getFormat();
-
-            // Ensure the audio format is supported
-            if (!AudioSystem.isLineSupported(new DataLine.Info(SourceDataLine.class, format))) {
-                throw new IllegalArgumentException("Audio format not supported: " + format);
-            }
-
-            // Get the SourceDataLine for the virtual audio cable (assumed to be the default)
-            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-            SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
-            line.open(format);
-            line.start();
-
-            // Write audio data to the SourceDataLine
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = audioStream.read(buffer)) != -1) {
-                line.write(buffer, 0, bytesRead);
-            }
-
-            // Close the line and audio stream
-            line.drain();
-            line.close();
-            audioStream.close();
-        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
-*/
-
-
-//        injectAudioFile("src/main/java/Pages/output_audio.wav");
+        injectAudioFile("src/main/java/Pages/output_audio.wav");
 
         Thread.sleep(4000);
 
         logStep("Click on Stop button");
         driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
-
-        Thread.sleep(2000);
-
 
         Thread.sleep(4000);
 
@@ -190,26 +94,26 @@ public class AllTest extends BrowserManager {
     }
 
 
-         private static void TexttoSpeach(String Text) throws InterruptedException {
-             System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
+    private static void TexttoSpeach(String Text) throws InterruptedException {
+        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 
-             logStep("Speak text in Mike");
-             // Create a voice manager
-             VoiceManager voiceManager = VoiceManager.getInstance();
+        logStep("Speak text in Mike");
+        // Create a voice manager
+        VoiceManager voiceManager = VoiceManager.getInstance();
 
-             // Select the voice
-             Voice voice = voiceManager.getVoice("kevin16");
-             if (voice == null) {
-                 System.err.println("Cannot find a voice named kevin16.\n" +
-                         "Please specify a different voice.");
-                 System.exit(1);
-             }
+        // Select the voice
+        Voice voice = voiceManager.getVoice("kevin16");
+        if (voice == null) {
+            System.err.println("Cannot find a voice named kevin16.\n" +
+                    "Please specify a different voice.");
+            System.exit(1);
+        }
 
-             // Allocate the chosen voice
-             voice.allocate();
-             voice.speak(Text);
+        // Allocate the chosen voice
+        voice.allocate();
+        voice.speak(Text);
 
-         }
+    }
 
     private static String convertWavToBase64(String filePath) {
         String base64String = "";
@@ -232,33 +136,65 @@ public class AllTest extends BrowserManager {
     }
 
 
-    private static void injectAudioFile(String relativeFilePath) throws IOException {
-        // Resolve the relative path to an absolute path
-        logStep("Speaking text in mike");
-        Path absolutePath = Paths.get(relativeFilePath).toAbsolutePath();
+    private static void injectAudioFile(String relativeFilePath) {
+        try {
+            // Resolve the relative path to an absolute path
+            Path absolutePath = Paths.get(relativeFilePath).toAbsolutePath();
 
-        // Read the audio file and convert it to a Base64 string
-        File file = absolutePath.toFile();
-        byte[] fileContent = Files.readAllBytes(file.toPath());
-        String encodedString = Base64.getEncoder().encodeToString(fileContent);
+            // Read the audio file and convert it to a Base64 string
+            File file = absolutePath.toFile();
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            String encodedString = Base64.getEncoder().encodeToString(fileContent);
 
-        // JavaScript to decode Base64 string and create a Blob URL
-        String script = "var audio = new Audio('data:audio/wav;base64," + encodedString + "');" +
-                "audio.play();" +
-                "document.body.appendChild(audio);";
+            // JavaScript to decode Base64 string and simulate microphone input
+            String script = "var base64Data = '" + encodedString + "';" +
+                    "var buffer = new ArrayBuffer(base64Data.length);" +
+                    "var view = new Uint8Array(buffer);" +
+                    "for (var i = 0; i < base64Data.length; i++) {" +
+                    "    view[i] = base64Data.charCodeAt(i);" +
+                    "}" +
+                    "navigator.mediaDevices.getUserMedia({audio: true})" +
+                    ".then(function(stream) {" +
+                    "    var mediaRecorder = new MediaRecorder(stream);" +
+                    "    var audioContext = new AudioContext();" +
+                    "    var source = audioContext.createBufferSource();" +
+                    "    audioContext.decodeAudioData(buffer, function(decodedData) {" +
+                    "        source.buffer = decodedData;" +
+                    "        source.connect(audioContext.destination);" +
+                    "        source.start(0);" +
+                    "    });" +
+                    "    mediaRecorder.ondataavailable = function(e) {" +
+                    "        var audio = new Audio();" +
+                    "        audio.src = URL.createObjectURL(e.data);" +
+                    "        audio.play();" +
+                    "        document.body.appendChild(audio);" +
+                    "    };" +
+                    "    mediaRecorder.start();" +
+                    "    setTimeout(function() {" +
+                    "        mediaRecorder.stop();" +
+                    "    }, 5000); // Adjust the duration as needed" +
+                    "})" +
+                    ".catch(function(err) {" +
+                    "    console.error('Error accessing microphone:', err);" +
+                    "});";
 
-        // Execute the JavaScript in the context of the browser
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-        jsExecutor.executeScript(script);
-        logStep("Speaking text in mike");
+            // Execute the JavaScript in the context of the browser
+            JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+            jsExecutor.executeScript(script);
 
+            logStep("Audio injected into microphone simulation.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
 
     private static void clickElementUsingJavaScript(WebElement element) {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript("arguments[0].click();", element);
     }
-
 
 
 }
@@ -267,4 +203,4 @@ public class AllTest extends BrowserManager {
 
 //
 //    String audioFilePath = "output.mp3";
-////        convertTextToSpeech(Text,audioFilePath);
+////        convertTextToSpeech(Text,audioFilePath)

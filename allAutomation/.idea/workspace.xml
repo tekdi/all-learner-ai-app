@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9892bf9f-1e92-4f6f-af00-55759d55c3df" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.github/workflows/all-automation.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.github/workflows/all-automation.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Tests/AllTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/AllTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Tests/AudioRecorder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Tests/AudioRecorder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Tests/AllTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Tests/AllTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +67,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AudioRecorder" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Tests.AudioRecorder" />
+      <module name="All_Automation" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="All_Automation" />
       <method v="2">
@@ -78,32 +95,8 @@
     </configuration>
     <configuration name="AllTest.Login (1)" type="TestNG" temporary="true" nameIsGenerated="true">
       <module name="All_Automation" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Tests" />
-      <option name="MAIN_CLASS_NAME" value="Tests.AllTest" />
-      <option name="METHOD_NAME" value="Login" />
-      <option name="TEST_OBJECT" value="METHOD" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="AllTest.Login (2)" type="TestNG" temporary="true" nameIsGenerated="true">
-      <module name="All_Automation" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="Tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="Tests" />
-      <option name="MAIN_CLASS_NAME" value="Tests.AllTest" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="AllTest" />
       <option name="METHOD_NAME" value="Login" />
       <option name="TEST_OBJECT" value="METHOD" />
       <properties />
@@ -151,10 +144,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="TestNG.AllTest.Login" />
+        <item itemvalue="TestNG.AllTest.Login (1)" />
+        <item itemvalue="Application.AudioRecorder" />
         <item itemvalue="Application.AllTest" />
         <item itemvalue="TestNG.AllTest.Login (3)" />
-        <item itemvalue="TestNG.AllTest.Login (2)" />
-        <item itemvalue="TestNG.AllTest.Login (1)" />
       </list>
     </recent_temporary>
   </component>
