@@ -24,6 +24,9 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Base64;
 
+import javax.sound.sampled.*;
+
+
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -84,11 +87,15 @@ public class AllTest extends BrowserManager {
 
 
         try {
-            // Path to your audio file
 
             File audioFile = new File(audioFilePath);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             AudioFormat format = audioStream.getFormat();
+
+            // Ensure the audio format is supported
+            if (!AudioSystem.isLineSupported(new DataLine.Info(SourceDataLine.class, format))) {
+                throw new IllegalArgumentException("Audio format not supported: " + format);
+            }
 
             // Get the SourceDataLine for the virtual audio cable (assumed to be the default)
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
@@ -201,6 +208,8 @@ public class AllTest extends BrowserManager {
         jsExecutor.executeScript("arguments[0].click();", element);
     }
 
+
+    
 }
 
 
