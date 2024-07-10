@@ -54,61 +54,111 @@ public class AllTest extends BrowserManager {
         driver.findElement(By.xpath("//button[@type='submit']")).click();
 
         waitForUi(2);
+
         Thread.sleep(3000);
+//        driver.switchTo().alert().accept();
+
+
 
         logStep("Click on Start assessment button");
         WebElement startButton = driver.findElement(By.xpath("//div[@class='MuiBox-root css-14j5rrt']"));
         startButton.click();
+
         Thread.sleep(3000);
 
         logStep("Get Text from UI");
         WebElement textElement = driver.findElement(By.xpath("//h4[@class='MuiTypography-root MuiTypography-h5 css-xilszg']"));
-        assertTrue("Mike button is enabled", textElement.isDisplayed(), "Mike button is not enabled");
+        assertTrue("Mike button is enabled", textElement.isDisplayed(),"Mike button is not enabled");
 
         String text = textElement.getText();
         logStep(text);
 
-        String audioFilePath = "src/main/java/Pages/output_audio.wav";
+        String audioFilePath = "src/main/java/Pages/converted_audio.wav";
+
 
         logStep("Click on the Mike button");
         WebElement mikeButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']"));
         mikeButton.click();
 
+
         logStep("Speak text in Mike");
-        TextToSpeech(text, audioFilePath);
+//        TexttoSpeach(text);
         Thread.sleep(4000);
 
-        injectAudioFile(audioFilePath);
+
+        try {
+
+            File audioFile = new File(audioFilePath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            AudioFormat format = audioStream.getFormat();
+
+            // Ensure the audio format is supported
+            if (!AudioSystem.isLineSupported(new DataLine.Info(SourceDataLine.class, format))) {
+                throw new IllegalArgumentException("Audio format not supported: " + format);
+            }
+
+            // Get the SourceDataLine for the virtual audio cable (assumed to be the default)
+            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+            SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
+            line.open(format);
+            line.start();
+
+            // Write audio data to the SourceDataLine
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = audioStream.read(buffer)) != -1) {
+                line.write(buffer, 0, bytesRead);
+            }
+
+            // Close the line and audio stream
+            line.drain();
+            line.close();
+            audioStream.close();
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+
+
+
+//        injectAudioFile("src/main/java/Pages/output_audio.wav");
+
         Thread.sleep(4000);
 
         logStep("Click on Stop button");
         driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
+
+        Thread.sleep(2000);
+
+
         Thread.sleep(4000);
 
         logStep("Click on Next Button");
         WebElement nextButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-140ohgs']"));
         nextButton.click();
+
     }
 
-    private static void TextToSpeech(String text, String audioFilePath) throws InterruptedException {
-        System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 
-        logStep("Speak text in Mike");
-        VoiceManager voiceManager = VoiceManager.getInstance();
-        Voice voice = voiceManager.getVoice("kevin16");
-        if (voice == null) {
-            System.err.println("Cannot find a voice named kevin16.\nPlease specify a different voice.");
-            System.exit(1);
-        }
-        voice.allocate();
-        voice.speak(text);
+         private static void TexttoSpeach(String Text) throws InterruptedException {
+             System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 
-        // Save the spoken text to an audio file
-        SingleFileAudioPlayer audioPlayer = new SingleFileAudioPlayer(audioFilePath.replace(".wav", ""), AudioFileFormat.Type.WAVE);
-        voice.setAudioPlayer(audioPlayer);
-        voice.speak(text);
-        audioPlayer.close();
-    }
+             logStep("Speak text in Mike");
+             // Create a voice manager
+             VoiceManager voiceManager = VoiceManager.getInstance();
+
+             // Select the voice
+             Voice voice = voiceManager.getVoice("kevin16");
+             if (voice == null) {
+                 System.err.println("Cannot find a voice named kevin16.\n" +
+                         "Please specify a different voice.");
+                 System.exit(1);
+             }
+
+             // Allocate the chosen voice
+             voice.allocate();
+             voice.speak(Text);
+
+         }
 
     private static String convertWavToBase64(String filePath) {
         String base64String = "";
@@ -130,21 +180,27 @@ public class AllTest extends BrowserManager {
         }
     }
 
+
     private static void injectAudioFile(String relativeFilePath) throws IOException {
+        // Resolve the relative path to an absolute path
         logStep("Speaking text in mike");
         Path absolutePath = Paths.get(relativeFilePath).toAbsolutePath();
 
+        // Read the audio file and convert it to a Base64 string
         File file = absolutePath.toFile();
         byte[] fileContent = Files.readAllBytes(file.toPath());
         String encodedString = Base64.getEncoder().encodeToString(fileContent);
 
+        // JavaScript to decode Base64 string and create a Blob URL
         String script = "var audio = new Audio('data:audio/wav;base64," + encodedString + "');" +
                 "audio.play();" +
                 "document.body.appendChild(audio);";
 
+        // Execute the JavaScript in the context of the browser
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript(script);
         logStep("Speaking text in mike");
+
     }
 
     private static void clickElementUsingJavaScript(WebElement element) {
@@ -152,4 +208,12 @@ public class AllTest extends BrowserManager {
         jsExecutor.executeScript("arguments[0].click();", element);
     }
 
+
+
 }
+
+
+
+//
+//    String audioFilePath = "output.mp3";
+////        convertTextToSpeech(Text,audioFilePath);
