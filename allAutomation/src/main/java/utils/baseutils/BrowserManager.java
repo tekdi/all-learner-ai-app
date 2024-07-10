@@ -19,7 +19,8 @@ import java.io.FileReader;
 import java.util.Properties;
 
 
-/*public class BrowserManager extends BaseUtils {
+/*
+public class BrowserManager extends BaseUtils {
     static String locatorsPath = System.getProperty("user.dir") + "/src/test/java/test/resources/locators/";
     static {
         PropertiesFileManager.getInstance().setPath(locatorsPath);
@@ -45,8 +46,6 @@ import java.util.Properties;
             opt.addArguments("--remote-allow-origins=*");
             opt.addArguments("--incognito");
             opt.addArguments("--use-fake-ui-for-media-stream");
-//            opt.addExtensions(new File("src/Extensions.zip")); // Add your extension path here
-
             driver = new ChromeDriver(opt);
         } else if (prop.getProperty("Browser").equalsIgnoreCase("firefox")) {
             FirefoxOptions opt = new FirefoxOptions();
@@ -71,7 +70,8 @@ import java.util.Properties;
     public static void main(String[] args) throws Exception {
         browserRun();
     }
-}*/
+}
+*/
 
 
 
@@ -108,7 +108,7 @@ public class BrowserManager extends BaseUtils {
             opt.addArguments("--remote-allow-origins=*");
             opt.addArguments("--incognito");
             opt.addArguments("--use-fake-ui-for-media-stream");
-//            opt.addExtensions(new File("src/Extensions.zip")); // Add your extension path here
+            opt.addExtensions(new File("src/Extensions.zip")); // Add your extension path here
             driver = new ChromeDriver(opt);
         } else if (prop.getProperty("Browser").equalsIgnoreCase("firefox")) {
             FirefoxOptions opt = new FirefoxOptions();

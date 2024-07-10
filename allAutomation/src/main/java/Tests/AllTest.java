@@ -104,18 +104,19 @@ public class AllTest extends BrowserManager {
 
     }
 
-    public static void playAudio(String filePath) throws Exception {
+    public static void playAudio(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException {
         File audioFile = new File(filePath);
         AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+        AudioFormat format = audioStream.getFormat();
+        DataLine.Info info = new DataLine.Info(Clip.class, format);
+        Clip audioClip = (Clip) AudioSystem.getLine(info);
+        audioClip.open(audioStream);
+        audioClip.start();
 
-        Clip clip = AudioSystem.getClip();
-        clip.open(audioStream);
-        clip.start();
+        while (!audioClip.isRunning()) Thread.sleep(10);
+        while (audioClip.isRunning()) Thread.sleep(10);
 
-        // Wait for audio to finish playing
-        Thread.sleep(clip.getMicrosecondLength() / 1000);
-
-        clip.close();
+        audioClip.close();
         audioStream.close();
     }
 
