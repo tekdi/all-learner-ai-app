@@ -145,7 +145,15 @@ jobs:
         cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
         mvn install -DskipTests
 
-  
+   - name: Install Chrome and Chromedriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        wget -N https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo mv -f chromedriver /usr/local/bin/chromedriver
+        sudo chown root:root /usr/local/bin/chromedriver
+        sudo chmod 0755 /usr/local/bin/chromedriver
 
     - name: Run tests
       run: |
