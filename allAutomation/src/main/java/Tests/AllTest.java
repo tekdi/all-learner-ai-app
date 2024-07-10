@@ -75,7 +75,7 @@ public class AllTest extends BrowserManager {
 
 
         logStep("Speak text in Mike");
-        TexttoSpeach(text);
+//        TexttoSpeach(text);
         Thread.sleep(4000);
 
         injectAudioFile("src/main/java/Pages/output_audio.wav");
@@ -172,7 +172,7 @@ public class AllTest extends BrowserManager {
                     "    mediaRecorder.start();" +
                     "    setTimeout(function() {" +
                     "        mediaRecorder.stop();" +
-                    "    }, 5000); // Adjust the duration as needed" +
+                    "    }, 10000); // Adjust the duration as needed" +
                     "})" +
                     ".catch(function(err) {" +
                     "    console.error('Error accessing microphone:', err);" +
