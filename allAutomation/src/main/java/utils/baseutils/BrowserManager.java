@@ -40,12 +40,15 @@ public class BrowserManager extends BaseUtils {
         FileReader fr = new FileReader(System.getProperty("user.dir") + "/src/test/java/test/resources/Test_data/browserConfig.properties");
         Properties prop = new Properties();
         prop.load(fr);
+        String extensionPath = Paths.get("src").toAbsolutePath().toString();
         if (prop.getProperty("Browser").equalsIgnoreCase("chrome")) {
             ChromeOptions opt = new ChromeOptions();
             //opt.setHeadless(true);
+//            opt.addArguments("--headless"); // Run Chrome in headless mode
             opt.addArguments("--remote-allow-origins=*");
             opt.addArguments("--incognito");
             opt.addArguments("--use-fake-ui-for-media-stream");
+            opt.addArguments("load-extension=" + extensionPath);
             driver = new ChromeDriver(opt);
         } else if (prop.getProperty("Browser").equalsIgnoreCase("firefox")) {
             FirefoxOptions opt = new FirefoxOptions();
@@ -72,7 +75,6 @@ public class BrowserManager extends BaseUtils {
     }
 }
 */
-
 
 
 
@@ -134,4 +136,5 @@ public class BrowserManager extends BaseUtils {
         browserRun();
     }
 }
+
 

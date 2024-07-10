@@ -59,14 +59,12 @@ public class AllTest extends BrowserManager {
 
         String text = textElement.getText();
         logStep(text);
-
         String audioFilePath = "src/main/java/Pages/output_audio.wav";
-
         logStep("Click on the Mike button");
         WebElement mikeButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']"));
         mikeButton.click();
         logStep("Speak text in Mike");
-//        TexttoSpeach(text);
+        TexttoSpeach(text);
         Thread.sleep(4000);
 
         new Thread(() -> {
