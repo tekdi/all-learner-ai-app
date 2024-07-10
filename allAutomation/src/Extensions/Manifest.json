@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Mic Simulation",
+  "version": "1.0",
+  "background": {
+    "service_worker": "Background.js"
+  },
+  "permissions": [
+    "tabs",
+    "scripting",
+    "activeTab",
+    "host_permissions",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "src/Extensions/Images/Icon16.png",
+      "48": "src/Extensions/Images/Icon48.png",
+      "128": "src/Extensions/Images/Icon128.png"
+    }
+  }
+}
