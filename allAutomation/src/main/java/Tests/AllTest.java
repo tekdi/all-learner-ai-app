@@ -79,15 +79,8 @@ public class AllTest extends BrowserManager {
         logStep("Click on Stop button");
         driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
 
-        // Assuming audio is recorded and stored, proceed with enabling Next button
         Thread.sleep(2000);
 
-        // Assuming the path to the recorded audio is dynamic, you would set it here
-        String recordedAudioPath = "allAutomation/src/main/java/Pages/output_audio.wav.wav";
-
-        // Set the file path dynamically for the Next button action
-//        WebElement fileInputElement = driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]"));
-//        fileInputElement.sendKeys(recordedAudioPath);
 
         Thread.sleep(4000);
 
@@ -95,7 +88,6 @@ public class AllTest extends BrowserManager {
         WebElement nextButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-140ohgs']"));
         nextButton.click();
 
-        // Additional verification or actions as needed
     }
 
 
