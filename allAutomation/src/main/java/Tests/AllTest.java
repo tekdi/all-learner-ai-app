@@ -24,6 +24,12 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Base64;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
+
+
 public class AllTest extends BrowserManager {
 
     public AllTest() {
@@ -66,14 +72,7 @@ public class AllTest extends BrowserManager {
         logStep("Speak text in Mike");
 //        TexttoSpeach(text);
         Thread.sleep(4000);
-//
-//        new Thread(() -> {
-//            try {
-//                playAudio(audioFilePath); // Call the playAudio method
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
+
         injectAudioFile("src/main/java/Pages/output_audio.wav");
         Thread.sleep(4000);
         logStep("Click on Stop button");
@@ -86,32 +85,38 @@ public class AllTest extends BrowserManager {
 
     }
 
-    public static void playAudio(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException {
-        File audioFile = new File(filePath);
-        AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-        AudioFormat format = audioStream.getFormat();
-        DataLine.Info info = new DataLine.Info(Clip.class, format);
-        Clip audioClip = (Clip) AudioSystem.getLine(info);
-        audioClip.open(audioStream);
-        audioClip.start();
-        while (!audioClip.isRunning()) Thread.sleep(10);
-        while (audioClip.isRunning()) Thread.sleep(10);
-        audioClip.close();
-        audioStream.close();
+    private static void injectAudioFile(String relativeFilePath) throws IOException {
+        logStep("Speaking text in mike");
+        Path absolutePath = Paths.get(relativeFilePath).toAbsolutePath();
+        File file = absolutePath.toFile();
+        byte[] fileContent = Files.readAllBytes(file.toPath());
+        String encodedString = Base64.getEncoder().encodeToString(fileContent);
+
+        String script = "async function simulateAudioInput(base64Audio) {"
+                + "const audioContext = new AudioContext();"
+                + "const response = await fetch(`data:audio/wav;base64,${base64Audio}`);"
+                + "const arrayBuffer = await response.arrayBuffer();"
+                + "const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);"
+                + "const source = audioContext.createBufferSource();"
+                + "source.buffer = audioBuffer;"
+                + "const destination = audioContext.createMediaStreamDestination();"
+                + "source.connect(destination);"
+                + "source.start();"
+                + "navigator.mediaDevices.getUserMedia = async function(constraints) {"
+                + "if (constraints.audio) {"
+                + "return new Promise((resolve) => {"
+                + "resolve({ getTracks: () => destination.stream.getTracks() });"
+                + "});"
+                + "}"
+                + "return navigator.mediaDevices.originalGetUserMedia(constraints);"
+                + "};"
+                + "}"
+                + "simulateAudioInput('" + encodedString + "');";
+
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        jsExecutor.executeScript(script);
+        logStep("Speaking text in mike");
     }
-         private static void TexttoSpeach(String Text) throws InterruptedException {
-             System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
-             logStep("Speak text in Mike");
-             VoiceManager voiceManager = VoiceManager.getInstance();
-             Voice voice = voiceManager.getVoice("kevin16");
-             if (voice == null) {
-                 System.err.println("Cannot find a voice named kevin16.\n" +
-                         "Please specify a different voice.");
-                 System.exit(1);
-             }
-             voice.allocate();
-             voice.speak(Text);
-         }
 
     private static String convertWavToBase64(String filePath) {
         String base64String = "";
@@ -132,23 +137,11 @@ public class AllTest extends BrowserManager {
             e.printStackTrace();
         }
     }
-    private static void injectAudioFile(String relativeFilePath) throws IOException {
-        logStep("Speaking text in mike");
-        Path absolutePath = Paths.get(relativeFilePath).toAbsolutePath();
-        File file = absolutePath.toFile();
-        byte[] fileContent = Files.readAllBytes(file.toPath());
-        String encodedString = Base64.getEncoder().encodeToString(fileContent);
-        String script = "var audio = new Audio('data:audio/wav;base64," + encodedString + "');" +
-                "audio.play();" +
-                "document.body.appendChild(audio);";
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-        jsExecutor.executeScript(script);
-        logStep("Speaking text in mike");
-    }
 
     private static void clickElementUsingJavaScript(WebElement element) {
         JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
         jsExecutor.executeScript("arguments[0].click();", element);
     }
+
 
 }
