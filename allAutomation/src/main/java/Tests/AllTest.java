@@ -31,6 +31,9 @@ import javax.sound.sampled.*;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+
+import static Tests.AudioRecorder.getAudioFormat;
+
 public class AllTest extends BrowserManager {
 
     public AllTest() {
@@ -85,8 +88,55 @@ public class AllTest extends BrowserManager {
 //        TexttoSpeach(text);
         Thread.sleep(4000);
 
+        int recordTime = 10000; // 10 seconds
+
+        // Define the target data line (microphone)
+        AudioFormat format = getAudioFormat();
+        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+
+        if (!AudioSystem.isLineSupported(info)) {
+            System.out.println("The line is not supported.");
+            System.exit(0);
+        }
 
         try {
+            // Open the target data line
+            TargetDataLine microphone = (TargetDataLine) AudioSystem.getLine(info);
+            microphone.open(format);
+            microphone.start();
+
+            System.out.println("Recording...");
+
+            // Create a thread to record the audio
+            Thread stopper = new Thread(new Runnable() {
+                public void run() {
+                    AudioInputStream audioStream = new AudioInputStream(microphone);
+                    File audioFile = new File("recorded_audio.wav");
+
+                    try {
+                        // Write the recorded audio to a WAV file
+                        AudioSystem.write(audioStream, AudioFileFormat.Type.WAVE, audioFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            stopper.start();
+            Thread.sleep(recordTime);
+            microphone.stop();
+            microphone.close();
+
+            System.out.println("Recording completed.");
+
+        } catch (LineUnavailableException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+      /*  try {
 
             File audioFile = new File(audioFilePath);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
@@ -117,7 +167,7 @@ public class AllTest extends BrowserManager {
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-
+*/
 
 
 //        injectAudioFile("src/main/java/Pages/output_audio.wav");
