@@ -88,7 +88,7 @@ public class RunSuite {
 //          driver.findElement(By.xpath("//*[@class='MuiBox-root css-1fhz53j']")).click();
 //
 //          Thread.sleep(2000);
-//          driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).sendKeys("allAutomation/src/main/java/Pages/output_audio.wav.wav");
+//          driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).sendKeys("allAutomation/src/main/java/Pages/output_audio.wav");
 //
 //
 //          Thread.sleep(4000);

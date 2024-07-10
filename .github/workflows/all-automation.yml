@@ -142,10 +142,16 @@ jobs:
       run: |
         cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
         mvn install -DskipTests
+
+  
+
     - name: Run tests
       run: |
         cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
         mvn test
+        env:
+        DISPLAY: :99.0
+        CHROME_EXTENSION_PATH: ${{ github.workspace }}/src/main/resources/Extensions.zip
 
 
 

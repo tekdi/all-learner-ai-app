@@ -49,6 +49,9 @@ public class AllTest extends BrowserManager {
         waitForUi(2);
 
         Thread.sleep(3000);
+//        driver.switchTo().alert().accept();
+
+
 
         logStep("Click on Start assessment button");
         WebElement startButton = driver.findElement(By.xpath("//div[@class='MuiBox-root css-14j5rrt']"));
@@ -63,6 +66,9 @@ public class AllTest extends BrowserManager {
         String text = textElement.getText();
         logStep(text);
 
+        String audioFilePath = "src/main/java/Pages/output_audio.wav";
+
+
         logStep("Click on the Mike button");
         WebElement mikeButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']"));
         mikeButton.click();
@@ -72,7 +78,15 @@ public class AllTest extends BrowserManager {
 //        TexttoSpeach(text);
         Thread.sleep(4000);
 
-        injectAudioFile("src/main/java/Pages/output_audio.wav.wav");
+        new Thread(() -> {
+            try {
+                playAudio(audioFilePath); // Call the playAudio method
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+//        injectAudioFile("src/main/java/Pages/output_audio.wav");
 
         Thread.sleep(4000);
 
@@ -90,61 +104,42 @@ public class AllTest extends BrowserManager {
 
     }
 
+    public static void playAudio(String filePath) throws Exception {
+        File audioFile = new File(filePath);
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioStream);
+        clip.start();
+
+        // Wait for audio to finish playing
+        Thread.sleep(clip.getMicrosecondLength() / 1000);
+
+        clip.close();
+        audioStream.close();
+    }
+
 
          private static void TexttoSpeach(String Text) throws InterruptedException {
-          System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
+             System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
 
-          logStep("Speak text in Mike");
-          // Create a voice manager
-          VoiceManager voiceManager = VoiceManager.getInstance();
+             logStep("Speak text in Mike");
+             // Create a voice manager
+             VoiceManager voiceManager = VoiceManager.getInstance();
 
-          // Select the voice
-          Voice voice = voiceManager.getVoice("kevin16");
-          if (voice == null) {
-               System.err.println("Cannot find a voice named kevin16.\n" +
-                       "Please specify a different voice.");
-               System.exit(1);
-          }
+             // Select the voice
+             Voice voice = voiceManager.getVoice("kevin16");
+             if (voice == null) {
+                 System.err.println("Cannot find a voice named kevin16.\n" +
+                         "Please specify a different voice.");
+                 System.exit(1);
+             }
 
-          // Allocate the chosen voice
-          voice.allocate();
-          voice.speak(Text);
+             // Allocate the chosen voice
+             voice.allocate();
+             voice.speak(Text);
 
-
-
-          // Ensure the directory exists
-//          String directoryPath = "src/main/java/Pages"; // Adjust this path as needed
-//          String fileName = "output_audio"; // Adjust the file name as needed
-//          String outputPath = directoryPath + "/" + fileName + ".wav";
-//
-//          // Create directory if it doesn't exist
-//          File directory = new File(directoryPath);
-//          if (!directory.exists()) {
-//               directory.mkdirs();
-//          }
-//
-//          // Create a SingleFileAudioPlayer
-//          SingleFileAudioPlayer audioPlayer = new SingleFileAudioPlayer(outputPath, javax.sound.sampled.AudioFileFormat.Type.WAVE);
-//          voice.setAudioPlayer(audioPlayer);
-//
-//          voice.speak(Text);
-//
-//          audioPlayer.close();
-//          // Deallocate the voice resources
-//          voice.deallocate();
-//
-//          System.out.println("Audio file created successfully at: " + outputPath);
-//
-//          // Convert audio file to Base64
-//          String base64Audio = convertWavToBase64(outputPath);
-//          System.out.println("Base64 Audio: " + base64Audio);
-//
-//          // Save Base64 string to a file
-//          String base64FilePath = directoryPath + "/Base64Audio.txt";
-//          saveBase64ToFile(base64FilePath, base64Audio);
-//          System.out.println("Base64 Audio saved successfully at: " + base64FilePath);
-     }
-
+         }
 
     private static String convertWavToBase64(String filePath) {
         String base64String = "";
