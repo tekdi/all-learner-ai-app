@@ -85,42 +85,7 @@ public class AllTest extends BrowserManager {
 //        TexttoSpeach(text);
         Thread.sleep(4000);
 
-
-        try {
-
-            File audioFile = new File(audioFilePath);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-            AudioFormat format = audioStream.getFormat();
-
-            // Ensure the audio format is supported
-            if (!AudioSystem.isLineSupported(new DataLine.Info(SourceDataLine.class, format))) {
-                throw new IllegalArgumentException("Audio format not supported: " + format);
-            }
-
-            // Get the SourceDataLine for the virtual audio cable (assumed to be the default)
-            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-            SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
-            line.open(format);
-            line.start();
-
-            // Write audio data to the SourceDataLine
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = audioStream.read(buffer)) != -1) {
-                line.write(buffer, 0, bytesRead);
-            }
-
-            // Close the line and audio stream
-            line.drain();
-            line.close();
-            audioStream.close();
-        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
-
-
-
-//        injectAudioFile("src/main/java/Pages/output_audio.wav");
+        injectAudioFile("src/main/java/Pages/output_audio.wav");
 
         Thread.sleep(4000);
 
@@ -209,7 +174,7 @@ public class AllTest extends BrowserManager {
     }
 
 
-    
+
 }
 
 
