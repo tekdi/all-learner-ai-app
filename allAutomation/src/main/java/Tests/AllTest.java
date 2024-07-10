@@ -111,7 +111,7 @@ public class AllTest extends BrowserManager {
             Thread stopper = new Thread(new Runnable() {
                 public void run() {
                     AudioInputStream audioStream = new AudioInputStream(microphone);
-                    File audioFile = new File("recorded_audio.wav");
+                    File audioFile = new File("src/main/java/Pages/converted_audio.wav");
 
                     try {
                         // Write the recorded audio to a WAV file
