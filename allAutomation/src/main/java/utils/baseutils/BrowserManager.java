@@ -19,8 +19,7 @@ import java.io.FileReader;
 import java.util.Properties;
 
 
-/*
-public class BrowserManager extends BaseUtils {
+/*public class BrowserManager extends BaseUtils {
     static String locatorsPath = System.getProperty("user.dir") + "/src/test/java/test/resources/locators/";
     static {
         PropertiesFileManager.getInstance().setPath(locatorsPath);
@@ -72,8 +71,7 @@ public class BrowserManager extends BaseUtils {
     public static void main(String[] args) throws Exception {
         browserRun();
     }
-}
-*/
+}*/
 
 
 
