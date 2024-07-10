@@ -76,7 +76,7 @@ public class AllTest extends BrowserManager {
         String text = textElement.getText();
         logStep(text);
 
-        String audioFilePath = "src/main/java/Pages/converted_audio.wav";
+//        String audioFilePath = "src/main/java/Pages/converted_audio.wav";
 
 
         logStep("Click on the Mike button");
@@ -92,6 +92,7 @@ public class AllTest extends BrowserManager {
 
         // Define the target data line (microphone)
         AudioFormat format = getAudioFormat();
+        logStep(String.valueOf(format));
         DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
         if (!AudioSystem.isLineSupported(info)) {
