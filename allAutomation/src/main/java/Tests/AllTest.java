@@ -66,15 +66,15 @@ public class AllTest extends BrowserManager {
         logStep("Speak text in Mike");
 //        TexttoSpeach(text);
         Thread.sleep(4000);
-
-        new Thread(() -> {
-            try {
-                playAudio(audioFilePath); // Call the playAudio method
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-//        injectAudioFile("src/main/java/Pages/output_audio.wav");
+//
+//        new Thread(() -> {
+//            try {
+//                playAudio(audioFilePath); // Call the playAudio method
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
+        injectAudioFile("src/main/java/Pages/output_audio.wav");
         Thread.sleep(4000);
         logStep("Click on Stop button");
         driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
