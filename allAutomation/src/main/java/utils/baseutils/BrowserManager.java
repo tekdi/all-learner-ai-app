@@ -108,7 +108,7 @@ public class BrowserManager extends BaseUtils {
             opt.addArguments("--remote-allow-origins=*");
             opt.addArguments("--incognito");
             opt.addArguments("--use-fake-ui-for-media-stream");
-            opt.addExtensions(new File("src/Extensions.zip")); // Add your extension path here
+//            opt.addExtensions(new File("src/Extensions.zip")); // Add your extension path here
             driver = new ChromeDriver(opt);
         } else if (prop.getProperty("Browser").equalsIgnoreCase("firefox")) {
             FirefoxOptions opt = new FirefoxOptions();
