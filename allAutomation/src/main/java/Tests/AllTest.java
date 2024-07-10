@@ -64,7 +64,7 @@ public class AllTest extends BrowserManager {
         WebElement mikeButton = driver.findElement(By.xpath("//*[@class='MuiBox-root css-1l4w6pd']"));
         mikeButton.click();
         logStep("Speak text in Mike");
-        TexttoSpeach(text);
+//        TexttoSpeach(text);
         Thread.sleep(4000);
 
         new Thread(() -> {
@@ -74,7 +74,7 @@ public class AllTest extends BrowserManager {
                 e.printStackTrace();
             }
         }).start();
-        injectAudioFile("src/main/java/Pages/output_audio.wav");
+//        injectAudioFile("src/main/java/Pages/output_audio.wav");
         Thread.sleep(4000);
         logStep("Click on Stop button");
         driver.findElement(By.xpath("(//*[@xmlns='http://www.w3.org/2000/svg'])[2]")).click();
