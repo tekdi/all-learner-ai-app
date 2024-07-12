@@ -55,9 +55,6 @@
 #           distribution: 'temurin' # Can be 'adopt', 'zulu', etc.
 #           java-version: '17'
 
-#       - name: Build with Maven
-#         run: mvn clean install
-#         working-directory: all-learner-ai-app/allAutomation # Adjust this path as needed
 
 #       - name: Run TestNG tests
 #         run: mvn test -DsuiteXmlFile=testng.xml
