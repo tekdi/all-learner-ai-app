@@ -42,6 +42,8 @@ on:
 #       run: |
 #         cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
 #         pytest tests/microphoneSimulationTest.py
+        # pip install pyaudio==0.2.13
+
 
 
 jobs:
@@ -63,6 +65,7 @@ jobs:
         pip install pytest-html==3.2.0
         pip install pytest-mock==3.11.1
         pip install webdriver-manager==3.8.6
-        pip install pyaudio==0.2.13
+        pip install selenium pytest gtts comtypes
+
     - name: Run tests
       run: pytest
