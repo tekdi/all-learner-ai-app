@@ -14,6 +14,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
+import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import time
+import os
+import base64
+import shutil
 
 
 def logStep(step_description):
@@ -115,3 +122,13 @@ def play_audio(file_path):
     stream.stop_stream()
     stream.close()
     p.terminate()
+
+
+def speak_text(text):
+    from comtypes.client import CreateObject
+    engine = CreateObject("SAPI.SpVoice")
+    stream = CreateObject("SAPI.SpFileStream")
+    stream.Open("output_audio.wav", 3, False)
+    engine.AudioOutputStream = stream
+    engine.speak(text)
+    stream.Close()

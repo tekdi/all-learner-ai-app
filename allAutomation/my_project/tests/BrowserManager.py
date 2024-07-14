@@ -19,6 +19,10 @@ def setup():
     chrome_options.add_argument("--incognito")
     chrome_options.add_argument("--use-fake-ui-for-media-stream")
     chrome_options.add_argument("--use-file-for-fake-audio-capture")
+    chrome_options.add_argument("--use-fake-ui-for-media-stream")
+    chrome_options.add_argument("--use-file-for-fake-audio-capture=output_audio.wav")
+
+
 
     # Initialize Chrome WebDriver using WebDriverManager
     service = Service(ChromeDriverManager().install())
