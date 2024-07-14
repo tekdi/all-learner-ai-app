@@ -41,7 +41,7 @@ jobs:
 
     - name: Run tests
       run: |
-           run: pytest
+        pytest tests/microphoneSimulationTest.py
 
 
 # jobs:
