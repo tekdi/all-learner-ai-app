@@ -21,6 +21,8 @@ import time
 import os
 import base64
 import shutil
+import pyaudio
+import wave
 
 
 def logStep(step_description):
@@ -111,18 +113,18 @@ def test_microphone_simulation(setup):
 
 def play_audio_through_microphone(audio_file):
     # Construct the full path to the audio file
-    audio_file_path = "path_to_directory/output_audio.wav"  # Replace with your actual path
+    audio_file_path = "output_audio.wav"  # Replace with your actual path
 
     # Open the WAV file for reading binary data
     with wave.open(audio_file_path, 'rb') as wf:
+        # Instantiate PyAudio
         p = pyaudio.PyAudio()
 
-        # Open a stream for input (microphone)
+        # Open a stream for output (playback)
         stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
                         channels=wf.getnchannels(),
                         rate=wf.getframerate(),
-                        input=True,
-                        frames_per_buffer=1024)
+                        output=True)  # Set output=True for playback
 
         # Read and play audio frames
         data = wf.readframes(1024)
@@ -130,12 +132,17 @@ def play_audio_through_microphone(audio_file):
             stream.write(data)
             data = wf.readframes(1024)
 
-        # Close the input stream
+        # Close the output stream
         stream.stop_stream()
         stream.close()
 
         # Terminate PyAudio
         p.terminate()
+
+
+# Example usage:
+if __name__ == "__main__":
+    play_audio_through_microphone('output_audio.wav')
 
 
 def speak_text(text):

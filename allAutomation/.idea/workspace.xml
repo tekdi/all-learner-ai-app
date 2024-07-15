@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="da96d806-55b4-42f6-a4ce-296a6d544ae5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_project/tests/BrowserManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_project/tests/BrowserManager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/my_project/tests/microphoneSimulationTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_project/tests/microphoneSimulationTest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,7 +52,7 @@
       <recent name="E:\ALL_Automation_Git_Actions\all-learner-ai-app\allAutomation\my_project\tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation">
+  <component name="RunManager" selected="Python tests.Python tests in microphoneSimulationTest.py">
     <configuration name="Python tests for microphoneSimulationTest.test_microphone_simulation" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="ALLPython" />
       <option name="ENV_FILES" value="" />
@@ -83,8 +85,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation" />
         <item itemvalue="Python tests.Python tests in microphoneSimulationTest.py" />
+        <item itemvalue="Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation" />
       </list>
     </recent_temporary>
   </component>
