@@ -85,14 +85,14 @@ def test_microphone_simulation(setup):
     mike_button = driver.find_element(By.XPATH, "//*[@class='MuiBox-root css-1l4w6pd']")
     mike_button.click()
 
-    time.sleep(3)
+    time.sleep(1)
 
     # play_audio('E:/ALLPython/my_project/tests/output_audio.wav')
-    play_audio('output_audio.wav')
+    # play_audio('output_audio.wav')
     # speak_text(text)
+    play_audio_through_microphone('output_audio.wav')
 
-
-    time.sleep(3)
+    time.sleep(4)
 
     # Speak text in Mike (Placeholder, as actual implementation will differ)
     logStep("Speak text in Mike")
@@ -102,10 +102,54 @@ def test_microphone_simulation(setup):
     logStep("Click on Stop button")
     driver.find_element(By.XPATH, "(//*[@xmlns='http://www.w3.org/2000/svg'])[2]").click()
 
+    time.sleep(10)
     # Click on Next Button
     logStep("Click on Next Button")
     next_button = driver.find_element(By.XPATH, "//*[@class='MuiBox-root css-140ohgs']")
     next_button.click()
+
+
+def play_audio_through_microphone(audio_file):
+    chunk = 1024
+    wf = wave.open(audio_file, 'rb')
+
+    p = pyaudio.PyAudio()
+
+    stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+                    channels=wf.getnchannels(),
+                    rate=wf.getframerate(),
+                    input=True,  # Specify input=True for input stream
+                    frames_per_buffer=chunk)
+
+    data = wf.readframes(chunk)
+
+    while data:
+        stream.write(data)
+        data = wf.readframes(chunk)
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+
+def speak_text(text):
+    from comtypes.client import CreateObject
+    engine = CreateObject("SAPI.SpVoice")
+    stream = CreateObject("SAPI.SpFileStream")
+    stream.Open("output_audio.wav", 3, False)
+    engine.AudioOutputStream = stream
+    engine.speak(text)
+    stream.Close()
+
+    # Mock function to simulate clicking on Mike button and detecting audio input
+    def simulate_audio_detection(driver):
+        # Simulate clicking on Mike button
+        logStep("Simulating audio detection (clicking on Mike button)")
+        mike_button = driver.find_element(By.XPATH, "//*[@class='MuiBox-root css-1l4w6pd']")
+        mike_button.click()
+
+        # Simulate system detecting audio (placeholder logic)
+        logStep("System detects audio input (simulated)")
 
 
 def play_audio(file_path):
@@ -123,13 +167,3 @@ def play_audio(file_path):
     stream.stop_stream()
     stream.close()
     p.terminate()
-
-
-def speak_text(text):
-    from comtypes.client import CreateObject
-    engine = CreateObject("SAPI.SpVoice")
-    stream = CreateObject("SAPI.SpFileStream")
-    stream.Open("output_audio.wav", 3, False)
-    engine.AudioOutputStream = stream
-    engine.speak(text)
-    stream.Close()
