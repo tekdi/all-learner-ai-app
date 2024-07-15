@@ -9,23 +9,20 @@ from webdriver_manager.chrome import ChromeDriverManager
 def setup():
     # Initialize ChromeOptions
     chrome_options = ChromeOptions()
-    chrome_options.add_argument('--headless')  # Uncomment to run Chrome in headless mode
-    chrome_options.add_argument('--no-sandbox')  # Bypass OS security model
-    chrome_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
-
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument("--remote-debugging-port=9222")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--remote-allow-origins=*")
     chrome_options.add_argument("--incognito")
     chrome_options.add_argument("--use-fake-ui-for-media-stream")
-    chrome_options.add_argument("--use-file-for-fake-audio-capture")
-    chrome_options.add_argument("--use-fake-ui-for-media-stream")
     chrome_options.add_argument("--use-file-for-fake-audio-capture=output_audio.wav")
 
-
-
-    # Initialize Chrome WebDriver using WebDriverManager
-    service = Service(ChromeDriverManager().install())
+    # Specify the ChromeDriver version
+    service = Service(ChromeDriverManager(version="114.0.5735.90").install())
+    driver = webdriver.Chrome(service=service, options=chrome_options)
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
     driver.maximize_window()
