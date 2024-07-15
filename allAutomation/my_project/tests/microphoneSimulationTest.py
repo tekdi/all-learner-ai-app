@@ -110,38 +110,32 @@ def test_microphone_simulation(setup):
 
 
 def play_audio_through_microphone(audio_file):
-    # Get the absolute path to the audio file
-    audio_file_path = os.path.join(os.path.dirname(__file__), 'path_to_audio_directory', audio_file)
+    # Construct the full path to the audio file
+    audio_file_path = "path_to_directory/output_audio.wav"  # Replace with your actual path
 
-    # Check if the file exists
-    if not os.path.exists(audio_file_path):
-        raise FileNotFoundError(f"File '{audio_file}' not found at '{audio_file_path}'")
+    # Open the WAV file for reading binary data
+    with wave.open(audio_file_path, 'rb') as wf:
+        p = pyaudio.PyAudio()
 
-    chunk = 1024
-    wf = wave.open(audio_file_path, 'rb')
+        # Open a stream for input (microphone)
+        stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+                        channels=wf.getnchannels(),
+                        rate=wf.getframerate(),
+                        input=True,
+                        frames_per_buffer=1024)
 
-    p = pyaudio.PyAudio()
+        # Read and play audio frames
+        data = wf.readframes(1024)
+        while data:
+            stream.write(data)
+            data = wf.readframes(1024)
 
-    # Configure stream for input (microphone)
-    stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                    channels=wf.getnchannels(),
-                    rate=wf.getframerate(),
-                    input=True,  # Set to True for input stream (microphone)
-                    frames_per_buffer=chunk)
+        # Close the input stream
+        stream.stop_stream()
+        stream.close()
 
-    data = wf.readframes(chunk)
-
-    while data:
-        # Write data to the input stream (microphone)
-        stream.write(data)
-        data = wf.readframes(chunk)
-
-    # Stop and close the input stream
-    stream.stop_stream()
-    stream.close()
-
-    # Terminate PyAudio
-    p.terminate()
+        # Terminate PyAudio
+        p.terminate()
 
 
 def speak_text(text):
