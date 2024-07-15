@@ -22,7 +22,7 @@ def setup():
     options.add_argument("--incognito")
     options.add_argument("--use-fake-ui-for-media-stream")
     options.add_argument("--use-file-for-fake-audio-capture=path/to/audio/file.wav")
-
+    # options
     # Uncomment and set the correct path to load extension
     # options.add_argument("load-extension=path/to/extension")
 
