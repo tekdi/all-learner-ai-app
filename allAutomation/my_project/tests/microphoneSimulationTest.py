@@ -113,7 +113,7 @@ def test_microphone_simulation(setup):
 
 def play_audio_through_microphone(audio_file):
     # Construct the full path to the audio file
-    audio_file_path = "output_audio.wav"  # Replace with your actual path
+    audio_file_path = "my_project/tests/output_audio.wav"
 
     # Open the WAV file for reading binary data
     with wave.open(audio_file_path, 'rb') as wf:
