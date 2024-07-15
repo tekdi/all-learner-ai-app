@@ -50,7 +50,7 @@
       <recent name="E:\ALL_Automation_Git_Actions\all-learner-ai-app\allAutomation\my_project\tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in microphoneSimulationTest.py">
+  <component name="RunManager" selected="Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation">
     <configuration name="Python tests for microphoneSimulationTest.test_microphone_simulation" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="ALLPython" />
       <option name="ENV_FILES" value="" />
@@ -83,8 +83,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests in microphoneSimulationTest.py" />
         <item itemvalue="Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation" />
+        <item itemvalue="Python tests.Python tests in microphoneSimulationTest.py" />
       </list>
     </recent_temporary>
   </component>

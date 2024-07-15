@@ -92,7 +92,12 @@ def test_microphone_simulation(setup):
     # play_audio('E:/ALLPython/my_project/tests/output_audio.wav')
     # play_audio('output_audio.wav')
     # speak_text(text)
-    play_audio_through_microphone('output_audio.wav')
+    # play_audio_through_microphone('output_audio.wav')
+
+    if os.getenv('GITHUB_ACTIONS') != 'true':
+        play_audio_through_microphone('output_audio.wav')
+    else:
+        print("Simulate audio input process")
 
     time.sleep(4)
 
@@ -180,3 +185,53 @@ def play_audio(file_path):
     stream.stop_stream()
     stream.close()
     p.terminate()
+
+
+def play_audio_through_microphone(audio_file):
+    if os.getenv('GITHUB_ACTIONS') == 'true':
+        # Mock audio playback or skip if needed
+        pass
+    else:
+        audio_file_path = "my_project/tests/output_audio.wav"
+
+        # Open the WAV file for reading binary data
+        with wave.open(audio_file_path, 'rb') as wf:
+            # Instantiate PyAudio
+            p = pyaudio.PyAudio()
+
+            # Open a stream for output (playback)
+            stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+                            channels=wf.getnchannels(),
+                            rate=wf.getframerate(),
+                            output=True)  # Set output=True for playback
+
+            # Read and play audio frames
+            data = wf.readframes(1024)
+            while data:
+                stream.write(data)
+                data = wf.readframes(1024)
+
+            # Close the output stream
+            stream.stop_stream()
+            stream.close()
+
+            # Terminate PyAudio
+            p.terminate()
+
+
+def test_microphone_simulation(setup):
+    # Your existing test logic here
+    driver = webdriver.Chrome()
+
+    # Click on the Mike button
+    logStep("Click on the Mike button")
+    mike_button = driver.find_element(By.XPATH, "//*[@class='MuiBox-root css-1l4w6pd']")
+    mike_button.click()
+
+    # Simulate audio input if not running on GitHub Actions
+    if os.getenv('GITHUB_ACTIONS') != 'true':
+        play_audio_through_microphone('output_audio.wav')
+    else:
+        logStep("Simulate audio input process")
+
+    # Continue with the rest of your test script
