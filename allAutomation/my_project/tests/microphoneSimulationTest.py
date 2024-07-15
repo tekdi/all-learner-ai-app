@@ -110,25 +110,37 @@ def test_microphone_simulation(setup):
 
 
 def play_audio_through_microphone(audio_file):
+    # Get the absolute path to the audio file
+    audio_file_path = os.path.join(os.path.dirname(__file__), 'path_to_audio_directory', audio_file)
+
+    # Check if the file exists
+    if not os.path.exists(audio_file_path):
+        raise FileNotFoundError(f"File '{audio_file}' not found at '{audio_file_path}'")
+
     chunk = 1024
-    wf = wave.open(audio_file, 'rb')
+    wf = wave.open(audio_file_path, 'rb')
 
     p = pyaudio.PyAudio()
 
+    # Configure stream for input (microphone)
     stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
                     channels=wf.getnchannels(),
                     rate=wf.getframerate(),
-                    input=True,  # Specify input=True for input stream
+                    input=True,  # Set to True for input stream (microphone)
                     frames_per_buffer=chunk)
 
     data = wf.readframes(chunk)
 
     while data:
+        # Write data to the input stream (microphone)
         stream.write(data)
         data = wf.readframes(chunk)
 
+    # Stop and close the input stream
     stream.stop_stream()
     stream.close()
+
+    # Terminate PyAudio
     p.terminate()
 
 
