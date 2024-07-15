@@ -22,7 +22,7 @@ def setup():
     chrome_options.add_argument("--use-file-for-fake-audio-capture=output_audio.wav")
 
     # Initialize Chrome WebDriver using WebDriverManager with a specific version
-    service = Service(ChromeDriverManager(version=" 126.0.6478.127").install())
+    service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
     driver.maximize_window()
