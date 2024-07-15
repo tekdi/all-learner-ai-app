@@ -42,7 +42,7 @@ jobs:
     - name: Run tests
       run: |
         cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
-           run: pytest
+        run: pytest my_project/tests/microphoneSimulationTest.py
 
 
 # jobs:
