@@ -2,9 +2,9 @@ name: Python CI with pytest
 
 on:
   push:
-    branches: all_Automation_Actions
+    branches: [all_Automation_Actions]
   pull_request:
-    branches: all_Automation_Actions
+    branches: [all_Automation_Actions]
 
 jobs:
   build:
@@ -21,25 +21,15 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
-        python -m pip install --upgrade pip
         sudo apt-get update
-        sudo apt-get install -y portaudio19-dev python3-dev
-        sudo apt-get install -y google-chrome-stable
-        pip install selenium pytest webdriver-manager
+        sudo apt-get install -y portaudio19-dev python3-dev google-chrome-stable
+        python -m pip install --upgrade pip
+        pip install selenium pytest webdriver-manager pyaudio pytest-html pytest-mock gtts comtypes
 
-
-
-    - name: Install Python packages
+    - name: Run tests
       run: |
-        pip install pytest==7.3.1
-        pip install selenium==4.10.0
-        pip install pytest-html==3.2.0
-        pip install pytest-mock==3.11.1
-        pip install pyaudio
-        pip install selenium pytest gtts comtypes
-
-
+        cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
+        pytest my_project/tests/microphoneSimulationTest.py
       shell: /usr/bin/bash -e {0}
       env:
         pythonLocation: /opt/hostedtoolcache/Python/3.12.4/x64
@@ -48,12 +38,6 @@ jobs:
         Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.4/x64
         Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.4/x64
         LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.4/x64/lib
-
-    - name: Run tests
-      run: |
-        cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
-         pytest my_project/tests/microphoneSimulationTest.py
-
 
 # jobs:
   # build:
