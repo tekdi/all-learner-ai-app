@@ -60,7 +60,6 @@ def test_microphone_simulation(setup):
     driver.find_element(By.XPATH, "//button[@type='submit']").click()
 
     # Wait for UI to update
-    waitForUi(2)
     time.sleep(3)
 
     # Click on Start assessment button
