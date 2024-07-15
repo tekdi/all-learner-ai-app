@@ -24,7 +24,8 @@ def setup():
     chrome_options.add_argument("--use-fake-ui-for-media-stream")
     chrome_options.add_argument("--use-file-for-fake-audio-capture=output_audio.wav")
 
-    extension_path = os.path.abspath("allAutomation/Manifest.zip")
+    extension_path = os.path.abspath("Manifest.zip")
+    chrome_options.add_extension(extension_path)
 
     # Initialize Chrome WebDriver using WebDriverManager with a specific version
     service = Service(ChromeDriverManager().install())

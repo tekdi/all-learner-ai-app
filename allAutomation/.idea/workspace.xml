@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da96d806-55b4-42f6-a4ce-296a6d544ae5" name="Changes" comment="" />
+    <list default="true" id="da96d806-55b4-42f6-a4ce-296a6d544ae5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_project/tests/BrowserManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_project/tests/BrowserManager.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,18 +31,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation.executor": "Run",
-    "Python tests.Python tests in BrowserManager.py.executor": "Run",
-    "Python tests.Python tests in Test_Script.py.executor": "Run",
-    "Python tests.Python tests in microphoneSimulationTest.py.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "all__Automation__Actions",
-    "last_opened_file_path": "E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/Manifest"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in BrowserManager.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in Test_Script.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in microphoneSimulationTest.py.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;all__Automation__Actions&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/Manifest&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\ALL_Automation_Git_Actions\all-learner-ai-app\allAutomation\Manifest" />
