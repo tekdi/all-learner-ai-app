@@ -89,8 +89,8 @@ def test_microphone_simulation(setup):
     time.sleep(3)
 
     # play_audio('E:/ALLPython/my_project/tests/output_audio.wav')
-    # play_audio('output_audio.wav')
-    speak_text(text)
+    play_audio('output_audio.wav')
+    # speak_text(text)
 
 
     time.sleep(3)
