@@ -29,6 +29,8 @@ jobs:
         pip install pytest-mock==3.11.1
         pip install webdriver-manager==3.8.6
         pip install selenium pytest gtts comtypes
+        pip install pyaudio
+
 
       shell: /usr/bin/bash -e {0}
       env:
@@ -42,7 +44,7 @@ jobs:
     - name: Run tests
       run: |
         cd /home/runner/work/all-learner-ai-app/all-learner-ai-app/allAutomation
-        pytest my_project/tests/microphoneSimulationTest.py
+         pytest my_project/tests/microphoneSimulationTest.py
 
 
 # jobs:
