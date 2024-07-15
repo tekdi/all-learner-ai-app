@@ -41,7 +41,7 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest /my_project/tests/microphoneSimulationTest.py
+        pytest tests/microphoneSimulationTest.py
 
 
 # jobs:
