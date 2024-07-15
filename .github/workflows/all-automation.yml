@@ -27,9 +27,9 @@ jobs:
         pip install selenium==4.10.0
         pip install pytest-html==3.2.0
         pip install pytest-mock==3.11.1
+        pip install pyaudio
         pip install webdriver-manager==3.8.6
         pip install selenium pytest gtts comtypes
-        pip install pyaudio
 
 
       shell: /usr/bin/bash -e {0}
