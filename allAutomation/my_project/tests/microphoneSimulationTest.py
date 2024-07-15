@@ -221,7 +221,7 @@ def play_audio_through_microphone(audio_file):
 
 def test_microphone_simulation(setup):
     # Your existing test logic here
-    driver = webdriver.Chrome()
+    # driver = webdriver.Chrome()
 
     # Click on the Mike button
     logStep("Click on the Mike button")

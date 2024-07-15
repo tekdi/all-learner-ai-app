@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -21,6 +23,8 @@ def setup():
     chrome_options.add_argument("--use-file-for-fake-audio-capture")
     chrome_options.add_argument("--use-fake-ui-for-media-stream")
     chrome_options.add_argument("--use-file-for-fake-audio-capture=output_audio.wav")
+
+    extension_path = os.path.abspath("allAutomation/Manifest.zip")
 
     # Initialize Chrome WebDriver using WebDriverManager with a specific version
     service = Service(ChromeDriverManager().install())
