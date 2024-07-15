@@ -26,6 +26,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y portaudio19-dev python3-dev
         sudo apt-get install -y google-chrome-stable
+        pip install selenium pytest webdriver-manager
+
 
 
     - name: Install Python packages
@@ -35,7 +37,6 @@ jobs:
         pip install pytest-html==3.2.0
         pip install pytest-mock==3.11.1
         pip install pyaudio
-        pip install webdriver-manager==3.8.6
         pip install selenium pytest gtts comtypes
 
 

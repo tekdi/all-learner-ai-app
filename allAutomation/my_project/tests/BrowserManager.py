@@ -4,7 +4,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 
-
 @pytest.fixture(scope="module")
 def setup():
     # Initialize ChromeOptions
@@ -22,10 +21,8 @@ def setup():
     chrome_options.add_argument("--use-fake-ui-for-media-stream")
     chrome_options.add_argument("--use-file-for-fake-audio-capture=output_audio.wav")
 
-
-
-    # Initialize Chrome WebDriver using WebDriverManager
-    service = Service(ChromeDriverManager().install())
+    # Initialize Chrome WebDriver using WebDriverManager with a specific version
+    service = Service(ChromeDriverManager(version=" 126.0.6478.127").install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
     driver.maximize_window()
@@ -34,11 +31,11 @@ def setup():
     yield driver
 
     # Teardown - Close the browser
-    # driver.quit()
-
+    driver.quit()
 
 def test_open_website(setup):
     driver = setup  # Using the WebDriver instance from setup fixture
 
     # Open a website
     driver.get('https://d114esnbvw5tst.cloudfront.net/')
+    assert "Title of the website" in driver.title  # Adjust this assertion as needed
