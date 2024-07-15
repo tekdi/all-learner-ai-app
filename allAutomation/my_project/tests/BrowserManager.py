@@ -3,36 +3,35 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 @pytest.fixture(scope="module")
 def setup():
     # Initialize ChromeOptions
-    options = Options()
-    options.add_argument("--headless")  # Run Chrome in headless mode
-    options.add_argument("--no-sandbox")  # Bypass OS security model
-    options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
-    options.add_argument("--remote-debugging-port=9222")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--remote-allow-origins=*")
-    options.add_argument("--incognito")
-    options.add_argument("--use-fake-ui-for-media-stream")
-    options.add_argument("--use-file-for-fake-audio-capture=path/to/audio/file.wav")
-    # options
-    # Uncomment and set the correct path to load extension
-    # options.add_argument("load-extension=path/to/extension")
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument('--headless')  # Uncomment to run Chrome in headless mode
+    chrome_options.add_argument('--no-sandbox')  # Bypass OS security model
+    chrome_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
 
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-    yield driver
+    chrome_options.add_argument("--remote-debugging-port=9222")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--remote-allow-origins=*")
+    chrome_options.add_argument("--incognito")
+    chrome_options.add_argument("--use-fake-ui-for-media-stream")
+    chrome_options.add_argument("--use-file-for-fake-audio-capture")
+    chrome_options.add_argument("--use-fake-ui-for-media-stream")
+    chrome_options.add_argument("--use-file-for-fake-audio-capture=output_audio.wav")
+
+
+
+    # Initialize Chrome WebDriver using WebDriverManager
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
     driver.maximize_window()
 
     # Return the WebDriver instance for the tests to use
-    # yield driver
+    yield driver
 
     # Teardown - Close the browser
     # driver.quit()
