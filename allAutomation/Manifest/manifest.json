@@ -1,0 +1,30 @@
+{
+    "manifest_version": 2,
+    "name": "Microphone Simulation",
+    "version": "1.0",
+    "description": "Extension to simulate microphone input",
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "https://*/*",
+        "http://*/*"
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon16.png",
+            "48": "icon48.png",
+            "128": "icon128.png"
+        }
+    }
+}
