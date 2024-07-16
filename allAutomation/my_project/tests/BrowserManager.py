@@ -23,9 +23,12 @@ def setup():
     chrome_options.add_argument("--use-file-for-fake-audio-capture")
     chrome_options.add_argument("--use-fake-ui-for-media-stream")
     chrome_options.add_argument("--use-file-for-fake-audio-capture=output_audio.wav")
-
-    extension_path = os.path.abspath("Manifest.zip")
-    chrome_options.add_extension(extension_path)
+    # extension_Path = "E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/my_project/tests/Manifest.zip"
+    #
+    # if os.path.exists(extension_Path):
+    #     chrome_options.add_argument(f"--load-extension={extension_Path}")
+    # else:
+    #     raise FileNotFoundError(f"Extension directory not found at {extension_Path}")
 
     # Initialize Chrome WebDriver using WebDriverManager with a specific version
     service = Service(ChromeDriverManager().install())
@@ -51,3 +54,9 @@ def test_open_website(setup):
 
     # Print the title for debugging purposes
     print("Page title is:", driver.title)
+
+
+if __name__ == "__main__":
+    extension_path = os.path.abspath("Manifest.zip")
+    if not os.path.exists(extension_path):
+        print(f"Manifest.zip not found at {extension_path}")

@@ -5,11 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="da96d806-55b4-42f6-a4ce-296a6d544ae5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Manifest/Images/Icon128.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Manifest/Images/Icon16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Manifest/Images/Icon48.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manifest.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manifest/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/Manifest/background.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Manifest/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/Manifest/content.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Manifest.zip" beforeDir="false" afterPath="$PROJECT_DIR$/Manifest.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Manifest/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Manifest/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_project/tests/BrowserManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_project/tests/BrowserManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_project/tests/Manifest.zip" beforeDir="false" afterPath="$PROJECT_DIR$/my_project/tests/Manifest.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/my_project/tests/microphoneSimulationTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/my_project/tests/microphoneSimulationTest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,23 +44,46 @@
     "Python tests.Python tests in BrowserManager.py.executor": "Run",
     "Python tests.Python tests in Test_Script.py.executor": "Run",
     "Python tests.Python tests in microphoneSimulationTest.py.executor": "Run",
+    "Python.BrowserManager.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "all__Automation__Actions",
-    "last_opened_file_path": "E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/my_project/tests"
+    "last_opened_file_path": "E:/ALL_Automation_Git_Actions/all-learner-ai-app/allAutomation/Manifest"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\ALL_Automation_Git_Actions\all-learner-ai-app\allAutomation\my_project\tests" />
       <recent name="E:\ALL_Automation_Git_Actions\all-learner-ai-app\allAutomation\Manifest" />
+      <recent name="E:\ALL_Automation_Git_Actions\all-learner-ai-app\allAutomation\my_project\tests" />
       <recent name="E:\ALLPython\my_project\tests" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\ALL_Automation_Git_Actions\all-learner-ai-app\allAutomation\my_project\tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation">
+  <component name="RunManager" selected="Python tests.Python tests in microphoneSimulationTest.py">
+    <configuration name="BrowserManager" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ALLPython" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/my_project/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/my_project/tests/BrowserManager.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests for microphoneSimulationTest.test_microphone_simulation" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="ALLPython" />
       <option name="ENV_FILES" value="" />
@@ -70,6 +97,21 @@
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;microphoneSimulationTest.test_microphone_simulation&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests in BrowserManager.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="ALLPython" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/my_project/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/my_project/tests/BrowserManager.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests in microphoneSimulationTest.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
@@ -89,8 +131,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation" />
         <item itemvalue="Python tests.Python tests in microphoneSimulationTest.py" />
+        <item itemvalue="Python tests.Python tests for microphoneSimulationTest.test_microphone_simulation" />
+        <item itemvalue="Python tests.Python tests in BrowserManager.py" />
+        <item itemvalue="Python.BrowserManager" />
       </list>
     </recent_temporary>
   </component>

@@ -192,7 +192,7 @@ def play_audio_through_microphone(audio_file):
         # Mock audio playback or skip if needed
         pass
     else:
-        audio_file_path = "my_project/tests/output_audio.wav"
+        audio_file_path = "output_audio.wav"
 
         # Open the WAV file for reading binary data
         with wave.open(audio_file_path, 'rb') as wf:
@@ -219,19 +219,19 @@ def play_audio_through_microphone(audio_file):
             p.terminate()
 
 
-def test_microphone_simulation(setup):
-    # Your existing test logic here
-    # driver = webdriver.Chrome()
-
-    # Click on the Mike button
-    logStep("Click on the Mike button")
-    mike_button = driver.find_element(By.XPATH, "//*[@class='MuiBox-root css-1l4w6pd']")
-    mike_button.click()
-
-    # Simulate audio input if not running on GitHub Actions
-    if os.getenv('GITHUB_ACTIONS') != 'true':
-        play_audio_through_microphone('output_audio.wav')
-    else:
-        logStep("Simulate audio input process")
-
-    # Continue with the rest of your test script
+# def test_microphone_simulation(setup):
+#     # Your existing test logic here
+#     # driver = webdriver.Chrome()
+#
+#     # Click on the Mike button
+#     logStep("Click on the Mike button")
+#     mike_button = driver.find_element(By.XPATH, "//*[@class='MuiBox-root css-1l4w6pd']")
+#     mike_button.click()
+#
+#     # Simulate audio input if not running on GitHub Actions
+#     if os.getenv('GITHUB_ACTIONS') != 'true':
+#         play_audio_through_microphone('output_audio.wav')
+#     else:
+#         logStep("Simulate audio input process")
+#
+#     # Continue with the rest of your test script
