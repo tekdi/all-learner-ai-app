@@ -4,8 +4,11 @@ import {
   Box,
   Grid,
   IconButton,
+  Tooltip,
   Typography,
 } from "../../../node_modules/@mui/material/index";
+import LogoutImg from "../../assets/images/logout.svg";
+import { styled } from "@mui/material/styles";
 import {
   RoundTick,
   SelectLanguageButton,
@@ -41,6 +44,7 @@ import panda from "../../assets/images/panda.svg";
 import cryPanda from "../../assets/images/cryPanda.svg";
 import { uniqueId } from "../../services/utilService";
 import CircularProgressOverlay from "../CommonComponent/CircularProgressOverlay";
+import { end } from "../../services/telementryService";
 
 export const LanguageModal = ({
   lang,
@@ -513,6 +517,38 @@ export const ProfileHeader = ({
 
   const displayLanguage = selectedLanguage?.name || "Select Language";
 
+  const handleLogout = () => {
+    localStorage.clear();
+    end({});
+    navigate("/Login");
+  };
+
+  const CustomIconButton = styled(IconButton)({
+    padding: "6px 20px",
+    color: "white",
+    fontSize: "20px",
+    fontWeight: 500,
+    borderRadius: "8px",
+    marginRight: "10px",
+    fontFamily: '"Lato", "sans-serif"',
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    "& .logout-img": {
+      display: "block",
+      filter: "invert(1)",
+    },
+  });
+
+  const CustomTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))({
+    [`& .MuiTooltip-tooltip`]: {
+      fontSize: "1.2rem", // Adjust the font size as needed
+    },
+  });
+
   return (
     <>
       {!!openMessageDialog && (
@@ -645,6 +681,20 @@ export const ProfileHeader = ({
               </Box>
             </Box>
           </Box>
+          {process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true" && (
+            <CustomTooltip title="Logout">
+              <Box>
+                <CustomIconButton onClick={handleLogout}>
+                  <img
+                    className="logout-img"
+                    style={{ height: 30, width: 35 }}
+                    src={LogoutImg}
+                    alt="Logout"
+                  />
+                </CustomIconButton>
+              </Box>
+            </CustomTooltip>
+          )}
         </Box>
       </Box>
     </>
