@@ -54,9 +54,12 @@ const routData = [
     requiresAuth: true,
   },
 ];
-
 // add login route for test rig
-if (process.env.REACT_APP_IS_APP_TEST_RIG === 'true') {
+
+const virtualId = localStorage.getItem('virtualId');
+const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === 'true';
+
+if (isLogin && !virtualId) {
   routData.push(
   {
     id: "route-001",

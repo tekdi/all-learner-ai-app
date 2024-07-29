@@ -111,7 +111,11 @@ const Practice = () => {
 
   useEffect(() => {
     if (voiceText === "error") {
-      alert("Sorry I couldn't hear a voice. Could you please speak again?");
+      setOpenMessageDialog({
+        message: "Sorry I couldn't hear a voice. Could you please speak again?",
+        isError: true,
+      });
+      // alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText("");
       setEnableNext(false);
     }

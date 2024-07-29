@@ -4,8 +4,11 @@ import {
   Box,
   Grid,
   IconButton,
+  Tooltip,
   Typography,
 } from "../../../node_modules/@mui/material/index";
+import LogoutImg from "../../assets/images/logout.svg";
+import { styled } from "@mui/material/styles";
 import {
   RoundTick,
   SelectLanguageButton,
@@ -16,9 +19,7 @@ import {
   setLocalData,
 } from "../../utils/constants";
 import practicebg from "../../assets/images/practice-bg.svg";
-import {
-  useNavigate,
-} from "../../../node_modules/react-router-dom/dist/index";
+import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
 import { useEffect, useState } from "react";
 import axios from "../../../node_modules/axios/index";
 // import { useDispatch } from 'react-redux';
@@ -42,6 +43,7 @@ import config from "../../utils/urlConstants.json";
 import panda from "../../assets/images/panda.svg";
 import cryPanda from "../../assets/images/cryPanda.svg";
 import { uniqueId } from "../../services/utilService";
+import { end } from "../../services/telementryService";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -169,7 +171,8 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
         </Box>
         <Box
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}
-          mt={5} mb={1}
+          mt={5}
+          mb={1}
           // mr="110px"
         >
           <Box
@@ -340,16 +343,48 @@ export const ProfileHeader = ({
 
   const handleProfileBack = () => {
     try {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
-        window.parent.postMessage({ type: 'restore-iframe-content' }, '*');
-        navigate("/")
+      if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+        window.parent.postMessage({ type: "restore-iframe-content" }, "*");
+        navigate("/");
       } else {
-        navigate("/discover-start")
+        navigate("/discover-start");
       }
     } catch (error) {
       console.error("Error posting message:", error);
     }
   };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    end({});
+    navigate("/Login");
+  };
+
+  const CustomIconButton = styled(IconButton)({
+    padding: "6px 20px",
+    color: "white",
+    fontSize: "20px",
+    fontWeight: 500,
+    borderRadius: "8px",
+    marginRight: "10px",
+    fontFamily: '"Lato", "sans-serif"',
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    "& .logout-img": {
+      display: "block",
+      filter: "invert(1)",
+    },
+  });
+
+  const CustomTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))({
+    [`& .MuiTooltip-tooltip`]: {
+      fontSize: "1.2rem", // Adjust the font size as needed
+    },
+  });
 
   return (
     <>
@@ -377,7 +412,13 @@ export const ProfileHeader = ({
           zIndex: 5555,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", width: { xs: "100%", sm: "50%" } }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: { xs: "100%", sm: "50%" },
+          }}
+        >
           {handleBack && (
             <Box ml={{ xs: "10px", sm: "94px" }}>
               <IconButton onClick={handleBack}>
@@ -388,11 +429,19 @@ export const ProfileHeader = ({
           {username && (
             <>
               <Box
-                ml={handleBack ? { xs: "10px", sm: "12px" } : { xs: "10px", sm: "94px" }}
+                ml={
+                  handleBack
+                    ? { xs: "10px", sm: "12px" }
+                    : { xs: "10px", sm: "94px" }
+                }
                 sx={{ cursor: "pointer" }}
                 onClick={handleProfileBack}
               >
-                <img src={profilePic} alt="profile-pic" style={{ height: "30px" }} />
+                <img
+                  src={profilePic}
+                  alt="profile-pic"
+                  style={{ height: "30px" }}
+                />
               </Box>
               <Box ml="12px">
                 <span
@@ -404,13 +453,13 @@ export const ProfileHeader = ({
                     lineHeight: "25px",
                   }}
                 >
-                 {username || ""}
+                  {username || ""}
                 </span>
               </Box>
             </>
           )}
         </Box>
-  
+
         <Box
           sx={{
             justifySelf: "flex-end",
@@ -440,7 +489,7 @@ export const ProfileHeader = ({
               </span>
             </Box>
           </Box> */}
-  
+
           <Box
             mr={{ xs: "10px", sm: "90px" }}
             onClick={() =>
@@ -470,6 +519,20 @@ export const ProfileHeader = ({
               </Box>
             </Box>
           </Box>
+          {process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true" && (
+            <CustomTooltip title="Logout">
+              <Box>
+                <CustomIconButton onClick={handleLogout}>
+                  <img
+                    className="logout-img"
+                    style={{ height: 30, width: 35 }}
+                    src={LogoutImg}
+                    alt="Logout"
+                  />
+                </CustomIconButton>
+              </Box>
+            </CustomTooltip>
+          )}
         </Box>
       </Box>
     </>
@@ -491,7 +554,7 @@ const Assesment = ({ discoverStart }) => {
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
   const [openLangModal, setOpenLangModal] = useState(false);
-  const [lang, setLang] = useState(getLocalData("lang") || "en"); 
+  const [lang, setLang] = useState(getLocalData("lang") || "en");
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
@@ -524,11 +587,11 @@ const Assesment = ({ discoverStart }) => {
         );
         let session_id = localStorage.getItem("sessionId");
 
-        if (!session_id){
+        if (!session_id) {
           session_id = uniqueId();
-          localStorage.setItem("sessionId", session_id)
+          localStorage.setItem("sessionId", session_id);
         }
-        
+
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
@@ -555,9 +618,9 @@ const Assesment = ({ discoverStart }) => {
         );
         let sessionId = getLocalData("sessionId");
 
-        if (!sessionId || sessionId === 'null'){
+        if (!sessionId || sessionId === "null") {
           sessionId = uniqueId();
-          localStorage.setItem("sessionId", sessionId)
+          localStorage.setItem("sessionId", sessionId);
         }
 
         if (virtualId) {
@@ -607,7 +670,7 @@ const Assesment = ({ discoverStart }) => {
     height: "100vh",
     backgroundImage: `url(${images?.[`desktopLevel${level || 1}`]})`,
     backgroundRepeat: "round",
-    backgroundSize: 'auto',
+    backgroundSize: "auto",
     position: "relative",
   };
 
@@ -675,68 +738,68 @@ const Assesment = ({ discoverStart }) => {
         </Box>
       ) : (
         <MainLayout
-        showNext={false}
-        showTimer={false}
-        cardBackground={assessmentBackground}
-        backgroundImage={practicebg}
-        {...{
-          setOpenLangModal,
-          lang,
-          points,
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            right: { xs: 20, md: 200 },
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            mt: { xs: 2, md: 5 },
+          showNext={false}
+          showTimer={false}
+          cardBackground={assessmentBackground}
+          backgroundImage={practicebg}
+          {...{
+            setOpenLangModal,
+            lang,
+            points,
           }}
         >
-          <Typography
+          <Box
             sx={{
-              color: "#322020",
-              fontWeight: 700,
-              fontSize: { xs: "24px", md: "40px" },
-              fontFamily: "Quicksand",
-              lineHeight: { xs: "36px", md: "62px" }, 
-              textAlign: "center",
+              position: "absolute",
+              right: { xs: 20, md: 200 },
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              mt: { xs: 2, md: 5 },
             }}
           >
-            {discoverStart
-              ? "Let's test your language skills"
-              : "You have good language skills"}
-          </Typography>
-          <Box>
             <Typography
               sx={{
-                color: "#1CB0F6",
-                fontWeight: 600,
-                fontSize: { xs: "20px", md: "30px" },
+                color: "#322020",
+                fontWeight: 700,
+                fontSize: { xs: "24px", md: "40px" },
                 fontFamily: "Quicksand",
-                lineHeight: { xs: "30px", md: "50px" },
+                lineHeight: { xs: "36px", md: "62px" },
                 textAlign: "center",
               }}
             >
-              {level > 0
-                ? `Take the assessment to complete Level ${level}.`
-                : "Take the assessment to discover your level"}
+              {discoverStart
+                ? "Let's test your language skills"
+                : "You have good language skills"}
             </Typography>
+            <Box>
+              <Typography
+                sx={{
+                  color: "#1CB0F6",
+                  fontWeight: 600,
+                  fontSize: { xs: "20px", md: "30px" },
+                  fontFamily: "Quicksand",
+                  lineHeight: { xs: "30px", md: "50px" },
+                  textAlign: "center",
+                }}
+              >
+                {level > 0
+                  ? `Take the assessment to complete Level ${level}.`
+                  : "Take the assessment to discover your level"}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                cursor: "pointer",
+                mt: { xs: 1, md: 2 },
+              }}
+              onClick={handleRedirect}
+            >
+              <StartAssessmentButton />
+            </Box>
           </Box>
-          <Box
-            sx={{
-              cursor: "pointer",
-              mt: { xs: 1, md: 2 },
-            }}
-            onClick={handleRedirect}
-          >
-            <StartAssessmentButton />
-          </Box>
-        </Box>
-      </MainLayout>
+        </MainLayout>
       )}
     </>
   );

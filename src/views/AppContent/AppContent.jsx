@@ -1,14 +1,13 @@
 import React, { useEffect, Fragment } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
-import { useSelector } from "react-redux";
 
 const PrivateRoute = (props) => {
-  const { virtualId } = useSelector((state) => state.user);
-  // const navigate = useNavigate();
+  const virtualId = localStorage.getItem('virtualId');
+  const navigate = useNavigate();
   useEffect(() => {
     if (!virtualId && props.requiresAuth) {
-      // navigate("/");
+      navigate("/");
     }
   }, [virtualId]);
 
