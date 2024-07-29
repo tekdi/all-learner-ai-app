@@ -907,6 +907,9 @@ const Practice = () => {
         matchedChar: !isShowCase && questions[currentQuestion]?.matchedChar,
         loading,
         setOpenMessageDialog,
+        isNextButtonCalled,
+        setIsNextButtonCalled,
+        setEnableNext
       }} page={page} setPage={setPage} />;
     }
   };
