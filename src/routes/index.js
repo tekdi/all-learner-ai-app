@@ -56,38 +56,38 @@ const routData = [
 ];
 // add login route for test rig
 
-const virtualId = localStorage.getItem('virtualId');
-const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === 'true';
+const virtualId = localStorage.getItem("virtualId");
+const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true";
 
 if (isLogin && !virtualId) {
   routData.push(
-  {
-    id: "route-001",
-    path: "/",
-    component: reviews.LoginPage,
-    requiresAuth: true,
-  },
-  {
-    id: "route-000",
-    path: "*",
-    component: reviews.LoginPage,
-    requiresAuth: false,
-  },
+    {
+      id: "route-001",
+      path: "/",
+      component: reviews.LoginPage,
+      requiresAuth: true,
+    },
+    {
+      id: "route-000",
+      path: "*",
+      component: reviews.LoginPage,
+      requiresAuth: false,
+    }
   );
-}else {
+} else {
   routData.push(
     {
-    id: "route-001",
-    path: "/",
-    component: reviews.DiscoverStart,
-    requiresAuth: false,
-  },
-  {
-    id: "route-000",
-    path: "*",
-    component: reviews.DiscoverStart,
-    requiresAuth: false,
-  },
+      id: "route-001",
+      path: "/",
+      component: reviews.DiscoverStart,
+      requiresAuth: false,
+    },
+    {
+      id: "route-000",
+      path: "*",
+      component: reviews.DiscoverStart,
+      requiresAuth: false,
+    }
   );
 }
 

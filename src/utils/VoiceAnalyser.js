@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, CircularProgress } from "../../node_modules/@mui/material/index";
 import axios from "../../node_modules/axios/index";
 import calcCER from "../../node_modules/character-error-rate/index";
@@ -27,10 +27,15 @@ import {
   compareArrays,
   getLocalData,
   replaceAll,
+  rnnoiseModelPath,
 } from "./constants";
 import config from "./urlConstants.json";
 import { filterBadWords } from "./Badwords";
-// import S3Client from '../config/awsS3';
+import { fetchFile } from "@ffmpeg/ffmpeg";
+import useFFmpeg from "./useFFmpeg";
+import * as fuzz from "fuzzball";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import S3Client from '../config/awsS3';
 /* eslint-disable */
 
 const AudioPath = {
@@ -60,6 +65,7 @@ function VoiceAnalyser(props) {
   const [loader, setLoader] = useState(false);
   const [pauseAudio, setPauseAudio] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState("");
+  const [recordedPauseCount, setRecordedPauseCount] = useState(0);
   const [recordedAudioBase64, setRecordedAudioBase64] = useState("");
   const [audioPermission, setAudioPermission] = useState(null);
   const [apiResponse, setApiResponse] = useState("");
@@ -71,6 +77,222 @@ function VoiceAnalyser(props) {
   const [isAudioPreprocessing, setIsAudioPreprocessing] = useState(
     process.env.REACT_APP_IS_AUDIOPREPROCESSING === "true"
   );
+  const [nonDenoisedText, setNonDenoisedText] = useState("");
+  const [denoisedText, setDenoisedText] = useState("");
+  const [isOfflineModel, setIsOfflineModel] = useState(
+    localStorage.getItem("isOfflineModel") === "true"
+  );
+
+  const { ffmpeg, loading } = useFFmpeg();
+
+  const handleProcess = async (recordedBlob) => {
+    if (loading) {
+      console.log("FFmpeg is still loading...");
+      return;
+    }
+
+    try {
+      await ffmpeg.FS(
+        "writeFile",
+        "recorded.webm",
+        await fetchFile(recordedBlob)
+      );
+
+      let nondenoiseddata;
+      try {
+        nondenoiseddata = ffmpeg.FS("readFile", "recorded.webm");
+      } catch (error) {
+        console.error("Error reading recorded file:", error);
+        return;
+      }
+      const nondenoisedBlob = new Blob([nondenoiseddata.buffer], {
+        type: "audio/webm",
+      });
+
+      if (callUpdateLearner) {
+        try {
+          let nonDenoisedRes = await getResponseText(nondenoisedBlob);
+          setNonDenoisedText(nonDenoisedRes);
+          console.log("non denoised output -- ", nonDenoisedRes);
+          console.log(fuzz.ratio(props.originalText, nonDenoisedRes));
+        } catch (error) {
+          console.error("Error getting non denoised text:", error);
+        }
+      }
+
+      await ffmpeg.FS(
+        "writeFile",
+        "cb.rnnn",
+        await fetchFile(rnnoiseModelPath)
+      );
+
+      await ffmpeg.run(
+        "-i",
+        "recorded.webm",
+        "-af",
+        "arnndn=m=cb.rnnn",
+        "output.wav"
+      );
+
+      let data;
+      try {
+        data = ffmpeg.FS("readFile", "output.wav");
+      } catch (error) {
+        console.error("Error reading output file:", error);
+        return;
+      }
+      const denoisedBlob = new Blob([data.buffer], { type: "audio/wav" });
+      const newDenoisedUrl = URL.createObjectURL(denoisedBlob);
+
+      if (callUpdateLearner) {
+        try {
+          let denoisedRes = await getResponseText(denoisedBlob);
+          setDenoisedText(denoisedRes);
+          console.log("denoised output -- ", denoisedRes);
+          console.log(fuzz.ratio(props.originalText, denoisedRes));
+        } catch (error) {
+          console.error("Error getting denoised text:", error);
+        }
+      }
+
+      setRecordedAudio((prevUrl) => {
+        if (prevUrl) {
+          URL.revokeObjectURL(prevUrl); // Clean up the previous URL
+        }
+        return newDenoisedUrl;
+      });
+
+      console.log("Denoised URL:", newDenoisedUrl);
+    } catch (error) {
+      console.error("Error processing audio:", error);
+    }
+    setLoader(false);
+  };
+
+  const getResponseText = async (audioBlob) => {
+    let denoised_response_text = "";
+    let isWhisperRunning = false;
+    let audio0 = null;
+    let context = new AudioContext({
+      sampleRate: 16000,
+      channelCount: 1,
+      echoCancellation: false,
+      autoGainControl: true,
+      noiseSuppression: true,
+    });
+
+    window.OfflineAudioContext =
+      window.OfflineAudioContext || window.webkitOfflineAudioContext;
+
+    window.whisperModule.set_status("");
+
+    const blobToArrayBuffer = async (blob) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(blob);
+      });
+    };
+
+    let audioBuf = await blobToArrayBuffer(audioBlob);
+
+    let audioBuffer;
+    try {
+      audioBuffer = await context.decodeAudioData(audioBuf);
+    } catch (error) {
+      console.error("Error decoding audio data:", error);
+      return "";
+    }
+
+    var offlineContext = new OfflineAudioContext(
+      audioBuffer.numberOfChannels,
+      audioBuffer.length,
+      audioBuffer.sampleRate
+    );
+    var source = offlineContext.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(offlineContext.destination);
+    source.start(0);
+
+    let renderedBuffer = await offlineContext.startRendering();
+    let audio = renderedBuffer.getChannelData(0);
+    let audioAll = new Float32Array(
+      audio0 == null ? audio.length : audio0.length + audio.length
+    );
+
+    if (audio0 != null) {
+      audioAll.set(audio0, 0);
+    }
+    audioAll.set(audio, audio0 == null ? 0 : audio0.length);
+
+    window.whisperModule.set_audio(1, audioAll);
+
+    let whisperStatus = "";
+
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    let checkWhisperStatus = true;
+
+    while (checkWhisperStatus) {
+      whisperStatus = window.whisperModule.get_status();
+      if (whisperStatus === "running whisper ...") {
+        isWhisperRunning = true;
+      }
+      if (isWhisperRunning && whisperStatus === "waiting for audio ...") {
+        denoised_response_text = window.whisperModule.get_transcribed();
+        checkWhisperStatus = false;
+        break;
+      }
+      await delay(100);
+    }
+
+    return denoised_response_text;
+  };
+
+  useEffect(() => {
+    const processAudio = async () => {
+      if (loading || !recordedAudio) {
+        console.log("FFmpeg is still loading or no audio recorded...");
+        return;
+      }
+
+      try {
+        await ffmpeg.FS(
+          "writeFile",
+          "input.wav",
+          await fetchFile(recordedAudio)
+        );
+
+        let silenceStartCount = 0;
+        ffmpeg.setLogger(({ type, message }) => {
+          if (type === "fferr" && message.includes("silence_start")) {
+            silenceStartCount += 1;
+          }
+        });
+
+        await ffmpeg.run(
+          "-i",
+          "input.wav",
+          "-af",
+          "silencedetect=noise=-40dB:d=0.5",
+          "-f",
+          "null",
+          "/dev/null"
+        );
+
+        setRecordedPauseCount(silenceStartCount);
+        console.log("silenceStartCount", silenceStartCount);
+      } catch (error) {
+        console.error("Error processing audio for pause count:", error);
+      } finally {
+        // Clean up
+        ffmpeg.FS("unlink", "input.wav");
+      }
+    };
+
+    processAudio();
+  }, [recordedAudio, loading, ffmpeg]);
 
   const initiateValues = async () => {
     const currIndex = (await localStorage.getItem("index")) || 1;
@@ -169,7 +391,7 @@ function VoiceAnalyser(props) {
       });
     });
   }
-
+  
   useEffect(() => {
     if (recordedAudio !== "") {
       // setLoader(true);
@@ -193,19 +415,19 @@ function VoiceAnalyser(props) {
     }
   }, [recordedAudio]);
 
-  useEffect(()=>{
-    if(props.isNextButtonCalled){
+  useEffect(() => {
+    if (props.isNextButtonCalled) {
       if (recordedAudioBase64 !== "") {
         const lang = getLocalData("lang") || "ta";
         fetchASROutput(lang, recordedAudioBase64);
-        setLoader(true)
+        setLoader(true);
       }
     }
-      },[props.isNextButtonCalled])
+  }, [props.isNextButtonCalled]);
 
   useEffect(() => {
     if (recordedAudioBase64 !== "") {
-      if( props.setIsNextButtonCalled){
+      if (props.setIsNextButtonCalled) {
         props.setIsNextButtonCalled(false);
       }
     }
@@ -262,16 +484,32 @@ function VoiceAnalyser(props) {
       const { originalText, contentType, contentId, currentLine } = props;
       const responseStartTime = new Date().getTime();
       let responseText = "";
-      let profanityWord = ""
+      let profanityWord = "";
       let newThresholdPercentage = 0;
       let data = {};
+
+      let response_text = "";
+      let mode = isOfflineModel ? "offline" : "online";
+      let pause_count = recordedPauseCount;
+
+      if (
+        fuzz.ratio(originalText, nonDenoisedText) >=
+        fuzz.ratio(originalText, denoisedText)
+      ) {
+        response_text = nonDenoisedText;
+      } else {
+        response_text = denoisedText;
+      }
 
       if (callUpdateLearner) {
         const { data: updateLearnerData } = await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
           {
             original_text: originalText,
-            audio: base64Data,
+            response_text: response_text,
+            mode: mode,
+            pause_count: pause_count,
+            audio: mode === "offline" ? "" : base64Data,
             user_id: virtualId,
             session_id: sessionId,
             language: lang,
@@ -283,16 +521,21 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
-         profanityWord = await filterBadWords(data.responseText);
-        if (profanityWord !== data.responseText) {
+        profanityWord = await filterBadWords(data.responseText);
+        if (profanityWord.includes("**")) {
           props?.setOpenMessageDialog({
             message: "Please avoid using inappropriate language.",
             isError: true,
           });
-        } 
+        }
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
-        if (contentType.toLowerCase() !== 'word') {
-          handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency, lang);
+        if (contentType.toLowerCase() !== "word") {
+          handlePercentageForLife(
+            newThresholdPercentage,
+            contentType,
+            data?.subsessionFluency,
+            lang
+          );
         }
       }
 
@@ -362,22 +605,24 @@ function VoiceAnalyser(props) {
 
       // TODO: Remove false when REACT_APP_AWS_S3_BUCKET_NAME and keys added
       var audioFileName = "";
-      if (process.env.REACT_APP_CAPTURE_AUDIO === "true" && false) {
+      if (process.env.REACT_APP_CAPTURE_AUDIO === "true") {
         let getContentId = currentLine;
-        audioFileName = `${process.env.REACT_APP_CHANNEL
-          }/${sessionId}-${Date.now()}-${getContentId}.wav`;
-
-        const command = new PutObjectCommand({
-          Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
-          Key: audioFileName,
-          Body: Uint8Array.from(window.atob(base64Data), (c) =>
-            c.charCodeAt(0)
-          ),
-          ContentType: "audio/wav",
-        });
-        try {
-          const response = await S3Client.send(command);
-        } catch (err) { }
+        audioFileName = `${
+          process.env.REACT_APP_CHANNEL
+        }/${sessionId}-${Date.now()}-${getContentId}.wav`;
+const command = new PutObjectCommand({
+  Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
+  Key: audioFileName,
+  Body: Uint8Array.from(window.atob(base64Data), (c) =>
+  c.charCodeAt(0)
+  ),
+  ContentType: "audio/wav",
+});
+try {
+  const response = await S3Client.send(command);
+        } catch (err) {
+          console.log(err);
+        }
       }
 
       response(
@@ -404,23 +649,23 @@ function VoiceAnalyser(props) {
       );
 
       setApiResponse(callUpdateLearner ? data.status : "success");
-      if(props.handleNext){
+      if (props.handleNext) {
         props.handleNext();
-        if(temp_audio !== null){
+        if (temp_audio !== null) {
           temp_audio.pause();
           setPauseAudio(false);
         }
       }
       setLoader(false);
-      if( props.setIsNextButtonCalled){ 
+      if (props.setIsNextButtonCalled) {
         props.setIsNextButtonCalled(false);
       }
     } catch (error) {
       setLoader(false);
-      if(props.handleNext){
+      if (props.handleNext) {
         props.handleNext();
       }
-      if( props.setIsNextButtonCalled){ 
+      if (props.setIsNextButtonCalled) {
         props.setIsNextButtonCalled(false);
       }
       setRecordedAudioBase64("");
@@ -429,92 +674,95 @@ function VoiceAnalyser(props) {
     }
   };
 
-  const handlePercentageForLife = (percentage, contentType, fluencyScore, language) => {
+  const handlePercentageForLife = (
+    percentage,
+    contentType,
+    fluencyScore,
+    language
+  ) => {
     try {
-        if (livesData) {
-          let totalSyllables = livesData.totalTargets;
-          if (language === "en") {
-             if (totalSyllables > 50) {
-              totalSyllables = 50;
-             }
+      if (livesData) {
+        let totalSyllables = livesData.totalTargets;
+        if (language === "en") {
+          if (totalSyllables > 50) {
+            totalSyllables = 50;
           }
-            // Calculate the current percentage based on total targets.
-            percentage = Math.round((percentage / totalSyllables) * 100);
-
-            // Define the total number of lives and adjust the threshold based on syllables.
-            const totalLives = 5;
-            let threshold = 30; // Default threshold
-
-            // Adjust the threshold based on total syllables.
-            if (totalSyllables <= 100) threshold = 30;
-            else if (totalSyllables > 100 && totalSyllables <= 150) threshold = 25;
-            else if (totalSyllables > 150 && totalSyllables <= 175) threshold = 20;
-            else if (totalSyllables > 175 && totalSyllables <= 250) threshold = 15;
-            else if (totalSyllables > 250 && totalSyllables <= 500) threshold = 10;
-            else if (totalSyllables > 500) threshold = 5;
-
-            // Calculate lives lost based on percentage.
-            let livesLost = Math.floor(percentage / (threshold / totalLives));
-
-            // Check fluency criteria and adjust lives lost accordingly.
-            let meetsFluencyCriteria;
-            switch (contentType.toLowerCase()) {
-                case 'word':
-                    meetsFluencyCriteria = fluencyScore < 2;
-                    break;
-                case 'sentence':
-                    meetsFluencyCriteria = fluencyScore < 6;
-                    break;
-                case 'paragraph':
-                    meetsFluencyCriteria = fluencyScore < 10;
-                    break;
-                default:
-                    meetsFluencyCriteria = true; // Assume criteria met if not specified.
-            }
-
-            // If fluency criteria are not met, reduce an additional life, but ensure it doesn't exceed the total lives.
-            if (!meetsFluencyCriteria && livesLost < totalLives) {
-                livesLost = Math.min(livesLost + 1, totalLives);
-            }
-
-            // Determine the number of red and black lives to show.
-            const redLivesToShow = totalLives - livesLost;
-            let blackLivesToShow = 5;
-            if(livesLost <= 5){
-               blackLivesToShow = livesLost;
-            }
-
-            // Prepare the new lives data.
-            let newLivesData = {
-                ...livesData,
-                blackLivesToShow,
-                redLivesToShow,
-                meetsFluencyCriteria: meetsFluencyCriteria,
-            };
-
-            // Play audio based on the change in lives.
-            const HeartGaain =
-              livesData.redLivesToShow === undefined
-                ? 5 - newLivesData.redLivesToShow
-                : livesData.redLivesToShow - newLivesData.redLivesToShow;
-            let isLiveLost;
-            if (HeartGaain > 0) {
-              isLiveLost = true;
-            } else {
-              isLiveLost = false;
-            }
-            const audio = new Audio(isLiveLost ? livesCut : livesAdd);
-            audio.play();
-
-            // Update the state or data structure with the new lives data.
-            setLivesData(newLivesData);
         }
+        // Calculate the current percentage based on total targets.
+        percentage = Math.round((percentage / totalSyllables) * 100);
+
+        // Define the total number of lives and adjust the threshold based on syllables.
+        const totalLives = 5;
+        let threshold = 30; // Default threshold
+
+        // Adjust the threshold based on total syllables.
+        if (totalSyllables <= 100) threshold = 30;
+        else if (totalSyllables > 100 && totalSyllables <= 150) threshold = 25;
+        else if (totalSyllables > 150 && totalSyllables <= 175) threshold = 20;
+        else if (totalSyllables > 175 && totalSyllables <= 250) threshold = 15;
+        else if (totalSyllables > 250 && totalSyllables <= 500) threshold = 10;
+        else if (totalSyllables > 500) threshold = 5;
+
+        // Calculate lives lost based on percentage.
+        let livesLost = Math.floor(percentage / (threshold / totalLives));
+
+        // Check fluency criteria and adjust lives lost accordingly.
+        let meetsFluencyCriteria;
+        switch (contentType.toLowerCase()) {
+          case "word":
+            meetsFluencyCriteria = fluencyScore < 2;
+            break;
+          case "sentence":
+            meetsFluencyCriteria = fluencyScore < 6;
+            break;
+          case "paragraph":
+            meetsFluencyCriteria = fluencyScore < 10;
+            break;
+          default:
+            meetsFluencyCriteria = true; // Assume criteria met if not specified.
+        }
+
+        // If fluency criteria are not met, reduce an additional life, but ensure it doesn't exceed the total lives.
+        if (!meetsFluencyCriteria && livesLost < totalLives) {
+          livesLost = Math.min(livesLost + 1, totalLives);
+        }
+
+        // Determine the number of red and black lives to show.
+        const redLivesToShow = totalLives - livesLost;
+        let blackLivesToShow = 5;
+        if (livesLost <= 5) {
+          blackLivesToShow = livesLost;
+        }
+
+        // Prepare the new lives data.
+        let newLivesData = {
+          ...livesData,
+          blackLivesToShow,
+          redLivesToShow,
+          meetsFluencyCriteria: meetsFluencyCriteria,
+        };
+
+        // Play audio based on the change in lives.
+        const HeartGaain =
+          livesData.redLivesToShow === undefined
+            ? 5 - newLivesData.redLivesToShow
+            : livesData.redLivesToShow - newLivesData.redLivesToShow;
+        let isLiveLost;
+        if (HeartGaain > 0) {
+          isLiveLost = true;
+        } else {
+          isLiveLost = false;
+        }
+        const audio = new Audio(isLiveLost ? livesCut : livesAdd);
+        audio.play();
+
+        // Update the state or data structure with the new lives data.
+        setLivesData(newLivesData);
+      }
     } catch (e) {
-        console.log("error", e);
+      console.log("error", e);
     }
-};
-
-
+  };
 
   // const getpermision = () => {
   //   navigator.getUserMedia =
@@ -573,6 +821,7 @@ function VoiceAnalyser(props) {
                     setEnableNext={props.setEnableNext}
                     showOnlyListen={props.showOnlyListen}
                     setOpenMessageDialog={props.setOpenMessageDialog}
+                    handleProcess={handleProcess}
                   />
                   {/* <RecordVoiceVisualizer /> */}
                 </>

@@ -3356,12 +3356,12 @@ export const levelGetContent = {
     {
       title: "P1",
       criteria: "word",
-      template: "simple"
+      template: "simple",
     },
     {
       title: "P2",
       criteria: "word",
-      template: "simple"
+      template: "simple",
     },
     { title: "P3", criteria: "sentence", template: "simple" },
     { title: "P4", criteria: "sentence", template: "simple" },
@@ -3477,10 +3477,10 @@ export function callConfettiSnow() {
     }
 
     // since particles fall down, start a bit higher than random
-     timeLeft = animationEnd - Date.now();
+    timeLeft = animationEnd - Date.now();
     var ticks = Math.max(200, 500 * (timeLeft / duration));
     var skew;
-     skew = Math.max(0.8, skew - 0.001);
+    skew = Math.max(0.8, skew - 0.001);
 
     confetti({
       particleCount: 1,
@@ -3540,21 +3540,29 @@ export const levelConfig = {
   9: { color: "#00C7E2" },
 };
 
- const AllLanguages = [
-  { name: "தமிழ்", lang: "ta", symbol: "இ" },
-  { name: "English", lang: "en", symbol: "A" },
-  { name: "हिंदी", lang: "hi", symbol: "क" },
-  { name: "ಕನ್ನಡ", lang: "kn", symbol: "ಕ" } ,
-  { name: "తెలుగు", lang: "te", symbol: "ఈ" } ,
+const AllLanguages = [
+  { name: "தமிழ்", lang: "ta", symbol: "இ", offline: false },
+  { name: "English", lang: "en", symbol: "A", offline: false },
+  { name: "English-Offline", lang: "en", symbol: "A", offline: true },
+  { name: "हिंदी", lang: "hi", symbol: "क", offline: false },
+  { name: "ಕನ್ನಡ", lang: "kn", symbol: "ಕ", offline: false },
+  { name: "తెలుగు", lang: "te", symbol: "ఈ", offline: false },
 ];
 
 const appLanguages = process.env.REACT_APP_LANGUAGES
   ? JSON.parse(process.env.REACT_APP_LANGUAGES)
   : [];
 
-export const languages = AllLanguages.filter(lang =>
-    appLanguages.includes(lang.lang)
-);
+const offlineLanguages = process.env.REACT_APP_ASR_OFFLINE_LANGUAGUAGES
+  ? JSON.parse(process.env.REACT_APP_ASR_OFFLINE_LANGUAGUAGES)
+  : [];
+
+export const languages = AllLanguages.filter((lang) => {
+  return (
+    (appLanguages.includes(lang.lang) && !lang.offline) ||
+    (offlineLanguages.includes(lang.lang) && lang.offline)
+  );
+});
 
 export const randomizeArray = (arr) => {
   let wordsArr = [...arr];
@@ -3566,3 +3574,5 @@ export const randomizeArray = (arr) => {
   }
   return wordsArr;
 };
+
+export const rnnoiseModelPath = "models/cb.rnnn";

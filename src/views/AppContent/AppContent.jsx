@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
 
 const PrivateRoute = (props) => {
-  const virtualId = localStorage.getItem('virtualId');
+  const virtualId = localStorage.getItem("virtualId");
   const navigate = useNavigate();
   useEffect(() => {
     if (!virtualId && props.requiresAuth) {
