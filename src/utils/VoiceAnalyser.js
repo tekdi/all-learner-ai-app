@@ -112,6 +112,7 @@ function VoiceAnalyser(props) {
       if (callUpdateLearner) {
         try {
           let nonDenoisedRes = await getResponseText(nondenoisedBlob);
+          nonDenoisedRes = await filterBadWords(nonDenoisedRes);
           setNonDenoisedText(nonDenoisedRes);
           console.log("non denoised output -- ", nonDenoisedRes);
           console.log(fuzz.ratio(props.originalText, nonDenoisedRes));
@@ -147,6 +148,7 @@ function VoiceAnalyser(props) {
       if (callUpdateLearner) {
         try {
           let denoisedRes = await getResponseText(denoisedBlob);
+          denoisedRes = await filterBadWords(denoisedRes);
           setDenoisedText(denoisedRes);
           console.log("denoised output -- ", denoisedRes);
           console.log(fuzz.ratio(props.originalText, denoisedRes));
