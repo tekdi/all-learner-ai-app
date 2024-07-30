@@ -965,7 +965,7 @@ const MainLayout = (props) => {
                             }}
                           >
                             {!gameOverData ? "Start Game ➜" : "Practice ➜"}
-                          </span>
+                          </Typography>
                           {/* <NextButton /> */}
                         </Box>
                       </Box>

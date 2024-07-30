@@ -66,10 +66,6 @@ const Practice = () => {
 
   };
 
-  const isFirefox = () => {
-    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
-  };
-
   useEffect(() => {
     if (startShowCase) {
       setLivesData({ ...livesData, lives: LIVES });
@@ -88,19 +84,14 @@ const Practice = () => {
       Number(currentPracticeStep + 1) > 0 &&
       currentQuestion === 0 &&
       !fromBack
-      // !state?.refresh
     ) {
       setDisableScreen(true);
       callConfettiAndPlay();
 
       setTimeout(() => {
-        // alert(
-        //   `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-        // );
         setOpenMessageDialog({
           message: `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `,
         });
-        // setDisableScreen(false);
       }, 1200);
     }
   }, [currentQuestion]);
@@ -117,13 +108,10 @@ const Practice = () => {
         message: "Sorry I couldn't hear a voice. Could you please speak again?",
         isError: true,
       });
-      // alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText("");
       setEnableNext(false);
     }
     if (voiceText == "success") {
-      // setEnableNext(true);
-      // go_to_result(voiceText);
       setVoiceText("");
     }
     //eslint-disable-next-line
@@ -217,7 +205,6 @@ const Practice = () => {
         currentQuestion === questions.length - 1 || isGameOver
           ? currentPracticeStep + 1
           : currentPracticeStep;
-      newPracticeStep = Number(newPracticeStep);
       let newQuestionIndex =
         currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
@@ -287,7 +274,7 @@ const Practice = () => {
 
         let quesArr = [];
 
-        if (newPracticeStep === 10) {
+        if (newPracticeStep == 10) {
           newPracticeStep = 0;
           currentPracticeProgress = 0;
         }
@@ -309,7 +296,7 @@ const Practice = () => {
           }
         );
 
-        if (newPracticeStep === 0 || newPracticeStep === 5 || isGameOver) {
+        if (newPracticeStep == 0 || newPracticeStep == 5 || isGameOver) {
           gameOver();
           return;
           // navigate("/assesment-end");
@@ -375,11 +362,6 @@ const Practice = () => {
       temp_audio.addEventListener("ended", () => setAudioPlayFlag(true));
     }
   };
-
-  // const playAudio = () => {
-  //   // const myAudio = localStorage.getItem("recordedAudio");
-  //   set_temp_audio(new Audio(recordedAudio));
-  // };
 
   useEffect(() => {
     learnAudio();
@@ -506,12 +488,6 @@ const Practice = () => {
     fetchDetails();
   }, []);
 
-  // useEffect(() => {
-  //   if (state?.refresh) {
-  //     setGameOverData(undefined);
-  //     fetchDetails();
-  //   }
-  // }, [state]);
 
   const handleBack = async () => {
     if (progressData.currentPracticeStep > 0) {
@@ -574,11 +550,7 @@ const Practice = () => {
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
-        navigate("/");
-      }else {
-        navigate("/discover-start")
-      }
+      navigate(process.env.REACT_APP_IS_APP_IFRAME === 'true' ? '/' : '/discover-start');
     }
   };
 
@@ -735,7 +707,6 @@ const Practice = () => {
             storyLine,
             handleNext,
             type: questions[currentQuestion]?.contentType,
-            // image: elephant,
             enableNext,
             showTimer: false,
             points,
@@ -789,7 +760,6 @@ const Practice = () => {
             setVoiceAnimate,
             storyLine,
             handleNext,
-            // image: elephant,
             enableNext,
             showTimer: false,
             points,
@@ -835,7 +805,6 @@ const Practice = () => {
             storyLine,
             handleNext,
             type: "word",
-            // image: elephant,
             enableNext,
             showTimer: false,
             points,
