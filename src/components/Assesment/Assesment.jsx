@@ -7,7 +7,6 @@ import {
   Typography,
 } from "../../../node_modules/@mui/material/index";
 import {
-  BASE_API,
   RoundTick,
   SelectLanguageButton,
   StartAssessmentButton,
@@ -37,10 +36,14 @@ import desktopLevel6 from "../../assets/images/desktopLevel6.png";
 import desktopLevel7 from "../../assets/images/desktopLevel7.png";
 import desktopLevel8 from "../../assets/images/desktopLevel8.png";
 import desktopLevel9 from "../../assets/images/desktopLevel9.png";
-import profilePic from "../../assets/images/profile_url.svg";
+import profilePic from "../../assets/images/profile_url.png";
 import textureImage from "../../assets/images/textureImage.png";
-import scoreView from "../../assets/images/scoreView.svg";
-import back from "../../assets/images/back-arrow.svg";
+import scoreView from "../../assets/images/scoreView.png";
+import back from "../../assets/images/back-arrow.png";
+import { jwtDecode } from "jwt-decode";
+import config from "../../utils/urlConstants.json";
+import panda from "../../assets/images/panda.svg";
+import cryPanda from "../../assets/images/cryPanda.svg";
 
 export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   const [selectedLang, setSelectedLang] = useState(lang);
@@ -86,7 +89,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
           </span>
         </Box>
         <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-          <Grid container justifyContent={"flex-start"} sx={{ width: "80%" }}>
+          <Grid container justifyContent={"space-evenly"} sx={{ width: "80%" }}>
             {languages.map((elem) => {
               const isSelectedLang = elem.lang == selectedLang;
               return (
@@ -167,9 +170,9 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
           </Grid>
         </Box>
         <Box
-          sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+          sx={{ width: "100%", display: "flex", justifyContent: "center" }}
           mt="60px"
-          mr="110px"
+          // mr="110px"
         >
           <Box
             onClick={() => {
@@ -194,6 +197,8 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
                 fontWeight: 600,
                 fontSize: "20px",
                 fontFamily: "Quicksand",
+                display: "flex",
+                alignItems: "center",
               }}
             >
               {"Confirm"}
@@ -205,10 +210,126 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
   );
 };
 
+export const MessageDialog = ({
+  message,
+  closeDialog,
+  isError,
+  dontShowHeader,
+}) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100vw",
+        height: "100vh",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        background: "rgba(0, 0, 0, 0.5)",
+        zIndex: 9999,
+      }}
+    >
+      <Box
+        sx={{
+          width: "600px",
+          minHeight: "424px",
+          borderRadius: "20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          backgroundImage: `url(${textureImage})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "round",
+          boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
+          backdropFilter: "blur(25px)",
+          position: "relative",
+        }}
+      >
+        <Box sx={{ position: "absolute", left: 10, bottom: 0 }}>
+          {isError ? (
+            <img src={cryPanda} alt="cryPanda" />
+          ) : (
+            <img src={panda} alt="panda" />
+          )}
+        </Box>
+
+        <Box mt="32px">
+          {!dontShowHeader && (
+            <Typography
+              className={isError ? "failureHeader" : "successHeader"}
+              sx={{
+                mt: 3,
+                textAlign: "center",
+              }}
+            >
+              {isError ? "Oops..." : "Hurray!!!"}
+            </Typography>
+          )}
+        </Box>
+
+        <Box
+          mt="28px"
+          display={"flex"}
+          flexWrap={"wrap"}
+          padding={"0px 10px 0px 10px"}
+          width={"80%"}
+        >
+          <span
+            style={{
+              color: "#000000",
+              fontWeight: 700,
+              fontSize: "40px",
+              fontFamily: "Quicksand",
+              lineHeight: "62px",
+              textAlign: "center",
+            }}
+          >
+            {message || ``}
+          </span>
+        </Box>
+        <Box
+          sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+          mt="60px"
+          // mr="110px"
+          mb={2}
+        >
+          <Box
+            onClick={() => {
+              closeDialog();
+            }}
+            sx={{
+              cursor: "pointer",
+              background: "#6DAF19",
+              minWidth: "173px",
+              height: "55px",
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "0px 24px 0px 20px",
+            }}
+          >
+            <span
+              style={{
+                color: "#FFFFFF",
+                fontWeight: 600,
+                fontSize: "20px",
+                fontFamily: "Quicksand",
+              }}
+            >
+              {"Continue"}
+            </span>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
 export const ProfileHeader = ({
-  setOpenLangModal = () => {
-    alert("go to homescreen to change language");
-  },
+  setOpenLangModal,
   lang,
   profileName,
   points = 0,
@@ -217,8 +338,31 @@ export const ProfileHeader = ({
   const language = lang || getLocalData("lang");
   const username = profileName || getLocalData("profileName");
   const navigate = useNavigate();
+  const [openMessageDialog, setOpenMessageDialog] = useState("");
+
+  const handleProfileBack = () => {
+    try {
+      if (window !== window.parent) {
+        window.parent.postMessage({ type: 'restore-iframe-content' }, '*');
+      }
+      navigate("/")
+    } catch (error) {
+      console.error("Error posting message:", error);
+    }
+  };
+
   return (
     <>
+      {!!openMessageDialog && (
+        <MessageDialog
+          message={openMessageDialog.message}
+          closeDialog={() => {
+            setOpenMessageDialog("");
+          }}
+          isError={openMessageDialog.isError}
+          dontShowHeader={openMessageDialog.dontShowHeader}
+        />
+      )}
       <Box
         sx={{
           position: "absolute",
@@ -246,7 +390,7 @@ export const ProfileHeader = ({
               <Box
                 ml={handleBack ? "12px" : "94px"}
                 sx={{ cursor: "pointer" }}
-                onClick={() => navigate("/")}
+                onClick={handleProfileBack}
               >
                 <img src={profilePic}></img>
               </Box>
@@ -276,7 +420,8 @@ export const ProfileHeader = ({
             alignItems: "center",
           }}
         >
-          <Box sx={{ position: "relative" }} mr="10px">
+          {/* <Box sx={{ position: "relative" }} mr="10px">
+
             <img
               src={scoreView}
               alt="scoreView"
@@ -295,9 +440,19 @@ export const ProfileHeader = ({
                 {points}
               </span>
             </Box>
-          </Box>
+          </Box> */}
 
-          <Box mr={"90px"} onClick={() => setOpenLangModal(true)}>
+          <Box
+            mr={"90px"}
+            onClick={() =>
+              setOpenLangModal
+                ? setOpenLangModal(true)
+                : setOpenMessageDialog({
+                    message: "go to homescreen to change language",
+                    dontShowHeader: true,
+                  })
+            }
+          >
             <Box sx={{ position: "relative", cursor: "pointer" }}>
               <SelectLanguageButton />
               <Box sx={{ position: "absolute", top: 9, left: 20 }}>
@@ -323,28 +478,38 @@ export const ProfileHeader = ({
 };
 
 const Assesment = ({ discoverStart }) => {
+  let username;
+  if (localStorage.getItem("token") !== null) {
+    let jwtToken = localStorage.getItem("token");
+    var userDetails = jwtDecode(jwtToken);
+    username = userDetails.student_name;
+    setLocalData("profileName", username);
+  }
   const [searchParams, setSearchParams] = useSearchParams();
-  let username = searchParams.get("username");
   const [profileName, setProfileName] = useState(username);
+  const [openMessageDialog, setOpenMessageDialog] = useState("");
   // let lang = searchParams.get("lang") || "ta";
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
   const [openLangModal, setOpenLangModal] = useState(false);
-  const [lang, setLang] = useState(getLocalData("lang") || "ta");
+  const [lang, setLang] = useState(getLocalData("lang") || "en"); 
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
     // const level = getLocalData('userLevel');
     // setLevel(level);
     setLocalData("lang", lang);
-    if (discoverStart && username) {
+    dispatch(setVirtualId(localStorage.getItem("virtualId")));
+    let contentSessionId = localStorage.getItem("contentSessionId");
+    localStorage.setItem("sessionId", contentSessionId);
+    if (discoverStart && username && !localStorage.getItem("virtualId")) {
       (async () => {
         setLocalData("profileName", username);
-        const usernameDetails = await axios.get(
-          `${BASE_API}v1/vid/generateVirtualID?username=${username}&password=${username}`
+        const usernameDetails = await axios.post(
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
         );
         const getMilestoneDetails = await axios.get(
-          `${BASE_API}lais/scores/getMilestone/user/${usernameDetails.data.virtualID}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
         );
 
         localStorage.setItem(
@@ -354,24 +519,31 @@ const Assesment = ({ discoverStart }) => {
         setLevel(
           getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
         );
-        localStorage.setItem("virtualId", usernameDetails.data.virtualID);
-        let session_id = `${usernameDetails.data.virtualID}${Date.now()}`;
-        localStorage.setItem("sessionId", `${session_id}`);
+        localStorage.setItem(
+          "virtualId",
+          usernameDetails?.data?.result?.virtualID
+        );
+        let session_id = localStorage.getItem("sessionId");
 
+        if (!session_id){
+          session_id = uniqueId();
+          localStorage.setItem("sessionId", session_id)
+        }
+        
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
-          `${BASE_API}lp-tracker/api/pointer/getPointers/${usernameDetails.data.virtualID}/${session_id}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
-        dispatch(setVirtualId(usernameDetails.data.virtualID));
+        dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
       })();
     } else {
       (async () => {
         const virtualId = getLocalData("virtualId");
         const language = lang;
         const getMilestoneDetails = await axios.get(
-          `${BASE_API}lais/scores/getMilestone/user/${virtualId}?language=${language}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
         );
         localStorage.setItem(
           "getMilestone",
@@ -383,9 +555,15 @@ const Assesment = ({ discoverStart }) => {
           )
         );
         const sessionId = getLocalData("sessionId");
+
+        if (!sessionId){
+          sessionId = uniqueId();
+          localStorage.setItem("sessionId", sessionId)
+        }
+
         if (virtualId) {
           const getPointersDetails = await axios.get(
-            `${BASE_API}lp-tracker/api/pointer/getPointers/${virtualId}/${sessionId}?language=${lang}`
+            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
           );
           setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
         }
@@ -399,7 +577,11 @@ const Assesment = ({ discoverStart }) => {
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
     if (!username && !profileName && !virtualId && level == 0) {
-      alert("please add username in query param");
+      // alert("please add username in query param");
+      setOpenMessageDialog({
+        message: "please add username in query param",
+        isError: true,
+      });
       return;
     }
     if (level == 0) {
@@ -432,12 +614,24 @@ const Assesment = ({ discoverStart }) => {
 
   return (
     <>
+      {!!openMessageDialog && (
+        <MessageDialog
+          message={openMessageDialog.message}
+          closeDialog={() => {
+            setOpenMessageDialog("");
+          }}
+          isError={openMessageDialog.isError}
+          dontShowHeader={openMessageDialog.dontShowHeader}
+        />
+      )}
       {openLangModal && (
         <LanguageModal {...{ lang, setLang, setOpenLangModal }} />
       )}
       {level > 0 ? (
         <Box style={sectionStyle}>
-          <ProfileHeader {...{ level, lang, setOpenLangModal, points }} />
+          <ProfileHeader
+            {...{ level, lang, setOpenLangModal, points, setOpenMessageDialog }}
+          />
           <Box
             sx={{
               position: "absolute",

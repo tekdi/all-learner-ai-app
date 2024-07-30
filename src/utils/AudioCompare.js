@@ -8,8 +8,12 @@ import { Box } from "@mui/material";
 import { ListenButton, RetryIcon, SpeakButton, StopButton } from "./constants";
 import RecordVoiceVisualizer from "./RecordVoiceVisualizer";
 
+// Import statements remain the same
+
 export default class AudioRecorderCompair extends Component {
   MIN_DECIBELS = Number(-45);
+  MEDIARECORDER = {};
+
   constructor(props) {
     super(props);
     this.state = {
@@ -17,6 +21,7 @@ export default class AudioRecorderCompair extends Component {
       pauseAudio: false,
       soundDetected: false,
       stopDetection: false,
+      audioSrc: "", // Added to store recorded audio
     };
   }
 
@@ -26,9 +31,10 @@ export default class AudioRecorderCompair extends Component {
     });
   }
 
-  changeScheme(e) {
+  resetRecording() {
     this.setState({
-      audioType: e.target.value,
+      audioSrc: "",
+      recordingInitialized: false,
     });
   }
 
@@ -50,6 +56,8 @@ export default class AudioRecorderCompair extends Component {
     } else {
       document.getElementById("startaudio_compair").click();
     }
+
+    this.resetRecording(); // Reset recording state before starting a new recording
   }
 
   handleStop() {
@@ -63,61 +71,56 @@ export default class AudioRecorderCompair extends Component {
     } else {
       document.getElementById("stopaudio_compair").click();
     }
+    this.MEDIARECORDER.stop();
   }
 
   startSoundDetection = async () => {
     try {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-        const mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream, { sampleRate: 22050 });
 
-        const audioChunks = [];
-        mediaRecorder.addEventListener("dataavailable", (event) => {
-          audioChunks.push(event.data);
-        });
+      this.MEDIARECORDER = mediaRecorder;
+      const audioContext = new AudioContext();
+      const analyser = audioContext.createAnalyser();
+      analyser.minDecibels = this.MIN_DECIBELS;
 
-        const audioContext = new AudioContext();
-        const audioStreamSource = audioContext.createMediaStreamSource(stream);
-        const analyser = audioContext.createAnalyser();
-        analyser.minDecibels = this.MIN_DECIBELS;
-        audioStreamSource.connect(analyser);
+      const audioStreamSource = audioContext.createMediaStreamSource(stream);
+      audioStreamSource.connect(analyser);
 
-        const bufferLength = analyser.frequencyBinCount;
-        const domainData = new Uint8Array(bufferLength);
+      const bufferLength = analyser.frequencyBinCount;
+      const domainData = new Float32Array(bufferLength); // Use Float32Array instead of Uint8Array
 
-        let soundDetected = false;
+      let soundDetected = false;
 
-        const detectSound = () => {
-          if (this.state.stopDetection) {
-            return; // Stop detection if stopDetection is true
-          }
-          if (this.state.soundDetected) {
-            return;
-          }
+      const ambientNoiseLevel = -70; // Example ambient noise level in dB
+      const humanVoiceThreshold = -40; // Example threshold for human voice detection
 
-          analyser.getByteFrequencyData(domainData);
+      let threshold = Math.max(ambientNoiseLevel, humanVoiceThreshold);
 
-          for (let i = 0; i < bufferLength; i++) {
-            const value = domainData[i];
+      const SILENCE_THRESHOLD = -60; // Adjust as needed
 
-            if (domainData[i] > 0) {
-              this.setState({ soundDetected: true });
-            }
-          }
+      const detectSound = () => {
+        if (this.state.stopDetection || this.state.soundDetected) {
+          return;
+        }
 
+        analyser.getFloatFrequencyData(domainData);
+
+        const isSilence = domainData.every((val) => val < SILENCE_THRESHOLD);
+
+        if (isSilence) {
+          this.setState({ soundDetected: false });
+        } else {
+          this.setState({ soundDetected: true });
+        }
+
+        if (!this.state.soundDetected) {
           window.requestAnimationFrame(detectSound);
-        };
+        }
+      };
 
-        window.requestAnimationFrame(detectSound);
-
-        mediaRecorder.addEventListener("stop", () => {
-          const audioBlob = new Blob(audioChunks);
-          const audioUrl = URL.createObjectURL(audioBlob);
-          const audio = new Audio(audioUrl);
-          audio.play();
-
-        });
-      });
+      mediaRecorder.start();
+      window.requestAnimationFrame(detectSound);
     } catch (error) {
       console.error("Error accessing microphone:", error);
     }
@@ -139,8 +142,7 @@ export default class AudioRecorderCompair extends Component {
           recordingInitialized: true,
         });
       },
-      pauseCallback: (e) => {
-      },
+      pauseCallback: (e) => {},
       stopCallback: (e) => {
         let temp_audioSrc = window.URL.createObjectURL(e);
         this.setState({
@@ -153,7 +155,11 @@ export default class AudioRecorderCompair extends Component {
           if (this.state.soundDetected) {
             this.props.setRecordedAudio(temp_audioSrc);
           } else {
-            alert("Please Speak Louder and Clear");
+            // this.props.setRecordedAudio(temp_audioSrc);
+            this.props?.setOpenMessageDialog({
+              message: "Please Speak Louder and Clear",
+              isError: true,
+            });
           }
         }
 
@@ -161,13 +167,10 @@ export default class AudioRecorderCompair extends Component {
           recordingInitialized: false,
         });
       },
-      onRecordCallback: (e) => {
-      },
-      errorCallback: (err) => {
-      },
+      onRecordCallback: (e) => {},
+      errorCallback: (err) => {},
       backgroundColor: "hsla(0, 100%, 0%, 0)",
       strokeColor: "#73DD24",
-      /* path76 */
     };
 
     return (
@@ -179,7 +182,6 @@ export default class AudioRecorderCompair extends Component {
                 <div
                   style={{
                     display: "flex",
-                    // width: '13%',
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
@@ -197,7 +199,6 @@ export default class AudioRecorderCompair extends Component {
                   </Box>
                   <Box style={{ marginTop: "50px", marginBottom: "50px" }}>
                     <RecordVoiceVisualizer />
-                    {/* <AudioAnalyser {...audioProps}></AudioAnalyser> */}
                   </Box>
                 </div>
               );
@@ -206,7 +207,6 @@ export default class AudioRecorderCompair extends Component {
                 <div
                   style={{
                     display: "flex",
-                    // width: '13%',
                     justifyContent: "space-between",
                     margin: "0 auto",
                   }}
@@ -257,26 +257,6 @@ export default class AudioRecorderCompair extends Component {
                         )}
                       </Box>
                     )}
-                    {/* <img
-                                            src={mic}
-                                            className="micimg mic_record"
-                                          
-                                            style={{
-                                                cursor: 'pointer',
-                                                padding: '5px',
-                                                height: '38px',
-                                            }}
-                                            alt="mic"
-                                        />
-                                        <div
-                                            style={{
-                                                color: 'white',
-                                                fontWeight: '600',
-                                                fontSize: '14px',
-                                            }}
-                                        >
-                                            SPEAK
-                                        </div> */}
                   </div>
                 </div>
               );

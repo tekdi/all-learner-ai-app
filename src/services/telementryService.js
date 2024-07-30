@@ -210,6 +210,13 @@ export const getEventOptions = () => {
                 { id: localStorage.getItem('virtualStorySessionID') || contentSessionId, type: 'ContentSession' },
                 { id: playSessionId, type: 'PlaySession' },
                 { id: userId, type: userType },
+                { id: localStorage.getItem("lang") || 'ta', type: 'language' },
+                { id: userDetails?.school_name, type: 'school_name' },
+                {
+                  id: userDetails?.class_studying_id,
+                  type: 'class_studying_id',
+                },
+                { id: userDetails?.udise_code, type: 'udise_code' },
             ],
             rollup: {},
         },

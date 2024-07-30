@@ -9,11 +9,11 @@ import discoverEndLeft from "../../assets/images/discover-end-left.svg";
 import discoverEndRight from "../../assets/images/discover-end-right.svg";
 import textureImage from "../../assets/images/textureImage.png";
 import {
-  BASE_API,
   LetsStart,
   getLocalData,
   setLocalData,
 } from "../../utils/constants";
+import config from '../../utils/urlConstants.json';
 
 const sectionStyle = {
   backgroundImage: `url(${textureImage})`,
@@ -34,13 +34,14 @@ const SpeakSentenceComponent = () => {
   const [level, setLevel] = useState("");
 
   useEffect(() => {
+    
     (async () => {
       let audio = new Audio(LevelCompleteAudio);
       audio.play();
       const virtualId = getLocalData("virtualId");
       const lang = getLocalData("lang");
       const getMilestoneDetails = await axios.get(
-        `${BASE_API}lais/scores/getMilestone/user/${virtualId}?language=${lang}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);

@@ -61,13 +61,14 @@ const App = () => {
             const fp = await FingerprintJS.load();
 
             const { visitorId } = await fp.get();
-
-            localStorage.setItem('did', visitorId);
+            if (!localStorage.getItem('did')) {
+                localStorage.setItem('did', visitorId);
+            }
             initService();
         };
 
         setFp();
-    }, []);
+     }, []);
 
     return (
         <StyledEngineProvider injectFirst>

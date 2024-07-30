@@ -126,6 +126,18 @@
   letter-spacing: 2px;
 }
 
+.failureHeader {
+  color: #c30303;
+  -webkit-text-stroke-width: 0.5;
+  -webkit-text-stroke-color: #c30303;
+  font-family: Quicksand;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 110.6%; /* 55.3px */
+  letter-spacing: 2px;
+}
+
 .shakeImage {
   animation: Shake 0.5s linear infinite;
 }

@@ -24,6 +24,8 @@ const WordsOrImage = ({
   currentStep,
   contentId,
   contentType,
+  percentage,
+  fluency,
   level,
   isDiscover,
   progressData,
@@ -41,6 +43,8 @@ const WordsOrImage = ({
   gameOverData,
   highlightWords,
   matchedChar,
+  loading,
+  setOpenMessageDialog
 }) => {
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
@@ -76,6 +80,9 @@ const WordsOrImage = ({
         level,
         progressData,
         showProgress,
+        contentType,
+        percentage,
+        fluency,
         playTeacherAudio,
         handleBack,
         isShowCase,
@@ -84,6 +91,7 @@ const WordsOrImage = ({
         disableScreen,
         livesData,
         gameOverData,
+        loading,
       }}
     >
       <CardContent
@@ -218,18 +226,18 @@ const WordsOrImage = ({
             )}
             {matchedChar && (
               <Box
-                display={"flex"}
-                mb={4}
-                sx={{
-                  width: "100%",
-                  justifyContent: "center",
-                  flexWrap: "wrap",
-                }}
-              >
+              display={"flex"}
+              mb={4}
+              sx={{
+                width: "100%",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
                 {highlightWords(words, matchedChar)}
               </Box>
             )}
-          </Box>
+         </Box>
         )}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
@@ -250,6 +258,7 @@ const WordsOrImage = ({
               setEnableNext,
               livesData,
               setLivesData,
+              setOpenMessageDialog
             }}
           />
         </Box>

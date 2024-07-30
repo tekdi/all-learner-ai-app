@@ -43,7 +43,11 @@
     "sass": "^1.44.0",
     "split-graphemes": "^0.5.0",
     "use-sound": "^4.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "eslint": "^8.46.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -55,15 +59,18 @@
     "prettier:fix": "npm run prettier:cli --write",
     "eslint": "eslint src -c .eslintrc.json --ext js,jsx --max-warnings=0",
     "eslint:fix": "npm run eslint --fix",
-    "lint": "npm run eslint && npm run prettier",
-    "lint:fix": "npm run eslint:fix && npm run prettier:fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint \"**/*.{js,jsx}\"",
+    "lint:fix": "eslint \"**/*.{js,jsx}\" --fix"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "ignorePatterns": ["build/", "public/js/jquery-3.7.0.min.js"]
   },
   "browserslist": {
     "production": [

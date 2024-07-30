@@ -3281,7 +3281,6 @@ export const HeartBlack = (props) => (
 
 export const SessionID = "13900744731701973109305";
 export const UserID = "1390074473";
-export const BASE_API = "https://www.learnerai-dev.theall.ai/";
 
 export const practiceSteps = [
   { name: "P1", fullName: "Practice 1" },
@@ -3298,10 +3297,10 @@ export const practiceSteps = [
 
 export const levelGetContent = {
   0: [
-    { title: "P1", criteria: "char", template: "simple" },
-    { title: "P2", criteria: "char", template: "simple" },
-    { title: "P3", criteria: "char", template: "simple" },
-    { title: "P4", criteria: "char", template: "simple" },
+    { title: "P1", criteria: "word", template: "simple" },
+    { title: "P2", criteria: "word", template: "simple" },
+    { title: "P3", criteria: "word", template: "simple" },
+    { title: "P4", criteria: "word", template: "simple" },
     { title: "S1", criteria: "word", template: "simple" },
     { title: "P5", criteria: "word", template: "simple" },
     { title: "P6", criteria: "word", template: "simple" },
@@ -3337,14 +3336,12 @@ export const levelGetContent = {
     {
       title: "P1",
       criteria: "word",
-      template: "simple",
-      mechanism: "formAWord",
+      template: "simple"
     },
     {
       title: "P2",
       criteria: "word",
-      template: "simple",
-      mechanism: "formAWord",
+      template: "simple"
     },
     { title: "P3", criteria: "sentence", template: "simple" },
     { title: "P4", criteria: "sentence", template: "simple" },
@@ -3519,9 +3516,9 @@ export const levelConfig = {
 };
 
 export const languages = [
-  { name: "Tamil", lang: "ta", symbol: "இ" },
+  { name: "தமிழ்", lang: "ta", symbol: "இ" },
   { name: "English", lang: "en", symbol: "A" },
-  { name: "Hindi", lang: "hi", symbol: "क" },
+  //{ name: "Hindi", lang: "hi", symbol: "क" },
   ,
 ];
 
