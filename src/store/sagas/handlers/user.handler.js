@@ -54,7 +54,7 @@ export function* handleVerifyOtp(action) {
         action.payload.otpToken = otpTokenObj.token;
         console.log('access:', action.payload.accessToken);
         console.log('otpToken:', action.payload.otpToken);
-        const response = yield retry(0, 0, verifyOtp, action.payload);
+        yield retry(0, 0, verifyOtp, action.payload);
 
         yield put(setOtpVerified({ isOtpVerified: true }));
     } catch (error) {

@@ -52,6 +52,18 @@ const SpeakSentenceComponent = () => {
     }, 4000);
   }, []);
 
+  const handleProfileBack = () => {
+    try {
+      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+        navigate("/")
+      } else {
+        navigate("/discover-start")
+      }
+    } catch (error) {
+      console.error("Error posting message:", error);
+    }
+  };
+
   let width = window.innerWidth * 0.85;
   const navigate = useNavigate();
 
@@ -120,10 +132,7 @@ const SpeakSentenceComponent = () => {
           </Typography>
 
           <Box
-            onClick={() => {
-              // window.location.reload();
-              navigate(`/`);
-            }}
+           onClick={() => handleProfileBack()}
             sx={{
               display: "flex",
               justifyContent: "center",

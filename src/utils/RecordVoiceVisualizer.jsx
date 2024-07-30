@@ -1,6 +1,3 @@
-import { useEffect } from 'react';
-
-const color1 = `linear-gradient(90deg, #73dd24 -1265.13%, #00bbe4 5589.67%, #46d77d 12029.02%)`;
 export default function RecordVoiceVisualizer() {
     const bar1 = (
         <span

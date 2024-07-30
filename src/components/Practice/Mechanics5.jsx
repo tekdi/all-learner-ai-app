@@ -1,6 +1,5 @@
 import { Box } from '@mui/material';
 import React, { createRef, useState } from 'react';
-import practicebg from '../../assets/images/practice-bg.svg';
 import seePictureAndTell from '../../assets/images/seePictureAndTell.png';
 import VoiceAnalyser from '../../utils/VoiceAnalyser';
 import MainLayout from '../Layouts.jsx/MainLayout';
@@ -8,16 +7,16 @@ import { Grid } from '../../../node_modules/@mui/material/index';
 import { PlayAudioButton, StopAudioButton } from '../../utils/constants';
 import v11 from '../../assets/audio/V10.mp3';
 
-const sectionStyle = {
-    width: '100%',
-    backgroundImage: `url(${practicebg})`,
-    backgroundSize: 'cover', // Cover the entire viewport
-    backgroundPosition: 'center center', // Center the image
-    backgroundRepeat: 'no-repeat', // Do not repeat the image
-    height: '100vh',
-    padding: '20px 100px',
-    boxSizing: 'border-box',
-};
+// const sectionStyle = {
+//     width: '100%',
+//     backgroundImage: `url(${practicebg})`,
+//     backgroundSize: 'cover', // Cover the entire viewport
+//     backgroundPosition: 'center center', // Center the image
+//     backgroundRepeat: 'no-repeat', // Do not repeat the image
+//     height: '100vh',
+//     padding: '20px 100px',
+//     boxSizing: 'border-box',
+// };
 
 const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }) => {
     const [sentences, setSentences] = useState([
@@ -26,10 +25,6 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
         'The kids are playing with the small dog',
         'The elephant is drinking water',
     ]);
-
-    const [selectedWords, setSelectedWords] = useState([]);
-
-    const handleWords = (word, isSelected) => {};
 
     const audioRef = createRef(null);
     const [duration, setDuration] = useState(0);
@@ -46,16 +41,15 @@ const Mechanics5 = ({ page, setPage, setVoiceText, setRecordedAudio, setVoiceAni
             setIsPlaying(true);
         }
     };
-
     const [currrentProgress, setCurrrentProgress] = React.useState(0);
-    const progressBarWidth = isNaN(currrentProgress / duration) ? 0 : currrentProgress / duration;
+    // const progressBarWidth = isNaN(currrentProgress / duration) ? 0 : currrentProgress / duration;
 
     return (
         <MainLayout level={1}>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Grid container sx={{ width: '80%', justifyContent: 'center', mb: 2, mt: 8 }}>
                     <Grid xs={5}>
-                        <img src={seePictureAndTell} style={{ borderRadius: '20px' }} />
+                        <img src={seePictureAndTell} style={{ borderRadius: '20px' }} alt='' />
                     </Grid>
                     <Grid xs={7}>
                         {sentences?.map((elem, i) => (

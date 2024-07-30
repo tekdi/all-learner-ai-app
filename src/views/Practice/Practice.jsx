@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Mechanics1 from "../../components/Practice/Mechanics1";
 import Mechanics2 from "../../components/Practice/Mechanics2";
 import Mechanics3 from "../../components/Practice/Mechanics3";
 import Mechanics4 from "../../components/Practice/Mechanics4";
 import Mechanics5 from "../../components/Practice/Mechanics5";
 
 import {
-  useLocation,
   useNavigate,
 } from "../../../node_modules/react-router-dom/dist/index";
 import {
@@ -22,29 +20,25 @@ import { uniqueId } from "../../services/utilService";
 import useSound from "use-sound";
 import LevelCompleteAudio from "../../assets/audio/levelComplete.wav";
 import { splitGraphemes } from "split-graphemes";
-import { Image } from "@mui/icons-material";
 import { Typography } from "@mui/material";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../../components/Assesment/Assesment";
+import { Log } from "../../services/telementryService";
 
 const Practice = () => {
   const [page, setPage] = useState("");
   const [recordedAudio, setRecordedAudio] = useState("");
-  const [Story, setStory] = useState([]);
   const [voiceText, setVoiceText] = useState("");
   const [storyLine, setStoryLine] = useState(0);
   const [voiceAnimate, setVoiceAnimate] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const navigate = useNavigate();
-
   const [assessmentResponse, setAssessmentResponse] = useState(undefined);
   const [currentContentType, setCurrentContentType] = useState("");
   const [currentCollectionId, setCurrentCollectionId] = useState("");
-
   const [points, setPoints] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [enableNext, setEnableNext] = useState(false);
-  const [sentencePassedCounter, setSentencePassedCounter] = useState(0);
   const [progressData, setProgressData] = useState({});
   const [level, setLevel] = useState("");
   const [isShowCase, setIsShowCase] = useState(false);
@@ -59,17 +53,21 @@ const Practice = () => {
   const LIVES = 5;
   const TARGETS_PERCENTAGE = 0.3;
   const [openMessageDialog, setOpenMessageDialog] = useState("");
-  const { state } = useLocation();
   const lang = getLocalData("lang");
   const [totalSyllableCount, setTotalSyllableCount] = useState('');
   const [percentage, setPercentage] = useState('');
-  const [fluency, setFluency] = useState('');
+  const [fluency, setFluency] = useState(false);
+  const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const gameOver = (data, isUserPass) => {
     let userWon = isUserPass ? true : false;
     const meetsFluencyCriteria = livesData.meetsFluencyCriteria ? true : false;
     setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
 
+  };
+
+  const isFirefox = () => {
+    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
   };
 
   useEffect(() => {
@@ -88,7 +86,7 @@ const Practice = () => {
     if (
       questions?.length &&
       Number(currentPracticeStep + 1) > 0 &&
-      currentQuestion == 0 &&
+      currentQuestion === 0 &&
       !fromBack
       // !state?.refresh
     ) {
@@ -115,12 +113,16 @@ const Practice = () => {
 
   useEffect(() => {
     if (voiceText === "error") {
-      alert("Sorry I couldn't hear a voice. Could you please speak again?");
+      setOpenMessageDialog({
+        message: "Sorry I couldn't hear a voice. Could you please speak again?",
+        isError: true,
+      });
+      // alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText("");
       setEnableNext(false);
     }
     if (voiceText == "success") {
-      setEnableNext(true);
+      // setEnableNext(true);
       // go_to_result(voiceText);
       setVoiceText("");
     }
@@ -128,7 +130,7 @@ const Practice = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (window && window.parent) {
+    if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
       window.parent.postMessage({
         score: score,
         message: "all-test-rig-score",
@@ -151,7 +153,9 @@ const Practice = () => {
             setFluency(true);
       }
   }
+
   const handleNext = async (isGameOver) => {
+    setIsNextButtonCalled(true)
     setEnableNext(false);
 
     try {
@@ -190,7 +194,7 @@ const Practice = () => {
         currentPracticeProgress = Math.round(
           ((currentQuestion + 1 + currentPracticeStep * limit) /
             (practiceSteps.length * limit)) *
-            100
+          100
         );
       }
 
@@ -210,17 +214,18 @@ const Practice = () => {
       );
 
       let newPracticeStep =
-        currentQuestion == questions.length - 1 || isGameOver
+        currentQuestion === questions.length - 1 || isGameOver
           ? currentPracticeStep + 1
           : currentPracticeStep;
+      newPracticeStep = Number(newPracticeStep);
       let newQuestionIndex =
-        currentQuestion == questions.length - 1 ? 0 : currentQuestion + 1;
+        currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
-      if (currentQuestion == questions.length - 1 || isGameOver) {
+      if (currentQuestion === questions.length - 1 || isGameOver) {
         // navigate or setNextPracticeLevel
         let currentPracticeStep =
           practiceProgress[virtualId].currentPracticeStep;
-        let isShowCase = currentPracticeStep == 4 || currentPracticeStep == 9; // P4 or P8
+        let isShowCase = currentPracticeStep === 4 || currentPracticeStep === 9; // P4 or P8
         if (isShowCase || isGameOver) {
           // assesment
 
@@ -237,8 +242,11 @@ const Practice = () => {
             }
           );
           const { data: getSetData } = getSetResultRes;
+          const data = JSON.stringify(getSetData?.data);
+          Log(data, "practice", "ET");
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
+          if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
           await axios.post(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
             {
@@ -250,22 +258,28 @@ const Practice = () => {
               language: localStorage.getItem("lang"),
             }
           );
+        }
           setLocalData("previous_level", getSetData.data.previous_level);
-          if (getSetData.data.sessionResult == "pass") {
-            await axios.post(
-              `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
-              {
-                userId: virtualId,
-                sessionId: sessionId,
-                milestone: `practice`,
-                lesson: "0",
-                progress: 0,
-                language: lang,
-                milestoneLevel: getSetData.data.currentLevel,
-              }
-            );
-            gameOver({ link: "/assesment-end" }, true);
-            return;
+          if (getSetData.data.sessionResult === "pass") {
+            try{
+              await axios.post(
+                `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
+                {
+                  userId: virtualId,
+                  sessionId: sessionId,
+                  milestone: `practice`,
+                  lesson: "0",
+                  progress: 0,
+                  language: lang,
+                  milestoneLevel: getSetData.data.currentLevel,
+                }
+              );
+              gameOver({ link: "/assesment-end" }, true);
+              return;
+            }
+            catch(e){
+              // catch error
+            }
           }
 
           // navigate("/assesment-end");
@@ -273,13 +287,13 @@ const Practice = () => {
 
         let quesArr = [];
 
-        if (newPracticeStep == 10) {
+        if (newPracticeStep === 10) {
           newPracticeStep = 0;
           currentPracticeProgress = 0;
         }
 
         const currentGetContent = levelGetContent?.[level]?.find(
-          (elem) => elem.title == practiceSteps?.[newPracticeStep].name
+          (elem) => elem.title === practiceSteps?.[newPracticeStep].name
         );
 
         await axios.post(
@@ -295,7 +309,7 @@ const Practice = () => {
           }
         );
 
-        if (newPracticeStep == 0 || newPracticeStep == 5 || isGameOver) {
+        if (newPracticeStep === 0 || newPracticeStep === 5 || isGameOver) {
           gameOver();
           return;
           // navigate("/assesment-end");
@@ -315,7 +329,7 @@ const Practice = () => {
         });
 
         let showcaseLevel =
-          currentPracticeStep == 3 || currentPracticeStep == 8;
+          currentPracticeStep === 3 || currentPracticeStep === 8;
         setIsShowCase(showcaseLevel);
 
         quesArr = [...quesArr, ...(resGetContent?.data?.content || [])];
@@ -362,10 +376,10 @@ const Practice = () => {
     }
   };
 
-  const playAudio = () => {
-    // const myAudio = localStorage.getItem("recordedAudio");
-    set_temp_audio(new Audio(recordedAudio));
-  };
+  // const playAudio = () => {
+  //   // const myAudio = localStorage.getItem("recordedAudio");
+  //   set_temp_audio(new Audio(recordedAudio));
+  // };
 
   useEffect(() => {
     learnAudio();
@@ -391,7 +405,7 @@ const Practice = () => {
       setLoading(true);
       const lang = getLocalData("lang");
       const virtualId = getLocalData("virtualId");
-      const sessionId = getLocalData("sessionId");
+      let sessionId = getLocalData("sessionId");
 
       if (!sessionId){
         sessionId = uniqueId();
@@ -437,7 +451,7 @@ const Practice = () => {
       };
 
       const currentGetContent = levelGetContent?.[level]?.find(
-        (elem) => elem.title == practiceSteps?.[userState].name
+        (elem) => elem.title === practiceSteps?.[userState].name
       );
 
       const resWord = await axios.get(
@@ -461,9 +475,8 @@ const Practice = () => {
       setQuestions(quesArr);
       setMechanism(currentGetContent.mechanism);
 
-      let showcaseLevel = userState == 4 || userState == 9;
+      let showcaseLevel = userState === 4 || userState === 9;
       setIsShowCase(showcaseLevel);
-
       if (showcaseLevel) {
         await axios.post(
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
@@ -507,7 +520,7 @@ const Practice = () => {
       const lang = getLocalData("lang");
       let practiceProgress = {};
       let newCurrentPracticeStep =
-        progressData.currentPracticeStep == 5
+        progressData.currentPracticeStep === 5
           ? 3
           : progressData.currentPracticeStep - 1;
       practiceProgress[virtualId] = {
@@ -534,7 +547,7 @@ const Practice = () => {
       setProgressData(practiceProgress[virtualId]);
 
       const currentGetContent = levelGetContent?.[level]?.find(
-        (elem) => elem.title == practiceSteps?.[newCurrentPracticeStep].name
+        (elem) => elem.title === practiceSteps?.[newCurrentPracticeStep].name
       );
       let quesArr = [];
       const resWord = await axios.get(
@@ -561,7 +574,11 @@ const Practice = () => {
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
-      navigate("/");
+      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+        navigate("/");
+      }else {
+        navigate("/discover-start")
+      }
     }
   };
 
@@ -574,18 +591,17 @@ const Practice = () => {
   }, [livesData]);
 
   function highlightWords(sentence, matchedChar) {
-    let isFirstImageDisplayed = false;
     const words = sentence.split(" ");
     matchedChar.sort(function (str1, str2) {
       return str2.length - str1.length;
     });
 
     let fontSize =
-      questions[currentQuestion]?.contentType?.toLowerCase() == "paragraph"
+      questions[currentQuestion]?.contentType?.toLowerCase() === "paragraph"
         ? 30
         : 40;
     let type = currentContentType?.toLowerCase();
-    if (type == "char" || type == "word") {
+    if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
         (item) => item !== "‌" && item !== "" && item !== " "
       );
@@ -603,9 +619,8 @@ const Practice = () => {
                 <Typography
                   variant="h5"
                   component="h4"
-                  sx={{                  
+                  sx={{
                     fontSize: `${fontSize}px`,
-                    lineHeight: "normal",
                     fontWeight: 700,
                     fontFamily: "Quicksand",
                     lineHeight: "50px",
@@ -630,7 +645,6 @@ const Practice = () => {
                 sx={{
                   color: "#333F61",
                   fontSize: `${fontSize}px`,
-                  lineHeight: "normal",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -657,7 +671,6 @@ const Practice = () => {
                 ml={1}
                 sx={{
                   fontSize: `${fontSize}px`,
-                  lineHeight: "normal",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -677,7 +690,6 @@ const Practice = () => {
               sx={{
                 color: "#333F61",
                 fontSize: `${fontSize}px`,
-                lineHeight: "normal",
                 fontWeight: 700,
                 fontFamily: "Quicksand",
                 lineHeight: "50px",
@@ -692,13 +704,14 @@ const Practice = () => {
       return highlightedSentence;
     }
   }
+
   useEffect(() => {
     if (questions[currentQuestion]?.contentSourceData) {
-      if (window !== window.parent) {
+      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
         const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
         const stringLengths = contentSourceData.map(item => item.text.length);
         const length = stringLengths[0];
-        window.parent.postMessage({ type: 'stringLengths', length }, '*');
+        window.parent.postMessage({ type: 'stringLengths', length });
       }
     }
   }, [questions[currentQuestion]]);
@@ -710,7 +723,7 @@ const Practice = () => {
           {...{
             level: !isShowCase && level,
             header:
-              questions[currentQuestion]?.contentType == "image"
+              questions[currentQuestion]?.contentType === "image"
                 ? `Guess the below image`
                 : `Speak the below ${questions[currentQuestion]?.contentType}`,
             words: questions[currentQuestion]?.contentSourceData?.[0]?.text,
@@ -749,10 +762,13 @@ const Practice = () => {
             percentage,
             fluency,
             setOpenMessageDialog,
+            setEnableNext,
+            isNextButtonCalled,
+            setIsNextButtonCalled
           }}
         />
       );
-    } else if (mechanism == "fillInTheBlank" || mechanism == "audio") {
+    } else if (mechanism === "fillInTheBlank" || mechanism === "audio") {
       return (
         <Mechanics3
           page={page}
@@ -760,7 +776,7 @@ const Practice = () => {
           {...{
             level: !isShowCase && level,
             header:
-              questions[currentQuestion]?.contentType == "image"
+              questions[currentQuestion]?.contentType === "image"
                 ? `Guess the below image`
                 : `Speak the below ${questions[currentQuestion]?.contentType}`,
             parentWords:
@@ -798,7 +814,7 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism == "formAWord") {
+    } else if (mechanism === "formAWord") {
       return (
         <Mechanics4
           page={page}
@@ -806,7 +822,7 @@ const Practice = () => {
           {...{
             level: !isShowCase && level,
             header:
-              questions[currentQuestion]?.contentType == "image"
+              questions[currentQuestion]?.contentType === "image"
                 ? `Guess the below image`
                 : `Speak the below ${questions[currentQuestion]?.contentType}`,
             parentWords:
@@ -841,7 +857,7 @@ const Practice = () => {
           }}
         />
       );
-    } else if (mechanism == "readTheImage") {
+    } else if (mechanism === "readTheImage") {
       return (
         <Mechanics5
           page={page}
@@ -849,7 +865,7 @@ const Practice = () => {
           {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
         />
       );
-    } else if (mechanism == "FormASentence") {
+    } else if (mechanism === "FormASentence") {
       return (
         <Mechanics4
           page={page}
@@ -857,7 +873,7 @@ const Practice = () => {
           {...{ setVoiceText, setRecordedAudio, setVoiceAnimate, storyLine }}
         />
       );
-    } else if (page == 1) {
+    } else if (page === 1) {
       return <Mechanics2 page={page} setPage={setPage} />;
     }
   };

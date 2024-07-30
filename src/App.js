@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ThemeProvider } from '@mui/material';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
@@ -11,14 +11,15 @@ import { startEvent } from './services/callTelemetryIntract';
 import '@project-sunbird/telemetry-sdk/index.js';
 
 const App = () => {
-    let ranonce = false;
+    const ranonce = useRef(false); 
     useEffect(() => {
         const initService = async () => {
+            var did;
             if (localStorage.getItem('fpDetails_v2') !== null) {
                 let fpDetails_v2 = localStorage.getItem('fpDetails_v2');
-                var did = fpDetails_v2.result;
+                 did = fpDetails_v2.result;
             } else {
-                var did = localStorage.getItem('did');
+                 did = localStorage.getItem('did');
             }
 
             await initialize({
@@ -49,11 +50,11 @@ const App = () => {
                 // tslint:disable-next-line:max-line-length
                 metadata: {},
             });
-            if (!ranonce) {
+            if (!ranonce.current) {
                 if (localStorage.getItem('contentSessionId') === null) {
                     startEvent();
                 }
-                ranonce = true;
+                ranonce.current = true;
             }
         };
 

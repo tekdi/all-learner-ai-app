@@ -7,7 +7,6 @@ import {
   AudioPlayerSvg,
   PlayAudioButton,
   StopAudioButton,
-  SubmitButton,
   getLocalData,
   randomizeArray,
 } from "../../utils/constants";
@@ -59,7 +58,7 @@ const Mechanics2 = ({
   const [wordToFill, setWordToFill] = useState("");
   const [disabledWords, setDisabledWords] = useState(false);
   const lang = getLocalData("lang");
-  let wordToCheck = type == "audio" ? parentWords : wordToFill;
+  let wordToCheck = type === "audio" ? parentWords : wordToFill;
 
   useEffect(() => {
     const initializeFillInTheBlank = async () => {
@@ -97,12 +96,12 @@ const Mechanics2 = ({
 
   const getSimilarWords = async (wordForFindingHomophones) => {
     const lang = getLocalData("lang");
-    // const isFillInTheBlanks = type == "fillInTheBlank";
+    // const isFillInTheBlanks = type === "fillInTheBlank";
     const wordToSimilar = wordForFindingHomophones
       ? wordForFindingHomophones
       : parentWords;
 
-    if (lang == "en") {
+    if (lang === "en") {
       const finder = new HomophonesFinder();
       const homophones = await finder.find(wordToSimilar);
       let wordsArr = [homophones[8], wordToSimilar, homophones[6]];
@@ -116,7 +115,7 @@ const Mechanics2 = ({
         wordsToShow = allWords
           ?.join(" ")
           ?.split(" ")
-          .filter((elem) => elem != wordToSimilar && elem.length > 2);
+          .filter((elem) => elem !== wordToSimilar && elem.length > 2);
       }
 
       wordsToShow = randomizeArray(wordsToShow).slice(0, 2);
@@ -133,17 +132,19 @@ const Mechanics2 = ({
       let wordsArr = [...words];
 
       if (type !== "audio") {
-        let index = wordsArr?.findIndex((elem) => elem == word);
+        let index = wordsArr?.findIndex((elem) => elem === word);
+        if (index !== -1) {
         wordsArr?.splice(index, 1);
+        }
       }
 
       if (selectedWord && type !== "audio") {
         wordsArr.push(selectedWord);
       }
 
-      // if (type == "audio") {
+      // if (type === "audio") {
 
-      var audio = new Audio(word == wordToCheck ? correctSound : wrongSound);
+      var audio = new Audio(word === wordToCheck ? correctSound : wrongSound);
       audio.play();
       setShake(true);
       setTimeout(() => {
@@ -179,13 +180,12 @@ const Mechanics2 = ({
     ? 0
     : currrentProgress / duration;
 
-  const handleSubmit = () => {};
   const getEnableButton = () => {
-    if (type == "fillInTheBlank") {
+    if (type === "fillInTheBlank") {
       return enableNext;
     }
-    if (type == "audio") {
-      return selectedWord == wordToCheck;
+    if (type === "audio") {
+      return selectedWord === wordToCheck;
     }
   };
   return (
@@ -215,9 +215,10 @@ const Mechanics2 = ({
           marginTop: "60px",
           letterSpacing: "5px",
           height: "100%",
+          flexWrap: "wrap",
         }}
       >
-        {type == "audio" ? (
+        {type === "audio" ? (
           <Box
             sx={{
               display: "flex",
@@ -283,8 +284,8 @@ const Mechanics2 = ({
         ) : (
           <>
             {sentences?.map((elem, index) => (
-              <>
-                {elem == "dash" ? (
+             <React.Fragment key={index}>
+                {elem === "dash" ? (
                   <Box
                     sx={{
                       display: "flex",
@@ -300,8 +301,8 @@ const Mechanics2 = ({
                       <Box
                         onClick={() => handleWord(selectedWord, true)}
                         className={
-                          elem == "dash"
-                            ? selectedWord == wordToCheck
+                          elem === "dash"
+                            ? selectedWord === wordToCheck
                               ? `audioSelectedWord`
                               : `audioSelectedWrongWord ${
                                   shake ? "shakeImage" : ""
@@ -312,13 +313,13 @@ const Mechanics2 = ({
                           textAlign: "center",
                           px: "25px",
                           py: "12px",
-                          background: "transparent",
+                          // background: "transparent",
                           m: 1,
                           textTransform: "none",
                           borderRadius: "12px",
                           border: `1px solid ${
-                            elem == "dash"
-                              ? selectedWord == wordToCheck
+                            elem === "dash"
+                              ? selectedWord === wordToCheck
                                 ? "#58CC02"
                                 : "#C30303"
                               : "#333F61"
@@ -330,8 +331,8 @@ const Mechanics2 = ({
                         <span
                           style={{
                             color:
-                              elem == "dash"
-                                ? selectedWord == wordToCheck
+                              elem === "dash"
+                                ? selectedWord === wordToCheck
                                   ? "#58CC02"
                                   : "#C30303"
                                 : "#333F61",
@@ -369,7 +370,7 @@ const Mechanics2 = ({
                     </Typography>
                   </Box>
                 )}
-              </>
+              </React.Fragment>
             ))}
           </>
         )}
@@ -385,8 +386,8 @@ const Mechanics2 = ({
         {words?.map((elem) => (
           <Box
             className={`${
-              type == "audio" && selectedWord == elem
-                ? selectedWord == parentWords
+              type === "audio" && selectedWord === elem
+                ? selectedWord === parentWords
                   ? `audioSelectedWord`
                   : `audioSelectedWrongWord ${shake ? "shakeImage" : ""}`
                 : ""
@@ -396,7 +397,7 @@ const Mechanics2 = ({
               textAlign: "center",
               px: "25px",
               py: "12px",
-              background: "transparent",
+              // background: "transparent",
               m: 1,
               textTransform: "none",
               borderRadius: "12px",
@@ -410,8 +411,8 @@ const Mechanics2 = ({
             <span
               style={{
                 color:
-                  type == "audio" && selectedWord == elem
-                    ? selectedWord == parentWords
+                  type === "audio" && selectedWord === elem
+                    ? selectedWord === parentWords
                       ? "#58CC02"
                       : "#C30303"
                     : "#333F61",
@@ -425,7 +426,7 @@ const Mechanics2 = ({
           </Box>
         ))}
       </Box>
-      {selectedWord == wordToCheck && type == "fillInTheBlank" && (
+      {selectedWord === wordToCheck && type === "fillInTheBlank" && (
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
             setVoiceText={setVoiceText}
