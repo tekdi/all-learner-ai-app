@@ -3524,8 +3524,8 @@ export const levelConfig = {
   { name: "తెలుగు", lang: "te", symbol: "ఈ" } ,
 ];
 
-const appLanguages = process.env.REACT_APP_IS_APP_LANGUAGES
-  ? JSON.parse(process.env.REACT_APP_IS_APP_LANGUAGES)
+const appLanguages = process.env.REACT_APP_LANGUAGES
+  ? JSON.parse(process.env.REACT_APP_LANGUAGES)
   : [];
 
 export const languages = AllLanguages.filter(lang =>

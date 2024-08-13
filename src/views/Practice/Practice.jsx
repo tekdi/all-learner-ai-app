@@ -274,12 +274,16 @@ const Practice = () => {
               gameOver({ link: "/assesment-end" }, true);
               return;
             }
-            catch(e){
-              // catch error
+            catch (err) {
+              setOpenMessageDialog({
+                message:
+                "Error posting lesson progress data",
+                isError: true,
+                dontShowHeader:true
+              });
             }
           }
 
-          // navigate("/assesment-end");
         }
 
         let quesArr = [];
@@ -358,7 +362,12 @@ const Practice = () => {
         setProgressData(practiceProgress[virtualId]);
       }
     } catch (error) {
-      console.log(error);
+    setOpenMessageDialog({
+      message:
+      "Error posting lesson progress data",
+      isError: true,
+      dontShowHeader:true
+    });
     }
   };
 
@@ -495,6 +504,12 @@ const Practice = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      setOpenMessageDialog({
+        message:
+        "Content Unavailable",
+        isError: true,
+        dontShowHeader:true
+      });
       console.log("err", error);
     }
   };
@@ -520,7 +535,7 @@ const Practice = () => {
         currentPracticeStep: newCurrentPracticeStep,
         fromBack: true,
       };
-
+     try {
       await axios.post(
         `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
         {
@@ -563,6 +578,15 @@ const Practice = () => {
       }, 1000);
       setCurrentQuestion(practiceProgress[virtualId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
+      }
+      catch (err) {
+        setOpenMessageDialog({
+          message:
+          "Error posting lesson progress data",
+          isError: true,
+          dontShowHeader:true
+        });
+      }
     } else {
       if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
         navigate("/");
@@ -876,6 +900,9 @@ const Practice = () => {
           closeDialog={() => {
             setOpenMessageDialog("");
             setDisableScreen(false);
+            if (openMessageDialog.isError) {
+              window.location.reload();
+            }
           }}
           isError={openMessageDialog.isError}
           dontShowHeader={openMessageDialog.dontShowHeader}

@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Typography, TextField, Button, Grid } from '@mui/material';
 import config from "../../utils/urlConstants.json";
 import './LoginPage.css'; // Import the CSS file
+import { MessageDialog } from '../../components/Assesment/Assesment';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [openMessageDialog, setOpenMessageDialog] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +22,7 @@ const LoginPage = () => {
 
     try {
       const usernameDetails = await axios.post(
-        `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
+        `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config. URLS.GET_VIRTUAL_ID}?username=${username}`
       );
 
       if (usernameDetails?.data?.result?.virtualID) {
@@ -31,12 +33,31 @@ const LoginPage = () => {
         alert("Enter correct username and password");
       }
     } catch (error) {
-      console.error("Error occurred:", error);
-      alert("An error occurred. Please try again later.");
+      setOpenMessageDialog({
+        message:
+        "An error occurred. Please try again later.",
+        isError: true,
+        dontShowHeader:true
+      });
     }
   };
 
   return (
+    <>
+       {!!openMessageDialog && (
+        <MessageDialog
+          message={openMessageDialog.message}
+          closeDialog={() => {
+            setOpenMessageDialog("");
+            if (openMessageDialog.isError) {
+              window.location.reload();
+            }
+          }}
+          isError={openMessageDialog.isError}
+          dontShowHeader={openMessageDialog.dontShowHeader}
+        />
+      )}
+
     <Container className="container">
       <div className="loginBox">
         <Typography variant="h4" align="center" gutterBottom>
@@ -74,6 +95,7 @@ const LoginPage = () => {
         </form>
       </div>
     </Container>
+  </>
   );
 };
 

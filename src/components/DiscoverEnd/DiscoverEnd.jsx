@@ -14,6 +14,7 @@ import {
   setLocalData,
 } from "../../utils/constants";
 import config from '../../utils/urlConstants.json';
+import { MessageDialog } from "../Assesment/Assesment";
 
 const sectionStyle = {
   backgroundImage: `url(${textureImage})`,
@@ -32,6 +33,7 @@ const sectionStyle = {
 const SpeakSentenceComponent = () => {
   const [shake, setShake] = useState(true);
   const [level, setLevel] = useState("");
+  const [openMessageDialog, setOpenMessageDialog] = useState("");
 
   useEffect(() => {
     
@@ -40,12 +42,21 @@ const SpeakSentenceComponent = () => {
       audio.play();
       const virtualId = getLocalData("virtualId");
       const lang = getLocalData("lang");
+      try {
       const getMilestoneDetails = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);
       setLocalData("userLevel", data.data.milestone_level?.replace("m", ""));
+    }catch (error) {
+      setOpenMessageDialog({
+        message:
+          "An error occurred. Please try again later.",
+        isError: true,
+        dontShowHeader: true
+      });
+    }
     })();
     setTimeout(() => {
       setShake(false);
@@ -68,6 +79,20 @@ const SpeakSentenceComponent = () => {
   const navigate = useNavigate();
 
   return (
+    <>
+     {!!openMessageDialog && (
+        <MessageDialog
+          message={openMessageDialog.message}
+          closeDialog={() => {
+            setOpenMessageDialog("");
+            if (openMessageDialog.isError) {
+              window.location.reload();
+            }
+          }}
+          isError={openMessageDialog.isError}
+          dontShowHeader={openMessageDialog.dontShowHeader}
+        />
+      )} 
     <Box
       sx={{
         background: "linear-gradient(45deg, #5FDF9A 30%, #35C57C 90%)",
@@ -146,6 +171,7 @@ const SpeakSentenceComponent = () => {
         </CardContent>
       </Card>
     </Box>
+    </>
   );
 };
 
