@@ -56,7 +56,7 @@ const routData = [
 ];
 
 // add login route for test rig
-if (process.env.REACT_APP_IS_APP_TEST_RIG === 'true') {
+if (process.env.REACT_APP_IS_IN_APP_AUTHORISATION === 'true') {
   routData.push(
   {
     id: "route-001",

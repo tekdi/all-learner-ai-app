@@ -413,6 +413,12 @@ function VoiceAnalyser(props) {
       }
     } catch (error) {
       setLoader(false);
+      setOpenMessageDialog({
+        message:
+        "Error fetching update learner profile details:",
+        isError: true,
+        dontShowHeader:true
+      });
       if(props.handleNext){
         props.handleNext();
       }
@@ -421,7 +427,6 @@ function VoiceAnalyser(props) {
       }
       setRecordedAudioBase64("");
       setApiResponse("error");
-      console.log("err", error);
     }
   };
 

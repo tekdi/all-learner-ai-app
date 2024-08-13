@@ -65,6 +65,7 @@ const SpeakSentenceComponent = () => {
   useEffect(() => {
     if (!(localStorage.getItem("contentSessionId") !== null)) {
       (async () => {
+        try {
         const sessionId = getLocalData("sessionId");
         const virtualId = getLocalData("virtualId");
         const lang = getLocalData("lang");
@@ -72,6 +73,14 @@ const SpeakSentenceComponent = () => {
           `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+      } catch (error) {
+          setOpenMessageDialog({
+            message:
+            "Error retrieving local data",
+            isError: true,
+            dontShowHeader:true
+          });
+        }
       })();
     }
   }, []);
@@ -244,7 +253,12 @@ const SpeakSentenceComponent = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      setOpenMessageDialog({
+        message:
+       "An error occurred. Please try again later.",
+        isError: true,
+        dontShowHeader:true
+      });
     }
   };
 
@@ -252,12 +266,6 @@ const SpeakSentenceComponent = () => {
     (async () => {
       let quesArr = [];
       try {
-        // const resSentence = await axios.get(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/scores/GetContent/sentence/${UserID}`);
-        // quesArr = [...quesArr, ...(resSentence?.data?.content?.splice(0, 5) || [])];
-        // const resWord = await axios.get(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/scores/GetContent/word/${UserID}`);
-        // quesArr = [...quesArr, ...(resWord?.data?.content?.splice(0, 5) || [])];
-        // const resPara = await axios.get(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/scores/GetContent/paragraph/${UserID}`);
-        // quesArr = [...quesArr, ...(resPara?.data?.content || [])];
         const lang = getLocalData("lang");
         const resAssessment = await axios.post(
           `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_ASSESSMENT}`,
@@ -269,6 +277,16 @@ const SpeakSentenceComponent = () => {
         const sentences = resAssessment?.data?.data?.find(
           (elem) => elem.category === "Sentence"
         );
+  
+        if (!sentences) {
+          setOpenMessageDialog({
+            message:
+           "No sentences found in assessment data",
+            isError: true,
+            dontShowHeader:true
+          });
+          return;
+        }
 
         const resPagination = await axios.get(
           `${process.env.REACT_APP_CONTENT_SERVICE_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=5&collectionId=${sentences?.collectionId}`
@@ -279,12 +297,16 @@ const SpeakSentenceComponent = () => {
         setAssessmentResponse(resAssessment);
         localStorage.setItem("storyTitle", sentences?.name);
         quesArr = [...quesArr, ...(resPagination?.data?.data || [])];
-        // quesArr[1].contentType = 'image';
-        // quesArr[0].contentType = 'phonics';
         console.log("quesArr", quesArr);
         setQuestions(quesArr);
       } catch (error) {
-        console.log("err", error);
+        setOpenMessageDialog({
+          message:
+          "Error fetching assessment",
+          isError: true,
+          dontShowHeader:true
+        });
+        return; 
       }
     })();
   }, []);
@@ -305,6 +327,9 @@ const SpeakSentenceComponent = () => {
           closeDialog={() => {
             setOpenMessageDialog("");
             setDisableScreen(false);
+            if (openMessageDialog.isError) {
+              window.location.reload();
+            }
           }}
           isError={openMessageDialog.isError}
           dontShowHeader={openMessageDialog.dontShowHeader}

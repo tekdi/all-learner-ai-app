@@ -503,6 +503,7 @@ const Assesment = ({ discoverStart }) => {
     localStorage.setItem("sessionId", contentSessionId);
     if (discoverStart && username && !localStorage.getItem("virtualId")) {
       (async () => {
+        try {
         setLocalData("profileName", username);
         const usernameDetails = await axios.post(
           `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
@@ -536,11 +537,21 @@ const Assesment = ({ discoverStart }) => {
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
         dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
+        } 
+        catch (error) {
+          setOpenMessageDialog({
+            message:
+              "An error occurred. Please try again later.",
+            isError: true,
+            dontShowHeader: true
+          });
+        }    
       })();
     } else {
       (async () => {
         const virtualId = getLocalData("virtualId");
         const language = lang;
+        try {
         const getMilestoneDetails = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
         );
@@ -559,12 +570,32 @@ const Assesment = ({ discoverStart }) => {
           sessionId = uniqueId();
           localStorage.setItem("sessionId", sessionId)
         }
+      }
+      catch(err){
+        setOpenMessageDialog({
+          message:
+          "An error occurred. Please try again later.",
+          isError: true,
+          dontShowHeader:true
+        });
+      }
+       
 
         if (virtualId) {
+          try{
+            let sessionId = getLocalData("sessionId");
           const getPointersDetails = await axios.get(
             `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
           );
           setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
+            }catch(err){
+              setOpenMessageDialog({
+                message:
+                "Error getting pointer details",
+                isError: true,
+                dontShowHeader:true
+              });
+            }
         }
       })();
     }
@@ -618,6 +649,9 @@ const Assesment = ({ discoverStart }) => {
           message={openMessageDialog.message}
           closeDialog={() => {
             setOpenMessageDialog("");
+            if (openMessageDialog.isError) {
+              window.location.reload();
+            }
           }}
           isError={openMessageDialog.isError}
           dontShowHeader={openMessageDialog.dontShowHeader}
