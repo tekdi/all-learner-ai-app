@@ -62,7 +62,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
     >
       <Box
         sx={{
-          width: "600px",
+          width: { xs: "90%", sm: "600px" },
           minHeight: "424px",
           borderRadius: "20px",
           display: "flex",
@@ -80,7 +80,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
             style={{
               color: "#000000",
               fontWeight: 600,
-              fontSize: "36px",
+              fontSize: { xs: "28px", sm: "36px" },
               fontFamily: "Quicksand",
               lineHeight: "45px",
             }}
@@ -89,7 +89,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
           </span>
         </Box>
         <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-          <Grid container sx={{ width: "80%" }}>
+          <Grid container sx={{ width: { xs: "90%", sm: "80%" } }}>
             {languages.map((elem) => {
               const isSelectedLang = elem.lang === selectedLang;
               return (
@@ -101,7 +101,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
                       mt: "34px",
                       ml: "15px",
                       me: "15px",
-                      height: "140px",
+                      height: { xs: "120px", sm: "140px" },
                       background: isSelectedLang ? "#EE6931" : "#EFEFEF",
                       borderRadius: "10px",
                       border: `3px solid ${
@@ -142,7 +142,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
                         style={{
                           color: isSelectedLang ? "#FFFFFF" : "#000000",
                           fontWeight: 600,
-                          fontSize: "50px",
+                          fontSize: { xs: "36px", sm: "50px" },
                           fontFamily: "Quicksand",
                           lineHeight: "62px",
                         }}
@@ -155,7 +155,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
                         style={{
                           color: isSelectedLang ? "#FFFFFF" : "#000000",
                           fontWeight: 600,
-                          fontSize: "20px",
+                          fontSize: { xs: "16px", sm: "20px" },
                           fontFamily: "Quicksand",
                           lineHeight: "25px",
                         }}
@@ -173,7 +173,6 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}
           mt={5}
           mb={1}
-          // mr="110px"
         >
           <Box
             onClick={() => {
@@ -184,7 +183,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
               cursor: "pointer",
               background: "#6DAF19",
               minWidth: "173px",
-              height: "55px",
+              height: { xs: "45px", sm: "55px" },
               borderRadius: "10px",
               display: "flex",
               justifyContent: "center",
@@ -196,7 +195,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
               style={{
                 color: "#FFFFFF",
                 fontWeight: 600,
-                fontSize: "20px",
+                fontSize: { xs: "16px", sm: "20px" },
                 fontFamily: "Quicksand",
                 display: "flex",
                 alignItems: "center",
@@ -210,6 +209,7 @@ export const LanguageModal = ({ lang, setLang, setOpenLangModal }) => {
     </Box>
   );
 };
+
 
 export const MessageDialog = ({
   message,
@@ -234,7 +234,7 @@ export const MessageDialog = ({
     >
       <Box
         sx={{
-          width: "600px",
+          width: { xs: "90%", sm: "600px" },
           minHeight: "424px",
           borderRadius: "20px",
           display: "flex",
@@ -246,6 +246,7 @@ export const MessageDialog = ({
           boxShadow: "0px 4px 20px -1px rgba(0, 0, 0, 0.00)",
           backdropFilter: "blur(25px)",
           position: "relative",
+          padding: { xs: "20px", sm: "0px" },
         }}
       >
         <Box sx={{ position: "absolute", left: 10, bottom: 0 }}>
@@ -263,6 +264,7 @@ export const MessageDialog = ({
               sx={{
                 mt: 3,
                 textAlign: "center",
+                fontSize: { xs: "24px", sm: "36px" },
               }}
             >
               {isError ? "Oops..." : "Hurray!!!"}
@@ -277,23 +279,23 @@ export const MessageDialog = ({
           padding={"0px 10px 0px 10px"}
           width={"80%"}
         >
-          <span
-            style={{
+          <Typography
+            sx={{
               color: "#000000",
               fontWeight: 700,
-              fontSize: "40px",
+              fontSize: { xs: "24px", sm: "40px" },
               fontFamily: "Quicksand",
               lineHeight: "62px",
               textAlign: "center",
             }}
           >
             {message || ``}
-          </span>
+          </Typography>
         </Box>
+
         <Box
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}
           mt="60px"
-          // mr="110px"
           mb={2}
         >
           <Box
@@ -303,7 +305,7 @@ export const MessageDialog = ({
             sx={{
               cursor: "pointer",
               background: "#6DAF19",
-              minWidth: "173px",
+              minWidth: { xs: "150px", sm: "173px" },
               height: "55px",
               borderRadius: "10px",
               display: "flex",
@@ -312,22 +314,23 @@ export const MessageDialog = ({
               padding: "0px 24px 0px 20px",
             }}
           >
-            <span
-              style={{
+            <Typography
+              sx={{
                 color: "#FFFFFF",
                 fontWeight: 600,
-                fontSize: "20px",
+                fontSize: { xs: "18px", sm: "20px" },
                 fontFamily: "Quicksand",
               }}
             >
               {"Continue"}
-            </span>
+            </Typography>
           </Box>
         </Box>
       </Box>
     </Box>
   );
 };
+
 
 export const ProfileHeader = ({
   setOpenLangModal,
@@ -382,7 +385,7 @@ export const ProfileHeader = ({
     <Tooltip {...props} classes={{ popper: className }} />
   ))({
     [`& .MuiTooltip-tooltip`]: {
-      fontSize: "1.2rem", // Adjust the font size as needed
+      fontSize: "1.2rem",
     },
   });
 
@@ -410,31 +413,28 @@ export const ProfileHeader = ({
           display: "flex",
           alignItems: "center",
           zIndex: 5555,
+          padding: { xs: "0 10px", sm: "0 20px" },
+          boxSizing: "border-box",
         }}
       >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            width: { xs: "100%", sm: "50%" },
+            width: "100%",
+            justifyContent: "space-between",
           }}
         >
-          {handleBack && (
-            <Box ml={{ xs: "10px", sm: "94px" }}>
-              <IconButton onClick={handleBack}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {handleBack && (
+              <IconButton onClick={handleBack} style={{padding:0}}>
                 <img src={back} alt="back" style={{ height: "30px" }} />
               </IconButton>
-            </Box>
-          )}
-          {username && (
-            <>
+            )}
+            {username && (
               <Box
-                ml={
-                  handleBack
-                    ? { xs: "10px", sm: "12px" }
-                    : { xs: "10px", sm: "94px" }
-                }
-                sx={{ cursor: "pointer" }}
+                ml="10px"
+                sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
                 onClick={handleProfileBack}
               >
                 <img
@@ -442,102 +442,80 @@ export const ProfileHeader = ({
                   alt="profile-pic"
                   style={{ height: "30px" }}
                 />
-              </Box>
-              <Box ml="12px">
-                <span
-                  style={{
+                <Typography
+                  sx={{
                     color: "#000000",
                     fontWeight: 700,
                     fontSize: { xs: "14px", sm: "16px" },
                     fontFamily: "Quicksand",
                     lineHeight: "25px",
+                    ml: "12px",
                   }}
                 >
                   {username || ""}
-                </span>
+                </Typography>
               </Box>
-            </>
-          )}
-        </Box>
-
-        <Box
-          sx={{
-            justifySelf: "flex-end",
-            width: { xs: "100%", sm: "50%" },
-            display: "flex",
-            justifyContent: { xs: "center", sm: "flex-end" },
-            alignItems: "center",
-          }}
-        >
-          {/* <Box sx={{ position: "relative" }} mr="10px">
-            <img
-              src={scoreView}
-              alt="scoreView"
-              width={"86px"}
-              height={"35px"}
-            />
-            <Box sx={{ position: "absolute", top: "6px", right: "16px" }}>
-              <span
-                style={{
-                  color: "#FFDD39",
-                  fontWeight: 700,
-                  fontSize: "18px",
-                  fontFamily: "Quicksand",
-                }}
-              >
-                {points}
-              </span>
-            </Box>
-          </Box> */}
+            )}
+          </Box>
 
           <Box
-            mr={{ xs: "10px", sm: "90px" }}
-            onClick={() =>
-              setOpenLangModal
-                ? setOpenLangModal(true)
-                : setOpenMessageDialog({
-                    message: "go to homescreen to change language",
-                    dontShowHeader: true,
-                  })
-            }
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "flex-end", sm: "flex-end" },
+              width: { xs: "auto", sm: "auto" },
+            }}
           >
-            <Box sx={{ position: "relative", cursor: "pointer" }}>
-              <SelectLanguageButton />
-              <Box sx={{ position: "absolute", top: 9, left: 20 }}>
-                <span
-                  style={{
-                    color: "#000000",
-                    fontWeight: 700,
-                    fontSize: { xs: "14px", sm: "16px" },
-                    fontFamily: "Quicksand",
-                    lineHeight: "25px",
-                  }}
-                >
-                  {languages?.find((elem) => elem.lang === language)?.name ||
-                    "Select Language"}
-                </span>
+            <Box
+              onClick={() =>
+                setOpenLangModal
+                  ? setOpenLangModal(true)
+                  : setOpenMessageDialog({
+                      message: "go to homescreen to change language",
+                      dontShowHeader: true,
+                    })
+              }
+            >
+              <Box sx={{ position: "relative", cursor: "pointer", marginLeft:'6px' }}>
+                <SelectLanguageButton />
+                <Box sx={{ position: "absolute", top: 9, left: 20 }}>
+                  <Typography
+                    sx={{
+                      color: "#000000",
+                      fontWeight: 700,
+                      fontSize: { xs: "14px", sm: "16px" },
+                      fontFamily: "Quicksand",
+                      lineHeight: "25px",
+                    }}
+                  >
+                    {languages?.find((elem) => elem.lang === language)?.name ||
+                      "Select Language"}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
+            {process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true" && (
+              <CustomTooltip title="Logout">
+                <Box>
+                  <CustomIconButton onClick={handleLogout} style={{ margin: 0 }}>
+                    <img
+                      className="logout-img"
+                      style={{ height: 30, width: 35 }}
+                      src={LogoutImg}
+                      alt="logout"
+                    />
+                  </CustomIconButton>
+                </Box>
+              </CustomTooltip>
+            )}
           </Box>
-          {process.env.REACT_APP_IS_IN_APP_AUTHORISATION === "true" && (
-            <CustomTooltip title="Logout">
-              <Box>
-                <CustomIconButton onClick={handleLogout}>
-                  <img
-                    className="logout-img"
-                    style={{ height: 30, width: 35 }}
-                    src={LogoutImg}
-                    alt="Logout"
-                  />
-                </CustomIconButton>
-              </Box>
-            </CustomTooltip>
-          )}
         </Box>
       </Box>
     </>
   );
 };
+
+
 
 const Assesment = ({ discoverStart }) => {
   let username;
@@ -547,10 +525,8 @@ const Assesment = ({ discoverStart }) => {
     username = userDetails.student_name;
     setLocalData("profileName", username);
   }
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const [profileName, setProfileName] = useState(username);
+
   const [openMessageDialog, setOpenMessageDialog] = useState("");
-  // let lang = searchParams.get("lang") || "ta";
   const [level, setLevel] = useState("");
   const dispatch = useDispatch();
   const [openLangModal, setOpenLangModal] = useState(false);
@@ -558,8 +534,6 @@ const Assesment = ({ discoverStart }) => {
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
-    // const level = getLocalData('userLevel');
-    // setLevel(level);
     setLocalData("lang", lang);
     dispatch(setVirtualId(localStorage.getItem("virtualId")));
     let contentSessionId = localStorage.getItem("contentSessionId");
@@ -639,7 +613,6 @@ const Assesment = ({ discoverStart }) => {
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
     if (!username && !profileName && !virtualId && level === 0) {
-      // alert("please add username in query param");
       setOpenMessageDialog({
         message: "please add username in query param",
         isError: true,
@@ -697,22 +670,22 @@ const Assesment = ({ discoverStart }) => {
           <Box
             sx={{
               position: "absolute",
-              bottom: 60,
-              right: 0,
-              width: "237px",
-              height: "112px",
+              bottom: { xs: 20, md: 60 },
+              right: { xs: 20, md: 0 },
+              width: { xs: "150px", md: "237px" },
+              height: { xs: "70px", md: "112px" },
               background: "rgba(255, 255, 255, 0.2)",
-              borderRadius: "20px 0px 0px 20px",
+              borderRadius: { xs: "10px", md: "20px 0px 0px 20px" },
               backdropFilter: "blur(3px)",
             }}
           >
             <Box
               sx={{
-                width: "165px",
-                height: "64px",
+                width: { xs: "120px", md: "165px" },
+                height: { xs: "50px", md: "64px" },
                 background: levelConfig[level].color,
                 borderRadius: "10px",
-                margin: "24px 48px 24px 24px",
+                margin: { xs: "10px 10px 10px 10px", md: "24px 48px 24px 24px" },
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -725,9 +698,9 @@ const Assesment = ({ discoverStart }) => {
                 style={{
                   color: "#F0EEEE",
                   fontWeight: 600,
-                  fontSize: "20px",
+                  fontSize: { xs: "14px", md: "20px" },
                   fontFamily: "Quicksand",
-                  lineHeight: "25px",
+                  lineHeight: { xs: "18px", md: "25px" },
                   textShadow: "#000 1px 0 10px",
                 }}
               >
