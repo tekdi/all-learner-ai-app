@@ -87,8 +87,8 @@ function VoiceAnalyser(props) {
         recordedAudio
           ? recordedAudio
           : props.contentId
-            ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
-            : AudioPath[1][10]
+          ? `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${props.contentId}.wav`
+          : AudioPath[1][10]
       );
       set_temp_audio(audio);
       setPauseAudio(val);
@@ -189,19 +189,19 @@ function VoiceAnalyser(props) {
     }
   }, [recordedAudio]);
 
-  useEffect(()=>{
-    if(props.isNextButtonCalled){
+  useEffect(() => {
+    if (props.isNextButtonCalled) {
       if (recordedAudioBase64 !== "") {
         const lang = getLocalData("lang") || "ta";
         fetchASROutput(lang, recordedAudioBase64);
-        setLoader(true)
+        setLoader(true);
       }
     }
-      },[props.isNextButtonCalled])
+  }, [props.isNextButtonCalled]);
 
   useEffect(() => {
     if (recordedAudioBase64 !== "") {
-      if( props.setIsNextButtonCalled){
+      if (props.setIsNextButtonCalled) {
         props.setIsNextButtonCalled(false);
       }
     }
@@ -258,7 +258,7 @@ function VoiceAnalyser(props) {
       const { originalText, contentType, contentId, currentLine } = props;
       const responseStartTime = new Date().getTime();
       let responseText = "";
-      let profanityWord = ""
+      let profanityWord = "";
       let newThresholdPercentage = 0;
       let data = {};
 
@@ -279,16 +279,21 @@ function VoiceAnalyser(props) {
         );
         data = updateLearnerData;
         responseText = data.responseText;
-         profanityWord = await filterBadWords(data.responseText);
+        profanityWord = await filterBadWords(data.responseText);
         if (profanityWord !== data.responseText) {
           props?.setOpenMessageDialog({
             message: "Please avoid using inappropriate language.",
             isError: true,
           });
-        } 
+        }
         newThresholdPercentage = data?.subsessionTargetsCount || 0;
-        if (contentType.toLowerCase() !== 'word') {
-          handlePercentageForLife(newThresholdPercentage, contentType, data?.subsessionFluency, lang);
+        if (contentType.toLowerCase() !== "word") {
+          handlePercentageForLife(
+            newThresholdPercentage,
+            contentType,
+            data?.subsessionFluency,
+            lang
+          );
         }
       }
 
@@ -360,8 +365,9 @@ function VoiceAnalyser(props) {
       var audioFileName = "";
       if (process.env.REACT_APP_CAPTURE_AUDIO === "true" && false) {
         let getContentId = currentLine;
-        audioFileName = `${process.env.REACT_APP_CHANNEL
-          }/${sessionId}-${Date.now()}-${getContentId}.wav`;
+        audioFileName = `${
+          process.env.REACT_APP_CHANNEL
+        }/${sessionId}-${Date.now()}-${getContentId}.wav`;
 
         const command = new PutObjectCommand({
           Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
@@ -373,7 +379,7 @@ function VoiceAnalyser(props) {
         });
         try {
           const response = await S3Client.send(command);
-        } catch (err) { }
+        } catch (err) {}
       }
 
       response(
@@ -400,23 +406,23 @@ function VoiceAnalyser(props) {
       );
 
       setApiResponse(callUpdateLearner ? data.status : "success");
-      if(props.handleNext){
+      if (props.handleNext) {
         props.handleNext();
-        if(temp_audio !== null){
+        if (temp_audio !== null) {
           temp_audio.pause();
           setPauseAudio(false);
         }
       }
       setLoader(false);
-      if( props.setIsNextButtonCalled){ 
+      if (props.setIsNextButtonCalled) {
         props.setIsNextButtonCalled(false);
       }
     } catch (error) {
       setLoader(false);
-      if(props.handleNext){
+      if (props.handleNext) {
         props.handleNext();
       }
-      if( props.setIsNextButtonCalled){ 
+      if (props.setIsNextButtonCalled) {
         props.setIsNextButtonCalled(false);
       }
       setRecordedAudioBase64("");
@@ -425,92 +431,95 @@ function VoiceAnalyser(props) {
     }
   };
 
-  const handlePercentageForLife = (percentage, contentType, fluencyScore, language) => {
+  const handlePercentageForLife = (
+    percentage,
+    contentType,
+    fluencyScore,
+    language
+  ) => {
     try {
-        if (livesData) {
-          let totalSyllables = livesData.totalTargets;
-          if (language === "en") {
-             if (totalSyllables > 50) {
-              totalSyllables = 50;
-             }
+      if (livesData) {
+        let totalSyllables = livesData.totalTargets;
+        if (language === "en") {
+          if (totalSyllables > 50) {
+            totalSyllables = 50;
           }
-            // Calculate the current percentage based on total targets.
-            percentage = Math.round((percentage / totalSyllables) * 100);
-
-            // Define the total number of lives and adjust the threshold based on syllables.
-            const totalLives = 5;
-            let threshold = 30; // Default threshold
-
-            // Adjust the threshold based on total syllables.
-            if (totalSyllables <= 100) threshold = 30;
-            else if (totalSyllables > 100 && totalSyllables <= 150) threshold = 25;
-            else if (totalSyllables > 150 && totalSyllables <= 175) threshold = 20;
-            else if (totalSyllables > 175 && totalSyllables <= 250) threshold = 15;
-            else if (totalSyllables > 250 && totalSyllables <= 500) threshold = 10;
-            else if (totalSyllables > 500) threshold = 5;
-
-            // Calculate lives lost based on percentage.
-            let livesLost = Math.floor(percentage / (threshold / totalLives));
-
-            // Check fluency criteria and adjust lives lost accordingly.
-            let meetsFluencyCriteria;
-            switch (contentType.toLowerCase()) {
-                case 'word':
-                    meetsFluencyCriteria = fluencyScore < 2;
-                    break;
-                case 'sentence':
-                    meetsFluencyCriteria = fluencyScore < 6;
-                    break;
-                case 'paragraph':
-                    meetsFluencyCriteria = fluencyScore < 10;
-                    break;
-                default:
-                    meetsFluencyCriteria = true; // Assume criteria met if not specified.
-            }
-
-            // If fluency criteria are not met, reduce an additional life, but ensure it doesn't exceed the total lives.
-            if (!meetsFluencyCriteria && livesLost < totalLives) {
-                livesLost = Math.min(livesLost + 1, totalLives);
-            }
-
-            // Determine the number of red and black lives to show.
-            const redLivesToShow = totalLives - livesLost;
-            let blackLivesToShow = 5;
-            if(livesLost <= 5){
-               blackLivesToShow = livesLost;
-            }
-
-            // Prepare the new lives data.
-            let newLivesData = {
-                ...livesData,
-                blackLivesToShow,
-                redLivesToShow,
-                meetsFluencyCriteria: meetsFluencyCriteria,
-            };
-
-            // Play audio based on the change in lives.
-            const HeartGaain =
-              livesData.redLivesToShow === undefined
-                ? 5 - newLivesData.redLivesToShow
-                : livesData.redLivesToShow - newLivesData.redLivesToShow;
-            let isLiveLost;
-            if (HeartGaain > 0) {
-              isLiveLost = true;
-            } else {
-              isLiveLost = false;
-            }
-            const audio = new Audio(isLiveLost ? livesCut : livesAdd);
-            audio.play();
-
-            // Update the state or data structure with the new lives data.
-            setLivesData(newLivesData);
         }
+        // Calculate the current percentage based on total targets.
+        percentage = Math.round((percentage / totalSyllables) * 100);
+
+        // Define the total number of lives and adjust the threshold based on syllables.
+        const totalLives = 5;
+        let threshold = 30; // Default threshold
+
+        // Adjust the threshold based on total syllables.
+        if (totalSyllables <= 100) threshold = 30;
+        else if (totalSyllables > 100 && totalSyllables <= 150) threshold = 25;
+        else if (totalSyllables > 150 && totalSyllables <= 175) threshold = 20;
+        else if (totalSyllables > 175 && totalSyllables <= 250) threshold = 15;
+        else if (totalSyllables > 250 && totalSyllables <= 500) threshold = 10;
+        else if (totalSyllables > 500) threshold = 5;
+
+        // Calculate lives lost based on percentage.
+        let livesLost = Math.floor(percentage / (threshold / totalLives));
+
+        // Check fluency criteria and adjust lives lost accordingly.
+        let meetsFluencyCriteria;
+        switch (contentType.toLowerCase()) {
+          case "word":
+            meetsFluencyCriteria = fluencyScore < 2;
+            break;
+          case "sentence":
+            meetsFluencyCriteria = fluencyScore < 6;
+            break;
+          case "paragraph":
+            meetsFluencyCriteria = fluencyScore < 10;
+            break;
+          default:
+            meetsFluencyCriteria = true; // Assume criteria met if not specified.
+        }
+
+        // If fluency criteria are not met, reduce an additional life, but ensure it doesn't exceed the total lives.
+        if (!meetsFluencyCriteria && livesLost < totalLives) {
+          livesLost = Math.min(livesLost + 1, totalLives);
+        }
+
+        // Determine the number of red and black lives to show.
+        const redLivesToShow = totalLives - livesLost;
+        let blackLivesToShow = 5;
+        if (livesLost <= 5) {
+          blackLivesToShow = livesLost;
+        }
+
+        // Prepare the new lives data.
+        let newLivesData = {
+          ...livesData,
+          blackLivesToShow,
+          redLivesToShow,
+          meetsFluencyCriteria: meetsFluencyCriteria,
+        };
+
+        // Play audio based on the change in lives.
+        const HeartGaain =
+          livesData.redLivesToShow === undefined
+            ? 5 - newLivesData.redLivesToShow
+            : livesData.redLivesToShow - newLivesData.redLivesToShow;
+        let isLiveLost;
+        if (HeartGaain > 0) {
+          isLiveLost = true;
+        } else {
+          isLiveLost = false;
+        }
+        const audio = new Audio(isLiveLost ? livesCut : livesAdd);
+        audio.play();
+
+        // Update the state or data structure with the new lives data.
+        setLivesData(newLivesData);
+      }
     } catch (e) {
-        console.log("error", e);
+      console.log("error", e);
     }
-};
-
-
+  };
 
   // const getpermision = () => {
   //   navigator.getUserMedia =
@@ -559,6 +568,7 @@ function VoiceAnalyser(props) {
                     setRecordedAudio={setRecordedAudio}
                     playAudio={playAudio}
                     pauseAudio={pauseAudio}
+                    enableNext={props.enableNext}
                     dontShowListen={
                       props.isShowCase
                         ? props.isShowCase && !recordedAudio

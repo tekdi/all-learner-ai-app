@@ -1,123 +1,91 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import RecordRTC from "recordrtc";
 import { Box } from "@mui/material";
 import { ListenButton, RetryIcon, SpeakButton, StopButton } from "./constants";
 import RecordVoiceVisualizer from "./RecordVoiceVisualizer";
 
-const AudioRecorderCompair = (props) => {
+const AudioRecorder = (props) => {
+  const [isRecording, setIsRecording] = useState(false);
   const [status, setStatus] = useState("");
-  const [audioSrc, setAudioSrc] = useState("");
-  const [recordingInitialized, setRecordingInitialized] = useState(false);
-  const [recorder, setRecorder] = useState(null);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const recorderRef = useRef(null);
+  const mediaStreamRef = useRef(null);
 
-  const controlAudio = async (status) => {
-    if (status === "recording") {
-      startRecording();
-    } else {
-      stopRecording();
-    }
-    setStatus(status);
-  };
+  useEffect(() => {
+    // Cleanup when component unmounts
+    return () => {
+      if (recorderRef.current) {
+        recorderRef.current.destroy();
+      }
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
 
-  const resetRecording = () => {
-    setAudioSrc("");
-    setRecordingInitialized(false);
-  };
-
-  const handleMic = async () => {
+  const startRecording = async () => {
+    setStatus("recording");
     if (props.setEnableNext) {
       props.setEnableNext(false);
     }
-    resetRecording();
-    controlAudio("recording");
-  };
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
 
-  const handleStop = () => {
-    if (props.setEnableNext) {
-      props.setEnableNext(true);
+      recorderRef.current = new RecordRTC(stream, { type: "audio" });
+      recorderRef.current.startRecording();
+
+      setIsRecording(true);
+    } catch (err) {
+      console.error("Failed to start recording:", err);
     }
-    controlAudio("inactive");
-  };
-
-  const startRecording = () => {
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: {},
-      })
-      .then((stream) => {
-        const audioContext = new (window.AudioContext ||
-          window.webkitAudioContext)();
-
-        const recorder = RecordRTC(stream, {
-          type: "audio",
-          mimeType: "audio/wav",
-          recorderType: RecordRTC.StereoAudioRecorder,
-          desiredSampRate: 16000, // Lower sample rate for voice recording
-          numberOfAudioChannels: 1, // Force mono recording
-          audioContext: audioContext,
-        });
-
-        recorder.startRecording();
-        setRecorder(recorder);
-        setRecordingInitialized(true);
-        props.setRecordedAudio("");
-      })
-      .catch((error) => {
-        console.error("Error accessing microphone:", error);
-        props?.setOpenMessageDialog({
-          message:
-            "Microphone access denied or not working. Please check your settings.",
-          isError: true,
-        });
-      });
   };
 
   const stopRecording = () => {
-    if (recorder) {
-      recorder.stopRecording(() => {
-        const blob = recorder.getBlob();
-        const temp_audioSrc = window.URL.createObjectURL(blob);
-        setAudioSrc(temp_audioSrc);
+    setStatus("inactive");
+    if (recorderRef.current) {
+      recorderRef.current.stopRecording(() => {
+        const blob = recorderRef.current.getBlob();
 
-        // Validate the blob
-        if (blob.size < 1000) {
-          console.error("Recording too short or no audio detected");
-          // props?.setOpenMessageDialog({
-          //   message: "Please Speak Louder and Clear",
-          //   isError: true,
-          // });
-          if (props.setEnableNext) {
-            props.setEnableNext(false);
-          }
-          return;
+        if (blob) {
+          setAudioBlob(blob);
+          saveBlob(blob); // Persist the blob
+        } else {
+          console.error("Failed to retrieve audio blob.");
         }
 
-        props.setRecordedAudio(temp_audioSrc);
-        setRecordingInitialized(false);
+        // Stop the media stream
+        if (mediaStreamRef.current) {
+          mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+        }
+
+        setIsRecording(false);
       });
+    }
+    if (props.setEnableNext) {
+      props.setEnableNext(true);
     }
   };
 
-  React.useEffect(() => {
-    if (props.isNextButtonCalled) {
-      destroyRecording();
-    }
-  }, [props.isNextButtonCalled]);
+  const saveBlob = (blob) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Data = reader.result;
+      playRecording(base64Data);
+    };
+    reader.readAsDataURL(blob);
+  };
 
-  const destroyRecording = () => {
-    if (recorder) {
-      recorder.destroy();
-      if (audioSrc) {
-        URL.revokeObjectURL(audioSrc);
-        setAudioSrc("");
-      }
-      setRecorder(null);
-      setRecordingInitialized(false);
-      setStatus("");
-      props.setRecordedAudio("");
-      if (props.setEnableNext) {
-        props.setEnableNext(false);
-      }
+  const playRecording = (base64Data) => {
+    if (base64Data) {
+      fetch(base64Data)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+          props?.setRecordedAudio(url);
+        });
+    } else {
+      console.error("No saved audio found.");
     }
   };
 
@@ -125,7 +93,7 @@ const AudioRecorderCompair = (props) => {
     <div>
       <div>
         {(() => {
-          if (status === "recording" && recordingInitialized) {
+          if (status === "recording") {
             return (
               <div
                 style={{
@@ -138,7 +106,7 @@ const AudioRecorderCompair = (props) => {
               >
                 <Box
                   sx={{ cursor: "pointer", height: "38px" }}
-                  onClick={handleStop}
+                  onClick={stopRecording}
                 >
                   <StopButton />
                 </Box>
@@ -191,13 +159,9 @@ const AudioRecorderCompair = (props) => {
                           : "0px"
                       }
                       sx={{ cursor: "pointer" }}
-                      onClick={handleMic}
+                      onClick={startRecording}
                     >
-                      {!props.recordedAudio ? (
-                        <SpeakButton />
-                      ) : (
-                        <RetryIcon onClick={destroyRecording} />
-                      )}
+                      {!props.recordedAudio ? <SpeakButton /> : <RetryIcon />}
                     </Box>
                   )}
                 </div>
@@ -210,4 +174,4 @@ const AudioRecorderCompair = (props) => {
   );
 };
 
-export default AudioRecorderCompair;
+export default AudioRecorder;
