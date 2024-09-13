@@ -14,12 +14,10 @@ export const POPUP_TEXT_CONSTANT = {
     <>
       You have reached the final milestone for the demo. To explore additional
       levels, please{" "}
-      <a href="mailto:sunbird@tekditechnologies.com">click here</a> to contact
-      the ALL support team.
+      <a href={`mailto:${process.env.DEMO_POPUP_TEXT_SUPPORT_EMAIL_ID}`}>
+        click here
+      </a>{" "}
+      to contact the ALL support team.
     </>
   ),
-};
-
-export const MILESTONE_LEVEL = {
-  DEMO_MAX_MILESTONE_LEVEL: "m5",
 };

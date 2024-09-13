@@ -251,7 +251,7 @@ const Practice = () => {
           setLocalData("previous_level", getSetData.data.previous_level);
           if (
             getSetData.data.previous_level ===
-            MILESTONE_LEVEL.DEMO_MAX_MILESTONE_LEVEL
+            process.env.DEMO_MAX_MILESTONE_LEVEL
           ) {
             setOpenMessageDialog({
               message: POPUP_TEXT_CONSTANT.DEMO_MAX_MILESTONE_POPUP_TEXT,
