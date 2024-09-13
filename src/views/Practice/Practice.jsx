@@ -248,6 +248,19 @@ const Practice = () => {
             );
           }
           setLocalData("previous_level", getSetData.data.previous_level);
+          if (getSetData.data.previous_level === "m5") {
+            setOpenMessageDialog({
+              message: (
+                <>
+                  You have reached the final milestone for the demo. To explore
+                  additional levels, please{" "}
+                  <a href="mailto:sunbird@tekditechnologies.com">click here</a>{" "}
+                  to contact the ALL support team.
+                </>
+              ),
+              dontShowHeader: true,
+            });
+          }
           if (getSetData.data.sessionResult === "pass") {
             try {
               await axios.post(
