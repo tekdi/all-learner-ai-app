@@ -18,5 +18,8 @@ export const POPUP_TEXT_CONSTANT = {
       the ALL support team.
     </>
   ),
-  MAX_MILESTONE_LEVEL: "m5",
+};
+
+export const MILESTONE_LEVEL = {
+  DEMO_MAX_MILESTONE_LEVEL: "m5",
 };

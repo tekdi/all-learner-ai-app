@@ -21,7 +21,7 @@ import { Typography } from "@mui/material";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../../components/Assesment/Assesment";
 import { Log } from "../../services/telementryService";
-import { POPUP_TEXT_CONSTANT } from "../../config/config";
+import { POPUP_TEXT_CONSTANT, MILESTONE_LEVEL } from "../../config/config";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -251,7 +251,7 @@ const Practice = () => {
           setLocalData("previous_level", getSetData.data.previous_level);
           if (
             getSetData.data.previous_level ===
-            POPUP_TEXT_CONSTANT.MAX_MILESTONE_LEVEL
+            MILESTONE_LEVEL.DEMO_MAX_MILESTONE_LEVEL
           ) {
             setOpenMessageDialog({
               message: POPUP_TEXT_CONSTANT.DEMO_MAX_MILESTONE_POPUP_TEXT,
