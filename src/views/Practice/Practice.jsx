@@ -21,7 +21,7 @@ import { Typography } from "@mui/material";
 import config from "../../utils/urlConstants.json";
 import { MessageDialog } from "../../components/Assesment/Assesment";
 import { Log } from "../../services/telementryService";
-import { POPUP_TEXT_CONSTANT, MILESTONE_LEVEL } from "../../config/config";
+import { POPUP_TEXT_CONSTANT } from "../../config/config";
 
 const Practice = () => {
   const [page, setPage] = useState("");
@@ -62,7 +62,6 @@ const Practice = () => {
     const meetsFluencyCriteria = livesData?.meetsFluencyCriteria;
     setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria });
   };
-
   useEffect(() => {
     if (startShowCase) {
       setLivesData({ ...livesData, lives: LIVES });
@@ -250,8 +249,8 @@ const Practice = () => {
           }
           setLocalData("previous_level", getSetData.data.previous_level);
           if (
-            getSetData.data.previous_level ===
-            process.env.DEMO_MAX_MILESTONE_LEVEL
+            getSetData?.data?.previous_level ===
+            process.env.REACT_APP_DEMO_MAX_MILESTONE_LEVEL
           ) {
             setOpenMessageDialog({
               message: POPUP_TEXT_CONSTANT.DEMO_MAX_MILESTONE_POPUP_TEXT,

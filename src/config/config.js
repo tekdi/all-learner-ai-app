@@ -14,7 +14,9 @@ export const POPUP_TEXT_CONSTANT = {
     <>
       You have reached the final milestone for the demo. To explore additional
       levels, please{" "}
-      <a href={`mailto:${process.env.DEMO_POPUP_TEXT_SUPPORT_EMAIL_ID}`}>
+      <a
+        href={`mailto:${process.env.REACT_APP_DEMO_POPUP_TEXT_SUPPORT_EMAIL_ID}`}
+      >
         click here
       </a>{" "}
       to contact the ALL support team.
