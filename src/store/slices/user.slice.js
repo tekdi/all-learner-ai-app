@@ -9,7 +9,7 @@ const userSlice = createSlice({
         id: 0,
         mobile: '',
         otpSent: false,
-        virtualId: null,
+        userId: null,
     },
     reducers: {
         setUser(state, action) {
@@ -31,8 +31,8 @@ const userSlice = createSlice({
         setOtpVerified(state, action) {
             state.isOtpVerified = action.payload.isOtpVerified;
         },
-        setVirtualId(state, action) {
-            state.virtualId = action.payload;
+        setUserId(state, action) {
+            state.userId = action.payload;
         },
     },
 });
@@ -47,7 +47,7 @@ export const {
     setOtpVerified,
     verifyOtp,
     isOtpVerified,
-    setVirtualId,
+    setUserId,
 } = userSlice.actions;
 
 export default userSlice.reducer;

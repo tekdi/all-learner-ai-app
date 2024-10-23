@@ -3,13 +3,14 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
 
 const PrivateRoute = (props) => {
-  const virtualId = localStorage.getItem("virtualId");
+  const { userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (!virtualId && props.requiresAuth) {
-  //     navigate("/login");
-  //   }
-  // }, [virtualId]);
+  useEffect(() => {
+    if (!userId && props.requiresAuth) {
+      // navigate("/");
+    }
+  }, [userId]);
+
 
   return <>{props.children}</>;
 };
