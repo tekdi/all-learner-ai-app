@@ -22,7 +22,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "../../../node_modules/axios/index";
 // import { useDispatch } from 'react-redux';
-import { setVirtualId } from "../../store/slices/user.slice";
+import { setUserId } from "../../store/slices/user.slice";
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
 import desktopLevel1 from "../../assets/images/desktopLevel1.png";
@@ -480,8 +480,8 @@ const Assesment = ({ discoverStart }) => {
   let username;
   if (localStorage.getItem("token") !== null) {
     let jwtToken = localStorage.getItem("token");
-    var userDetails = jwtDecode(jwtToken);
-    username = userDetails.student_name;
+    let userDetails = jwtDecode(jwtToken);
+    username = userDetails.preferred_username;
     setLocalData("profileName", username);
   }
   // const [searchParams, setSearchParams] = useSearchParams();
@@ -498,17 +498,15 @@ const Assesment = ({ discoverStart }) => {
     // const level = getLocalData('userLevel');
     // setLevel(level);
     setLocalData("lang", lang);
-    dispatch(setVirtualId(localStorage.getItem("virtualId")));
-    let contentSessionId = localStorage.getItem("contentSessionId");
-    localStorage.setItem("sessionId", contentSessionId);
-    if (discoverStart && username && !localStorage.getItem("virtualId")) {
+    dispatch(setUserId(localStorage.getItem("userId")));
+    if (discoverStart && username && !localStorage.getItem("userId")) {
       (async () => {
         setLocalData("profileName", username);
-        const usernameDetails = await axios.post(
-          `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
-        );
+        // const usernameDetails = await axios.post(
+        //   `${process.env.REACT_APP_VIRTUAL_ID_HOST}/${config.URLS.GET_VIRTUAL_ID}?username=${username}`
+        // );
         const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${usernameDetails?.data?.result?.virtualID}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${localStorage.getItem("userId")}?language=${lang}`
         );
 
         localStorage.setItem(
@@ -518,9 +516,8 @@ const Assesment = ({ discoverStart }) => {
         setLevel(
           getMilestoneDetails?.data.data?.milestone_level?.replace("m", "")
         );
-        localStorage.setItem(
-          "virtualId",
-          usernameDetails?.data?.result?.virtualID
+        localStorage.getItem(
+          "userId"
         );
         let session_id = localStorage.getItem("sessionId");
 
@@ -531,18 +528,18 @@ const Assesment = ({ discoverStart }) => {
         
         localStorage.setItem("lang", lang || "ta");
         const getPointersDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${usernameDetails?.data?.result?.virtualID}/${session_id}?language=${lang}`
+          `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${localStorage.getItem("userId")}/${session_id}?language=${lang}`
         );
         setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
 
-        dispatch(setVirtualId(usernameDetails?.data?.result?.virtualID));
+        dispatch(setUserId(localStorage.getItem("userId")));
       })();
     } else {
       (async () => {
-        const virtualId = getLocalData("virtualId");
+        const userId = getLocalData("userId");
         const language = lang;
         const getMilestoneDetails = await axios.get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${language}`
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${userId}?language=${language}`
         );
         localStorage.setItem(
           "getMilestone",
@@ -560,9 +557,9 @@ const Assesment = ({ discoverStart }) => {
           localStorage.setItem("sessionId", sessionId)
         }
 
-        if (virtualId) {
+        if (userId) {
           const getPointersDetails = await axios.get(
-            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${virtualId}/${sessionId}?language=${lang}`
+            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.GET_POINTER}/${userId}/${sessionId}?language=${lang}`
           );
           setPoints(getPointersDetails?.data?.result?.totalLanguagePoints || 0);
         }
@@ -570,12 +567,15 @@ const Assesment = ({ discoverStart }) => {
     }
   }, [lang]);
 
-  const { virtualId } = useSelector((state) => state.user);
+  const { userId } = useSelector((state) => {
+    console.log(state); 
+    return state.user;  
+  });
 
   const navigate = useNavigate();
   const handleRedirect = () => {
     const profileName = getLocalData("profileName");
-    if (!username && !profileName && !virtualId && level === 0) {
+    if (!username && !profileName && !userId && level === 0) {
       // alert("please add username in query param");
       setOpenMessageDialog({
         message: "please add username in query param",

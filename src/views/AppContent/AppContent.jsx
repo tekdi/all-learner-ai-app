@@ -4,13 +4,13 @@ import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
 import { useSelector } from "react-redux";
 
 const PrivateRoute = (props) => {
-  const { virtualId } = useSelector((state) => state.user);
+  const { userId } = useSelector((state) => state.user);
   // const navigate = useNavigate();
   useEffect(() => {
-    if (!virtualId && props.requiresAuth) {
+    if (!userId && props.requiresAuth) {
       // navigate("/");
     }
-  }, [virtualId]);
+  }, [userId]);
 
   return <>{props.children}</>;
 };

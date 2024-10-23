@@ -38,10 +38,10 @@ const SpeakSentenceComponent = () => {
     (async () => {
       let audio = new Audio(LevelCompleteAudio);
       audio.play();
-      const virtualId = getLocalData("virtualId");
+      const userId = getLocalData("userId");
       const lang = getLocalData("lang");
       const getMilestoneDetails = await axios.get(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${virtualId}?language=${lang}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${userId}?language=${lang}`
       );
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);
@@ -57,7 +57,7 @@ const SpeakSentenceComponent = () => {
       if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
         navigate("/")
       } else {
-        navigate("/discover-start")
+      navigate(`/discover-start?userId=${encodeURIComponent(localStorage.getItem("userId"))}`);
       }
     } catch (error) {
       console.error("Error posting message:", error);

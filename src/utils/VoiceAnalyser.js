@@ -252,9 +252,10 @@ function VoiceAnalyser(props) {
 
     try {
       const lang = getLocalData("lang");
-      const virtualId = getLocalData("virtualId");
+      const userId = getLocalData("userId");
       const sessionId = getLocalData("sessionId");
       const sub_session_id = getLocalData("sub_session_id");
+      const tenantId = getLocalData("tenantId");
       const { originalText, contentType, contentId, currentLine } = props;
       const responseStartTime = new Date().getTime();
       let responseText = "";
@@ -268,13 +269,14 @@ function VoiceAnalyser(props) {
           {
             original_text: originalText,
             audio: base64Data,
-            user_id: virtualId,
+            user_id: userId,
             session_id: sessionId,
             language: lang,
             date: new Date(),
             sub_session_id,
             contentId,
             contentType,
+            tenantId
           }
         );
         data = updateLearnerData;
