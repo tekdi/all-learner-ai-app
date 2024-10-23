@@ -46,7 +46,7 @@ const WordsOrImage = ({
   loading,
   setOpenMessageDialog,
   isNextButtonCalled,
-  setIsNextButtonCalled
+  setIsNextButtonCalled,
 }) => {
   const audioRef = createRef(null);
   const [duration, setDuration] = useState(0);
@@ -90,7 +90,7 @@ const WordsOrImage = ({
         livesData,
         gameOverData,
         loading,
-        setIsNextButtonCalled
+        setIsNextButtonCalled,
       }}
     >
       <CardContent
@@ -210,7 +210,7 @@ const WordsOrImage = ({
                   mb: 4,
                   color: "#333F61",
                   textAlign: "center",
-                  fontSize: "40px",
+                  fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                   // lineHeight: "normal",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
@@ -222,18 +222,18 @@ const WordsOrImage = ({
             )}
             {matchedChar && (
               <Box
-              display={"flex"}
-              mb={4}
-              sx={{
-                width: "100%",
-                justifyContent: "center",
-                flexWrap: "wrap",
-              }}
-            >
+                display={"flex"}
+                mb={4}
+                sx={{
+                  width: "100%",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
+              >
                 {highlightWords(words, matchedChar)}
               </Box>
             )}
-         </Box>
+          </Box>
         )}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <VoiceAnalyser
@@ -257,7 +257,7 @@ const WordsOrImage = ({
               setLivesData,
               setOpenMessageDialog,
               isNextButtonCalled,
-              setIsNextButtonCalled
+              setIsNextButtonCalled,
             }}
           />
         </Box>

@@ -39,7 +39,7 @@ const AssesmentEnd = () => {
       const { data } = getMilestoneDetails;
       setLevel(data.data.milestone_level);
       setLocalData("userLevel", data.data.milestone_level?.replace("m", ""));
-      const sessionId = getLocalData("sessionId");
+      let sessionId = getLocalData("sessionId");
       if (!sessionId){
         sessionId = uniqueId();
         localStorage.setItem("sessionId", sessionId)

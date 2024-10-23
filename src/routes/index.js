@@ -4,6 +4,12 @@ import * as reviews from "../views";
 
 const routData = [
   {
+    id: "route-001",
+    path: "/",
+    component: reviews.DiscoverStart,
+    requiresAuth: true,
+  },
+  {
     id: "route-002",
     path: "/discover",
     component: reviews.Discover,
@@ -53,17 +59,20 @@ const routData = [
     component: reviews.PracticeRedirectPage,
     requiresAuth: true,
   },
-];
-
-// add login route for test rig
-if (process.env.REACT_APP_IS_APP_TEST_RIG === 'true') {
-  routData.push(
   {
-    id: "route-001",
-    path: "/",
+    id: "route-010",
+    path: "/login",
     component: reviews.LoginPage,
-    requiresAuth: true,
+    requiresAuth: false,
   },
+];
+// add login route for test rig
+
+const virtualId = localStorage.getItem('virtualId');
+const isLogin = process.env.REACT_APP_IS_IN_APP_AUTHORISATION === 'true';
+
+if (isLogin && !virtualId) {
+  routData.push(
   {
     id: "route-000",
     path: "*",
@@ -73,12 +82,6 @@ if (process.env.REACT_APP_IS_APP_TEST_RIG === 'true') {
   );
 }else {
   routData.push(
-    {
-    id: "route-001",
-    path: "/",
-    component: reviews.DiscoverStart,
-    requiresAuth: false,
-  },
   {
     id: "route-000",
     path: "*",

@@ -3,9 +3,7 @@ import Mechanics2 from "../../components/Practice/Mechanics2";
 import Mechanics3 from "../../components/Practice/Mechanics3";
 import Mechanics4 from "../../components/Practice/Mechanics4";
 import Mechanics5 from "../../components/Practice/Mechanics5";
-import {
-  useNavigate,
-} from "../../../node_modules/react-router-dom/dist/index";
+import { useNavigate } from "react-router-dom";
 import {
   callConfetti,
   getLocalData,
@@ -13,7 +11,7 @@ import {
   practiceSteps,
   setLocalData,
 } from "../../utils/constants";
-import axios from "../../../node_modules/axios/index";
+import axios from "axios";
 import WordsOrImage from "../../components/Mechanism/WordsOrImage";
 import { uniqueId } from "../../services/utilService";
 import useSound from "use-sound";
@@ -53,19 +51,15 @@ const Practice = () => {
   const TARGETS_PERCENTAGE = 0.3;
   const [openMessageDialog, setOpenMessageDialog] = useState("");
   const lang = getLocalData("lang");
-  const [totalSyllableCount, setTotalSyllableCount] = useState('');
-  const [percentage, setPercentage] = useState('');
+  const [totalSyllableCount, setTotalSyllableCount] = useState("");
+  const [percentage, setPercentage] = useState("");
   const [fluency, setFluency] = useState(false);
   const [isNextButtonCalled, setIsNextButtonCalled] = useState(false);
 
   const gameOver = (data, isUserPass) => {
-    let userWon = isUserPass ? true : false;
-    const meetsFluencyCriteria = livesData.meetsFluencyCriteria ? true : false;
-    setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria});
-  };
-
-  const isFirefox = () => {
-    return typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox');
+    const userWon = isUserPass;
+    const meetsFluencyCriteria = livesData?.meetsFluencyCriteria;
+    setGameOverData({ gameOver: true, userWon, ...data, meetsFluencyCriteria });
   };
 
   useEffect(() => {
@@ -73,6 +67,7 @@ const Practice = () => {
       setLivesData({ ...livesData, lives: LIVES });
     }
   }, [startShowCase]);
+
   const callConfettiAndPlay = () => {
     play();
     callConfetti();
@@ -92,13 +87,9 @@ const Practice = () => {
       callConfettiAndPlay();
 
       setTimeout(() => {
-        // alert(
-        //   `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `
-        // );
         setOpenMessageDialog({
           message: `You have successfully completed ${practiceSteps[currentPracticeStep].fullName} `,
         });
-        // setDisableScreen(false);
       }, 1200);
     }
   }, [currentQuestion]);
@@ -115,7 +106,6 @@ const Practice = () => {
         message: "Sorry I couldn't hear a voice. Could you please speak again?",
         isError: true,
       });
-      // alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText("");
       setEnableNext(false);
     }
@@ -128,7 +118,7 @@ const Practice = () => {
   }, [voiceText]);
 
   const send = (score) => {
-    if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+    if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
       window.parent.postMessage({
         score: score,
         message: "all-test-rig-score",
@@ -137,23 +127,23 @@ const Practice = () => {
   };
 
   const checkFluency = (contentType, fluencyScore) => {
-      switch (contentType.toLowerCase()) {
-          case 'word':
-            setFluency(fluencyScore < 2);
-              break;
-          case 'sentence':
-            setFluency(fluencyScore < 6);
-              break;
-          case 'paragraph':
-            setFluency(fluencyScore < 10);
-              break;
-          default:
-            setFluency(true);
-      }
-  }
+    switch (contentType.toLowerCase()) {
+      case "word":
+        setFluency(fluencyScore < 2);
+        break;
+      case "sentence":
+        setFluency(fluencyScore < 6);
+        break;
+      case "paragraph":
+        setFluency(fluencyScore < 10);
+        break;
+      default:
+        setFluency(true);
+    }
+  };
 
   const handleNext = async (isGameOver) => {
-    setIsNextButtonCalled(true)
+    setIsNextButtonCalled(true);
     setEnableNext(false);
 
     try {
@@ -194,7 +184,7 @@ const Practice = () => {
         currentPracticeProgress = Math.round(
           ((currentQuestion + 1 + currentPracticeStep * limit) /
             (practiceSteps.length * limit)) *
-          100
+            100
         );
       }
 
@@ -219,6 +209,7 @@ const Practice = () => {
         currentQuestion === questions.length - 1 || isGameOver
           ? currentPracticeStep + 1
           : currentPracticeStep;
+      newPracticeStep = Number(newPracticeStep);
       let newQuestionIndex =
         currentQuestion === questions.length - 1 ? 0 : currentQuestion + 1;
 
@@ -248,23 +239,25 @@ const Practice = () => {
           Log(data, "practice", "ET");
           setPercentage(getSetData?.data?.percentage);
           checkFluency(currentContentType, getSetData?.data?.fluency);
-          if(process.env.REACT_APP_POST_LEARNER_PROGRESS === "true"){
-          await axios.post(
-            `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
-            {
-              userId: userId,
-              sessionId: sessionId,
-              subSessionId: sub_session_id,
-              milestoneLevel: getSetData?.data?.currentLevel,
-              totalSyllableCount: totalSyllableCount,
-              language: localStorage.getItem("lang"),
-              tenantId : localStorage.getItem("tenantId"),
-            }
-          );
-        }
+
+          if (process.env.REACT_APP_POST_LEARNER_PROGRESS === "true") {
+            await axios.post(
+              `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.CREATE_LEARNER_PROGRESS}`,
+              {
+                userId: userId,
+                sessionId: sessionId,
+                subSessionId: sub_session_id,
+                milestoneLevel: getSetData?.data?.currentLevel,
+                totalSyllableCount: totalSyllableCount,
+                language: localStorage.getItem("lang"),
+                tenantId : localStorage.getItem("tenantId"),
+
+              }
+            );
+          }
           setLocalData("previous_level", getSetData.data.previous_level);
           if (getSetData.data.sessionResult === "pass") {
-            try{
+            try {
               await axios.post(
                 `${process.env.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST}/${config.URLS.ADD_LESSON}`,
                 {
@@ -280,13 +273,10 @@ const Practice = () => {
               );
               gameOver({ link: "/assesment-end" }, true);
               return;
-            }
-            catch(e){
+            } catch (e) {
               // catch error
             }
           }
-
-          // navigate("/assesment-end");
         }
 
         let quesArr = [];
@@ -317,20 +307,20 @@ const Practice = () => {
         if (newPracticeStep === 0 || newPracticeStep === 5 || isGameOver) {
           gameOver();
           return;
-          // navigate("/assesment-end");
         }
         const resGetContent = await axios.get(
           `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${userId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
         );
 
-        setTotalSyllableCount(resGetContent?.data?.totalSyllableCount)
+        setTotalSyllableCount(resGetContent?.data?.totalSyllableCount);
         setLivesData({
           ...livesData,
           totalTargets: resGetContent?.data?.totalSyllableCount,
           targetsForLives:
             resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
           targetPerLive:
-            (resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
+            (resGetContent?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) /
+            LIVES,
         });
 
         let showcaseLevel =
@@ -381,18 +371,13 @@ const Practice = () => {
     }
   };
 
-  // const playAudio = () => {
-  //   // const myAudio = localStorage.getItem("recordedAudio");
-  //   set_temp_audio(new Audio(recordedAudio));
-  // };
-
   useEffect(() => {
     learnAudio();
   }, [temp_audio]);
 
   const playTeacherAudio = () => {
     const contentId = questions[currentQuestion]?.contentId;
-    var audio = new Audio(
+    let audio = new Audio(
       `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/all-audio-files/${lang}/${contentId}.wav`
     );
     audio.addEventListener("canplaythrough", () => {
@@ -412,9 +397,9 @@ const Practice = () => {
       const userId = getLocalData("userId");
       const sessionId = getLocalData("sessionId");
 
-      if (!sessionId){
+      if (!sessionId) {
         sessionId = uniqueId();
-        localStorage.setItem("sessionId", sessionId)
+        localStorage.setItem("sessionId", sessionId);
       }
 
       const getMilestoneDetails = await axios.get(
@@ -462,11 +447,12 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${userId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
-      setTotalSyllableCount(resWord?.data?.totalSyllableCount)
+      setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
         ...livesData,
         totalTargets: resWord?.data?.totalSyllableCount,
-        targetsForLives: resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
+        targetsForLives:
+          resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
         targetPerLive:
           (resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
       });
@@ -553,11 +539,12 @@ const Practice = () => {
       const resWord = await axios.get(
         `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${currentGetContent.criteria}/${userId}?language=${lang}&contentlimit=${limit}&gettargetlimit=${limit}`
       );
-      setTotalSyllableCount(resWord?.data?.totalSyllableCount)
+      setTotalSyllableCount(resWord?.data?.totalSyllableCount);
       setLivesData({
         ...livesData,
         totalTargets: resWord?.data?.totalSyllableCount,
-        targetsForLives: resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
+        targetsForLives:
+          resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE,
         targetPerLive:
           (resWord?.data?.subsessionTargetsCount * TARGETS_PERCENTAGE) / LIVES,
       });
@@ -574,11 +561,10 @@ const Practice = () => {
       setCurrentQuestion(practiceProgress[userId]?.currentQuestion || 0);
       setLocalData("practiceProgress", JSON.stringify(practiceProgress));
     } else {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
+      if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
         navigate("/");
-      }else {
-      navigate(`/discover-start?userId=${encodeURIComponent(localStorage.getItem("userId"))}`);
-
+      } else {
+        navigate("/discover-start");
       }
     }
   };
@@ -597,10 +583,6 @@ const Practice = () => {
       return str2.length - str1.length;
     });
 
-    let fontSize =
-      questions[currentQuestion]?.contentType?.toLowerCase() === "paragraph"
-        ? 30
-        : 40;
     let type = currentContentType?.toLowerCase();
     if (type === "char" || type === "word") {
       const word = splitGraphemes(words[0].toLowerCase()).filter(
@@ -621,7 +603,7 @@ const Practice = () => {
                   variant="h5"
                   component="h4"
                   sx={{
-                    fontSize: `${fontSize}px`,
+                    fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                     fontWeight: 700,
                     fontFamily: "Quicksand",
                     lineHeight: "50px",
@@ -645,7 +627,7 @@ const Practice = () => {
                 component="h4"
                 sx={{
                   color: "#333F61",
-                  fontSize: `${fontSize}px`,
+                  fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -671,7 +653,7 @@ const Practice = () => {
                 component="h4"
                 ml={1}
                 sx={{
-                  fontSize: `${fontSize}px`,
+                  fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                   fontWeight: 700,
                   fontFamily: "Quicksand",
                   lineHeight: "50px",
@@ -690,7 +672,7 @@ const Practice = () => {
               ml={1}
               sx={{
                 color: "#333F61",
-                fontSize: `${fontSize}px`,
+                fontSize: "clamp(1.6rem, 2.5vw, 3.8rem)",
                 fontWeight: 700,
                 fontFamily: "Quicksand",
                 lineHeight: "50px",
@@ -708,13 +690,20 @@ const Practice = () => {
 
   useEffect(() => {
     if (questions[currentQuestion]?.contentSourceData) {
-      if (process.env.REACT_APP_IS_APP_IFRAME === 'true') {
-        const contentSourceData = questions[currentQuestion]?.contentSourceData || [];
-        const stringLengths = contentSourceData.map(item => item.text.length);
+      if (process.env.REACT_APP_IS_APP_IFRAME === "true") {
+        const contentSourceData =
+          questions[currentQuestion]?.contentSourceData || [];
+        const stringLengths = contentSourceData.map((item) => item.text.length);
         const length = stringLengths[0];
-        window.parent.postMessage({ type: 'stringLengths', length }, '*');
+        window.parent.postMessage({ type: "stringLengths", length });
       }
     }
+    const contentLoadStartTime = new Date().getTime();
+    const duration = {
+      ...JSON.parse(localStorage.getItem("duration")),
+      contentLoadStartTime: contentLoadStartTime,
+    };
+    localStorage.setItem("duration", JSON.stringify(duration));
   }, [questions[currentQuestion]]);
 
   const renderMechanics = () => {
@@ -765,7 +754,7 @@ const Practice = () => {
             setOpenMessageDialog,
             setEnableNext,
             isNextButtonCalled,
-            setIsNextButtonCalled
+            setIsNextButtonCalled,
           }}
         />
       );

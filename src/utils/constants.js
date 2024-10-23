@@ -3336,12 +3336,12 @@ export const levelGetContent = {
     {
       title: "P1",
       criteria: "word",
-      template: "simple"
+      template: "simple",
     },
     {
       title: "P2",
       criteria: "word",
-      template: "simple"
+      template: "simple",
     },
     { title: "P3", criteria: "sentence", template: "simple" },
     { title: "P4", criteria: "sentence", template: "simple" },
@@ -3453,10 +3453,10 @@ export function callConfettiSnow() {
     }
 
     // since particles fall down, start a bit higher than random
-     timeLeft = animationEnd - Date.now();
+    timeLeft = animationEnd - Date.now();
     var ticks = Math.max(200, 500 * (timeLeft / duration));
     var skew;
-     skew = Math.max(0.8, skew - 0.001);
+    skew = Math.max(0.8, skew - 0.001);
 
     confetti({
       particleCount: 1,
@@ -3516,20 +3516,21 @@ export const levelConfig = {
   9: { color: "#00C7E2" },
 };
 
- const AllLanguages = [
-  { name: "தமிழ்", lang: "ta", symbol: "இ" },
+const AllLanguages = [
   { name: "English", lang: "en", symbol: "A" },
+  { name: "தமிழ்", lang: "ta", symbol: "இ" },
   { name: "हिंदी", lang: "hi", symbol: "क" },
-  { name: "ಕನ್ನಡ", lang: "kn", symbol: "ಕ" } ,
-  { name: "తెలుగు", lang: "te", symbol: "ఈ" } ,
+  { name: "ಕನ್ನಡ", lang: "kn", symbol: "ಕ" },
+  { name: "తెలుగు", lang: "te", symbol: "ఈ" },
+  { name: "ગુજરાતી", lang: "gu", symbol: "ગુ" },
 ];
 
-const appLanguages = process.env.REACT_APP_IS_APP_LANGUAGES
-  ? JSON.parse(process.env.REACT_APP_IS_APP_LANGUAGES)
+const appLanguages = process.env.REACT_APP_LANGUAGES
+  ? JSON.parse(process.env.REACT_APP_LANGUAGES)
   : [];
 
-export const languages = AllLanguages.filter(lang =>
-    appLanguages.includes(lang.lang)
+export const languages = AllLanguages.filter((lang) =>
+  appLanguages.includes(lang.lang)
 );
 
 export const randomizeArray = (arr) => {

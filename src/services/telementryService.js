@@ -72,6 +72,7 @@ export const start = (duration) => {
                 mode: 'play',
                 stageid: url,
                 duration: Number((duration / 1e3).toFixed(2)),
+                dspec: window.navigator.userAgent
             },
         });
     } catch (error) {

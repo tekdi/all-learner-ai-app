@@ -1,16 +1,16 @@
 import React, { useEffect, Fragment } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import CustomizedSnackbars from "../../views/Snackbar/CustomSnackbar";
-import { useSelector } from "react-redux";
 
 const PrivateRoute = (props) => {
   const { userId } = useSelector((state) => state.user);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     if (!userId && props.requiresAuth) {
       // navigate("/");
     }
   }, [userId]);
+
 
   return <>{props.children}</>;
 };
