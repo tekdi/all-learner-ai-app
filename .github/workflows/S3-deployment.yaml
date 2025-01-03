@@ -33,10 +33,7 @@ jobs:
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
-
-      - name: Run Husky Install
-        run: npm run prepare
-
+        
       - name: Build and Package Application
         env:
           SKIP_PREFLIGHT_CHECK: ${{ vars.SKIP_PREFLIGHT_CHECK }}
