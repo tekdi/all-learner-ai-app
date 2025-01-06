@@ -224,8 +224,8 @@ export const getEventOptions = () => {
 
   const userType = isBuddyLogin ? "Buddy User" : "User";
   const userId = isBuddyLogin
-    ? emis_username + "/" + buddyUserId
-    : emis_username || "anonymous";
+    ? localStorage.getItem("userId") + "/" + buddyUserId
+    : localStorage.getItem("userId") || "anonymous";
 
   return {
     object: {},
@@ -237,11 +237,7 @@ export const getEventOptions = () => {
         pid: process.env.REACT_APP_PID, // Optional. In case the component is distributed, then which instance of that component
       },
       env: process.env.REACT_APP_ENV,
-      uid: `${
-        isBuddyLogin
-          ? emis_username + "/" + buddyUserId
-          : emis_username || "anonymous"
-      }`,
+      uid: localStorage.getItem("userId") || "anonymous",
       cdata: [
         {
           id: localStorage.getItem("virtualStorySessionID") || contentSessionId,
