@@ -1,6 +1,5 @@
 import { CsTelemetryModule } from "@project-sunbird/client-services/telemetry";
 const duration = new Date().getTime();
-const userId = localStorage.getItem("userId");
 
 export const initialize = ({ did }) => {
   if (!CsTelemetryModule.instance.isInitialised) {
@@ -16,7 +15,9 @@ export const initialize = ({ did }) => {
         channel: process.env.REACT_APP_CHANNEL,
         did: did,
         authtoken: "",
-        uid: userId ? userId : "anonymous",
+        uid: localStorage.getItem("userId")
+          ? localStorage.getItem("userId")
+          : "anonymous",
         sid: "",
         batchsize: 1,
         mode: "",
@@ -64,7 +65,9 @@ export const getEventOptions = () => {
         pid: "",
       },
       env: process.env.ENV,
-      uid: userId ? userId : "anonymous",
+      uid: localStorage.getItem("userId")
+        ? localStorage.getItem("userId")
+        : "anonymous",
       cdata: [],
       rollup: {},
     },
